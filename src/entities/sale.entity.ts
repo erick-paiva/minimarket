@@ -1,4 +1,13 @@
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  OneToOne,
+  JoinColumn,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+} from "typeorm";
 import { v4 as uuid } from "uuid";
 import { Client } from "./client.entity";
 import { Payment } from "./payment.entity";

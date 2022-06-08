@@ -1,5 +1,5 @@
 FROM node:18.3.0
-WORKDIR /app
+WORKDIR /api
 COPY package*.json ./
 RUN yarn 
 COPY . . 
