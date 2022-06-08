@@ -6,5 +6,9 @@ establishmentRouter.post(
   "/establishment",
   EstablishmentController.createEstablishment
 );
+establishmentRouter.patch(
+  "/establishment/:id",
+  EstablishmentController.editEstablishment
+);
 
 export default establishmentRouter;

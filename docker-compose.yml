@@ -10,15 +10,15 @@ services:
       - 3000
     ports:
       - 3000:3000
-    depends_on:
-      - pg
-    command: bash -c 'yarn migration:run && yarn dev'
-  pg:
-    container_name: minimarketDB
-    image: postgres
-    env_file:
-      - .env
-    expose:
-      - 5432
-    ports:
-      - 5432:5432
+    command: bash -c 'yarn dev'
+  #   depends_on:
+  #     - pg
+  # pg:
+  # container_name: minimarketDB
+  # image: postgres
+  # env_file:
+  #   - .env
+  # expose:
+  #   - 5432
+  # ports:
+  #   - 5432:5432
