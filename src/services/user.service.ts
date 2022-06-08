@@ -9,7 +9,9 @@ class userService {
     const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.save(validated);
     const createdUser = await userRepository.findOneBy({ id: user.id });
-    return serializedCreateUserSchema.validate(createdUser);
+    return await serializedCreateUserSchema.validate(createdUser, {
+      stripUnknown: true,
+    });
   };
   loginUser = () => {
     return { status: 200, message: "login" };
