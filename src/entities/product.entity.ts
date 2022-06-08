@@ -1,19 +1,18 @@
 import {
   Entity,
   Column,
-  PrimaryColumn,
   ManyToOne,
   ManyToMany,
   JoinTable,
+  PrimaryGeneratedColumn,
 } from "typeorm";
-import { v4 as uuid } from "uuid";
 import { Category } from "./category.entity";
 import { Establishment } from "./establishment.entity";
 
-@Entity()
+@Entity("products")
 export class Product {
-  @PrimaryColumn("uuid")
-  readonly id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column()
   name: string;
@@ -41,10 +40,4 @@ export class Product {
   })
   @JoinTable()
   categories: Category[];
-
-  constructor() {
-    if (!this.id) {
-      this.id = uuid();
-    }
-  }
 }

@@ -1,10 +1,9 @@
-import { Entity, Column, PrimaryColumn } from "typeorm";
-import { v4 as uuid } from "uuid";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Address {
-  @PrimaryColumn("uuid")
-  readonly id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column()
   street: string;
@@ -17,10 +16,4 @@ export class Address {
 
   @Column()
   district: string;
-
-  constructor() {
-    if (!this.id) {
-      this.id = uuid();
-    }
-  }
 }

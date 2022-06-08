@@ -1,14 +1,12 @@
 import { Request, Response } from "express";
+import { handleError } from "../errors/appError";
 import UserService from "../services/user.service";
-import { AppError, handleError } from "../errors/appError";
+
 class UserController {
   createUser = async (req: Request, res: Response) => {
-    try {
-      const { status, message } = UserService.createUser();
-      return res.status(status).json({ message: message });
-    } catch (err) {
-      return handleError(err, res);
-    }
+    const user = await UserService.createUser(req);
+    console.log(user);
+    return res.status(201).json(user);
   };
   loginUser = async (req: Request, res: Response) => {
     try {

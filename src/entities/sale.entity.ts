@@ -1,13 +1,21 @@
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn, ManyToOne, ManyToMany, JoinTable } from "typeorm";
-import { v4 as uuid } from "uuid";
+import {
+  Entity,
+  Column,
+  OneToOne,
+  JoinColumn,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Client } from "./client.entity";
 import { Payment } from "./payment.entity";
 import { Product } from "./product.entity";
 
-@Entity()
+@Entity("sales")
 export class Sale {
-  @PrimaryColumn("uuid")
-  readonly id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column()
   date: Date;
@@ -35,10 +43,4 @@ export class Sale {
   })
   @JoinTable()
   products: Product[];
-
-  constructor() {
-    if (!this.id) {
-      this.id = uuid();
-    }
-  }
 }

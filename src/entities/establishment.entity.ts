@@ -1,22 +1,21 @@
 import {
   Entity,
   Column,
-  PrimaryColumn,
   OneToOne,
   JoinColumn,
   OneToMany,
   ManyToOne,
+  PrimaryGeneratedColumn,
 } from "typeorm";
-import { v4 as uuid } from "uuid";
 import { Address } from "./address.entity";
 import { Client } from "./client.entity";
 import { Product } from "./product.entity";
 import { User } from "./user.entity";
 
-@Entity()
+@Entity("establishments")
 export class Establishment {
-  @PrimaryColumn("uuid")
-  readonly id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column()
   name: string;
@@ -48,10 +47,4 @@ export class Establishment {
   })
   @JoinColumn()
   addressId: Address;
-
-  constructor() {
-    if (!this.id) {
-      this.id = uuid();
-    }
-  }
 }
