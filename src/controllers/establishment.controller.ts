@@ -3,18 +3,21 @@ import EstablishmentService from "../services/establishment.service";
 import { handleError } from "../errors/appError";
 class EstablishmentController {
   createEstablishment = async (req: Request, res: Response) => {
-    const { status, message } = EstablishmentService.createEstablishment();
-    return res.status(status).json({ message: message });
+    try {
+      const { status, message } = EstablishmentService.createEstablishment();
+      return res.status(status).json({ message: message });
+    } catch (err) {
+      return handleError(err, res);
+    }
   };
 
-  editEstablishment = async (req: Request, res: Response) => {
+  patchEstablishment = async (req: Request, res: Response) => {
     try {
-      const { status, message } = EstablishmentService.editEstablishment();
+      const { status, message } = EstablishmentService.patchEstablishment();
       return res.status(status).json({ message: message });
     } catch (err) {
       return handleError(err, res);
     }
   };
 }
-
 export default new EstablishmentController();

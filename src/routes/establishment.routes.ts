@@ -8,7 +8,7 @@ establishmentRouter.post(
 );
 establishmentRouter.patch(
   "/establishment/:id",
-  EstablishmentController.editEstablishment
+  EstablishmentController.patchEstablishment
 );
 
 export default establishmentRouter;
