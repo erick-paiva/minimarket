@@ -1,11 +1,21 @@
-class UserService {
-  createUser = () => {
-    return {status: 200, message: "create"}
+import { User } from "../entities/user.entity";
+import { Request } from "express";
+import { serializedCreateUserSchema } from "../schemas";
+import { AssertsShape } from "yup/lib/object";
+import { AppDataSource } from "../data-source";
+
+class userService {
+  createUser = async ({ validated }: Request): Promise<AssertsShape<any>> => {
+    const userRepository = AppDataSource.getRepository(User);
+    const user = await userRepository.save(validated);
+    const createdUser = await userRepository.findOneBy({ id: user.id });
+    return await serializedCreateUserSchema.validate(createdUser, {
+      stripUnknown: true,
+    });
   };
   loginUser = () => {
-    return {status: 200, message: "login"}
-
+    return { status: 200, message: "login" };
   };
 }
 
-export default new UserService();
+export default new userService();

@@ -1,11 +1,10 @@
-import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
-import { v4 as uuid } from "uuid";
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Establishment } from "./establishment.entity";
 
-@Entity()
+@Entity("users")
 export class User {
-  @PrimaryColumn("uuid")
-  readonly id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column()
   name: string;
@@ -17,7 +16,7 @@ export class User {
   contact: string;
 
   @Column()
-  password_hash: string;
+  password: string;
 
   @Column()
   avatar: string;
@@ -38,10 +37,4 @@ export class User {
     eager: true,
   })
   establishments: Establishment[];
-
-  constructor() {
-    if (!this.id) {
-      this.id = uuid();
-    }
-  }
 }

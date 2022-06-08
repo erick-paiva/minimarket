@@ -1,12 +1,17 @@
-import { Entity, Column, PrimaryColumn, OneToMany, ManyToOne } from "typeorm";
-import { v4 as uuid } from "uuid";
+import {
+  Entity,
+  Column,
+  OneToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Establishment } from "./establishment.entity";
 import { Sale } from "./sale.entity";
 
 @Entity()
 export class Client {
-  @PrimaryColumn("uuid")
-  readonly id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column()
   name: string;
@@ -36,10 +41,4 @@ export class Client {
     eager: true,
   })
   sales: Sale[];
-
-  constructor() {
-    if (!this.id) {
-      this.id = uuid();
-    }
-  }
 }
