@@ -1,3 +1,5 @@
+version: "3"
+
 services:
   api:
     container_name: minimarketApi
@@ -7,18 +9,17 @@ services:
     volumes:
       - ./src:/app/src
     expose:
-      - 3000
+      - ${PORT}
     ports:
-      - 3000:3000
-    command: bash -c ' yarn migration:run && yarn dev'
+      - ${PORT}:${PORT}
     depends_on:
       - pg
   pg:
-  container_name: minimarketDB
-  image: postgres
-  env_file:
-    - .env
-  expose:
-    - 5432
-  ports:
-    - 5432:5432
+    container_name: minimarketDB
+    image: postgres
+    env_file:
+      - .env
+    expose:
+      - ${PGPORT}
+    ports:
+      - ${PGPORT}:${PGPORT}

@@ -5,10 +5,11 @@ import {
   OneToOne,
   JoinColumn,
   OneToMany,
+  ManyToOne,
 } from "typeorm";
 import { v4 as uuid } from "uuid";
 import { Address } from "./address.entity";
-import { Clients } from "./client.entity";
+import { Client } from "./client.entity";
 import { Product } from "./product.entity";
 import { User } from "./user.entity";
 
@@ -32,7 +33,7 @@ export class Establishment {
   @ManyToOne((type) => User, (user) => user.establishments)
   userId: User;
 
-  @OneToMany((type) => Clients, (client) => client.establishmentId, {
+  @OneToMany((type) => Client, (client) => client.establishment, {
     eager: true,
   })
   clients: Client[];

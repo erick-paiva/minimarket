@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+} from "typeorm";
 import { v4 as uuid } from "uuid";
 import { Category } from "./category.entity";
 import { Establishment } from "./establishment.entity";
@@ -27,7 +34,7 @@ export class Product {
   urlImg: Date;
 
   @ManyToOne((type) => Establishment, (establishment) => establishment.products)
-  establishmentId: Establishment;
+  establishment: Establishment;
 
   @ManyToMany((type) => Category, {
     eager: true,
