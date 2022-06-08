@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryColumn, OneToMany, ManyToOne } from "typeorm";
 import { v4 as uuid } from "uuid";
 import { Establishment } from "./establishment.entity";
 import { Sale } from "./sale.entity";
@@ -30,7 +30,7 @@ export class Client {
   isActivate: boolean;
 
   @ManyToOne((type) => Establishment, (establishment) => establishment.clients)
-  establishmentId: Establishment;
+  establishment: Establishment;
 
   @OneToMany((type) => Sale, (sale) => sale.clientId, {
     eager: true,
