@@ -6,7 +6,6 @@
   "author": "Bruno Tetzner <brunoltetzner@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": "18.3.x",
     "npm": "8.1.x",
     "yarn": "1.22.x"
   },
