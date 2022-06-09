@@ -10,8 +10,8 @@ class UserController {
   };
   loginUser = async (req: Request, res: Response) => {
     try {
-      const { status, message } = UserService.loginUser();
-      return res.status(status).json({ message: message });
+      const { status, message } = await UserService.loginUser(req.body);
+      return res.status(status).json(message);
     } catch (err) {
       return handleError(err, res);
     }
