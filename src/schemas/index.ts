@@ -3,4 +3,14 @@ import {
   serializedCreateUserSchema,
 } from "./user/create.schema";
 
-export { createUserSchema, serializedCreateUserSchema };
+import {
+  createEstablishmentSchema,
+  serializedCreateEstablishmentSchema,
+} from "./establishment/create.schema";
+
+export {
+  createUserSchema,
+  serializedCreateUserSchema,
+  createEstablishmentSchema,
+  serializedCreateEstablishmentSchema,
+};

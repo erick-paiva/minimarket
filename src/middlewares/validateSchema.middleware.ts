@@ -8,6 +8,7 @@ const validadeSchema =
       const validated = await shape.validate(req.body, {
         abortEarly: false,
         stripUnknown: true,
+        strict: true,
       });
 
       req.validated = validated;

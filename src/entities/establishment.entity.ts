@@ -20,17 +20,17 @@ export class Establishment {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   cnpj: string;
 
-  @Column()
+  @Column({ unique: true })
   contact: string;
 
   @Column()
   urlLogo: string;
 
   @ManyToOne((type) => User, (user) => user.establishments)
-  userId: User;
+  user: User;
 
   @OneToMany((type) => Client, (client) => client.establishment, {
     eager: true,
@@ -46,5 +46,5 @@ export class Establishment {
     eager: true,
   })
   @JoinColumn()
-  addressId: Address;
+  address: Address;
 }

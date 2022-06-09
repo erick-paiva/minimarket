@@ -8,7 +8,7 @@ import {
 import { Establishment } from "./establishment.entity";
 import { Sale } from "./sale.entity";
 
-@Entity()
+@Entity("clients")
 export class Client {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -37,7 +37,7 @@ export class Client {
   @ManyToOne((type) => Establishment, (establishment) => establishment.clients)
   establishment: Establishment;
 
-  @OneToMany((type) => Sale, (sale) => sale.clientId, {
+  @OneToMany((type) => Sale, (sale) => sale.client, {
     eager: true,
   })
   sales: Sale[];

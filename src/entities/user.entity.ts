@@ -9,7 +9,7 @@ export class User {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -33,7 +33,7 @@ export class User {
   @Column()
   isAdmin: string;
 
-  @OneToMany((type) => Establishment, (establishment) => establishment.userId, {
+  @OneToMany((type) => Establishment, (establishment) => establishment.user, {
     eager: true,
   })
   establishments: Establishment[];

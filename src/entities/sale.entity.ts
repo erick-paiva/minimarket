@@ -24,13 +24,13 @@ export class Sale {
   paidDate: Date;
 
   @ManyToOne((type) => Client, (client) => client.sales)
-  clientId: Client;
+  client: Client;
 
   @OneToOne((type) => Payment, {
     eager: true,
   })
   @JoinColumn()
-  paymentId: Payment;
+  payment: Payment;
 
   @Column()
   saleTotal: number;
