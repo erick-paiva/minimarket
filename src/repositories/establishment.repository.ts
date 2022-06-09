@@ -4,6 +4,7 @@ import { Establishment } from "../entities/establishment.entity";
 
 interface IEstablishmentRepo {
   save: (establishment: Partial<Establishment>) => Promise<Establishment>;
+  findOne: (payload: object) => Promise<Establishment | null>;
   getAll: () => Promise<Establishment[]>;
 }
 
@@ -18,7 +19,11 @@ class EstablishmentRepo implements IEstablishmentRepo {
     return await this.ormRepo.save(establishment);
   };
 
-  getAll = () => this.ormRepo.find();
+  findOne = async (payload: object) => {
+    return await this.ormRepo.findOneBy({ ...payload });
+  };
+
+  getAll = async () => await this.ormRepo.find();
 }
 
 export default new EstablishmentRepo();

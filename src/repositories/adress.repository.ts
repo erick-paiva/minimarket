@@ -4,6 +4,7 @@ import { Address } from "../entities/address.entity";
 
 interface IAdressRepo {
   save: (address: Partial<Address>) => Promise<Address>;
+  findOne: (payload: object) => Promise<Address | null>;
   getAll: () => Promise<Address[]>;
 }
 
@@ -18,11 +19,11 @@ class addressRepo implements IAdressRepo {
     return await this.ormRepo.save(address);
   };
 
-  retrieve = async (payload: object) => {
+  findOne = async (payload: object) => {
     return await this.ormRepo.findOneBy({ ...payload });
   };
 
-  getAll = () => this.ormRepo.find();
+  getAll = async () => await this.ormRepo.find();
 }
 
 export default new addressRepo();

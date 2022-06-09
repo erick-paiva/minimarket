@@ -1,4 +1,11 @@
-import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Establishment } from "./establishment.entity";
 
 @Entity("users")
@@ -21,16 +28,16 @@ export class User {
   @Column()
   avatar: string;
 
-  @Column()
-  created: Date;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @Column()
-  lastAccess: Date;
+  @UpdateDateColumn()
+  updatedAt: Date;
 
-  @Column()
-  isActivate: boolean;
+  @Column({ default: true })
+  isActie: boolean;
 
-  @Column()
+  @Column({ default: false })
   isAdmin: string;
 
   @OneToMany((type) => Establishment, (establishment) => establishment.user, {

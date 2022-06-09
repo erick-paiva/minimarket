@@ -1,17 +1,14 @@
-import { Request, Response } from "express";
 import EstablishmentService from "../services/establishment.service";
+import { Request, Response } from "express";
 class EstablishmentController {
   createEstablishment = async (req: Request, res: Response) => {
-    const establishment = await EstablishmentService.createEstablishment(
-      req,
-      res
-    );
+    const establishment = await EstablishmentService.createEstablishment(req);
     return res.status(201).json(establishment);
   };
 
   getEstablishments = async (req: Request, res: Response) => {
-    const establishment = EstablishmentService.getEstablishments(req, res);
-    return res.status(200).json(establishment);
+    const establishments = await EstablishmentService.getEstablishments(req);
+    return res.status(200).json(establishments);
   };
 }
 export default new EstablishmentController();
