@@ -1,3 +1,4 @@
+import { hash } from "bcrypt";
 import {
   Entity,
   Column,
@@ -5,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  BeforeInsert,
+  BeforeUpdate,
 } from "typeorm";
 import { Establishment } from "./establishment.entity";
 
@@ -35,7 +38,7 @@ export class User {
   updatedAt: Date;
 
   @Column({ default: true })
-  isActie: boolean;
+  isActive: boolean;
 
   @Column({ default: false })
   isAdmin: string;
@@ -44,4 +47,10 @@ export class User {
     eager: true,
   })
   establishments: Establishment[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    return this.password && (this.password = await hash(this.password, 10));
+  }
 }

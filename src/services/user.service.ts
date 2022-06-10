@@ -23,7 +23,9 @@ interface ILoginData {
 class UserService {
   createUser = async ({ validated }: Request): Promise<AssertsShape<any>> => {
     const userRepository = AppDataSource.getRepository(User);
-    const user = await userRepository.save(validated);
+    const user = await userRepository.save(
+      Object.assign(new User(), validated)
+    );
     const createdUser = await userRepository.findOneBy({ id: user.id });
     return await serializedCreateUserSchema.validate(createdUser, {
       stripUnknown: true,
@@ -33,7 +35,7 @@ class UserService {
     const { email, password } = userData as ILoginData;
 
     const user = (await userRepository.findOne({ email })) as User | null;
-    
+
     if (!user) {
       throw new UserError(404, "User not found");
     }

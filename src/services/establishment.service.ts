@@ -27,7 +27,7 @@ class EstablishmentService {
 
     if (addressAlreadyExists) {
       throw new ErrorHTTP(
-        404,
+        409,
         `Address number ${address.number} already registered`
       );
     }
@@ -38,7 +38,7 @@ class EstablishmentService {
 
     if (cnpjAlreadyExists) {
       throw new ErrorHTTP(
-        404,
+        409,
         `Establishment with cnpj ${validated.cnpj} already registered`
       );
     }
@@ -49,7 +49,7 @@ class EstablishmentService {
 
     if (contactAlreadyExists) {
       throw new ErrorHTTP(
-        404,
+        409,
         `Establishment with contact ${validated.contact} already registered`
       );
     }
