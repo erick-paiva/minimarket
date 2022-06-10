@@ -35,7 +35,7 @@ export class User {
   updatedAt: Date;
 
   @Column({ default: true })
-  isActie: boolean;
+  isActive: boolean;
 
   @Column({ default: false })
   isAdmin: string;
