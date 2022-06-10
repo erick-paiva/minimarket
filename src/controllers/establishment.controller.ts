@@ -1,23 +1,14 @@
-import { Request, Response } from "express";
 import EstablishmentService from "../services/establishment.service";
-import { handleError } from "../errors/appError";
+import { Request, Response } from "express";
 class EstablishmentController {
   createEstablishment = async (req: Request, res: Response) => {
-    try {
-      const { status, message } = EstablishmentService.createEstablishment();
-      return res.status(status).json({ message: message });
-    } catch (err) {
-      return handleError(err, res);
-    }
+    const establishment = await EstablishmentService.createEstablishment(req);
+    return res.status(201).json(establishment);
   };
 
-  patchEstablishment = async (req: Request, res: Response) => {
-    try {
-      const { status, message } = EstablishmentService.patchEstablishment();
-      return res.status(status).json({ message: message });
-    } catch (err) {
-      return handleError(err, res);
-    }
+  getEstablishments = async (req: Request, res: Response) => {
+    const establishments = await EstablishmentService.getEstablishments(req);
+    return res.status(200).json(establishments);
   };
 }
 export default new EstablishmentController();
