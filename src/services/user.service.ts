@@ -19,6 +19,7 @@ interface ILoginData {
   email: string;
   password: string;
 }
+
 class UserService {
   createUser = async ({ validated }: Request): Promise<AssertsShape<any>> => {
     const userRepository = AppDataSource.getRepository(User);
@@ -32,7 +33,7 @@ class UserService {
     const { email, password } = userData as ILoginData;
 
     const user = (await userRepository.findOne({ email })) as User | null;
-
+    
     if (!user) {
       throw new UserError(404, "User not found");
     }
