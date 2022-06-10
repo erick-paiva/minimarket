@@ -19,7 +19,8 @@ interface ILoginData {
   email: string;
   password: string;
 }
-class userService {
+
+class UserService {
   createUser = async ({ validated }: Request): Promise<AssertsShape<any>> => {
     const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.save(validated);
@@ -31,8 +32,8 @@ class userService {
   loginUser = async (userData: ILoginData): Promise<ILogin> => {
     const { email, password } = userData as ILoginData;
 
-    const user = (await userRepository.findOne({ email })) as User | any;
-
+    const user = (await userRepository.findOne({ email })) as User | null;
+    
     if (!user) {
       throw new UserError(404, "User not found");
     }
@@ -56,4 +57,4 @@ class userService {
   };
 }
 
-export default new userService();
+export default new UserService();
