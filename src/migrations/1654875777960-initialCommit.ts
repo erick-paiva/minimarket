@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class initialCommit1654867587820 implements MigrationInterface {
-    name = 'initialCommit1654867587820'
+export class initialCommit1654875777960 implements MigrationInterface {
+    name = 'initialCommit1654875777960'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE "adresses" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "street" character varying NOT NULL, "number" integer NOT NULL, "zipCode" character varying NOT NULL, "district" character varying NOT NULL, CONSTRAINT "PK_2787c84f7433e390ff8961d552d" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "categories" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "image" character varying NOT NULL, CONSTRAINT "PK_24dbc6126a28ff948da33e97d3b" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "adresses" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "street" character varying NOT NULL, "number" integer NOT NULL, "zipCode" character varying NOT NULL, "district" character varying NOT NULL, CONSTRAINT "PK_2787c84f7433e390ff8961d552d" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "products" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "description" character varying NOT NULL, "salePrice" character varying NOT NULL, "costPrice" character varying NOT NULL, "unitType" character varying NOT NULL, "urlImg" TIMESTAMP NOT NULL, "establishmentId" uuid, CONSTRAINT "PK_0806c755e0aca124e67c0cf6d7d" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "users" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "email" character varying NOT NULL, "contact" character varying NOT NULL, "password" character varying NOT NULL, "avatar" character varying NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "isActive" boolean NOT NULL DEFAULT true, "isAdmin" character varying NOT NULL DEFAULT false, CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "establishments" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "cnpj" character varying NOT NULL, "contact" character varying NOT NULL, "urlLogo" character varying NOT NULL, "userId" uuid, "addressId" uuid, CONSTRAINT "UQ_88bbb5a2aba9ffa0d05384ac144" UNIQUE ("cnpj"), CONSTRAINT "UQ_6a660a2a399ce9971c3dcbb2371" UNIQUE ("contact"), CONSTRAINT "REL_06edbd9c4ab6f29aaa067f0499" UNIQUE ("addressId"), CONSTRAINT "PK_7fb6da6c365114ccb61b091bbdf" PRIMARY KEY ("id"))`);
@@ -53,8 +53,8 @@ export class initialCommit1654867587820 implements MigrationInterface {
         await queryRunner.query(`DROP TABLE "establishments"`);
         await queryRunner.query(`DROP TABLE "users"`);
         await queryRunner.query(`DROP TABLE "products"`);
-        await queryRunner.query(`DROP TABLE "categories"`);
         await queryRunner.query(`DROP TABLE "adresses"`);
+        await queryRunner.query(`DROP TABLE "categories"`);
     }
 
 }
