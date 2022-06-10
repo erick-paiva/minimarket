@@ -1,5 +1,8 @@
+import { hashSync } from "bcrypt";
+import { config } from "dotenv";
 import { MigrationInterface, QueryRunner } from "typeorm";
 
+config()
 export class initialCommit1654875777960 implements MigrationInterface {
     name = 'initialCommit1654875777960'
 
@@ -28,6 +31,12 @@ export class initialCommit1654875777960 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "products_categories_categories" ADD CONSTRAINT "FK_e1d833224b5be535323207473f1" FOREIGN KEY ("categoriesId") REFERENCES "categories"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "sales_products_products" ADD CONSTRAINT "FK_f29355e1d4d0ea504077a30449d" FOREIGN KEY ("salesId") REFERENCES "sales"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
         await queryRunner.query(`ALTER TABLE "sales_products_products" ADD CONSTRAINT "FK_dc1ade1611cfc9b55ec14c72863" FOREIGN KEY ("productsId") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
+        await queryRunner.query(
+          `
+            INSERT INTO "users" ("name", "email", "contact", "password", "avatar", "isAdmin")
+            VALUES ('${process.env.ADMIN_NAME}','${process.env.ADMIN_EMAIL}','035 99999-9999','${hashSync(process.env.ADMIN_PASSWORD!, 10)}','https://images.uncyc.org/pt/1/18/Dobby_HarryPotter.jpg',true)
+          `
+        );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
