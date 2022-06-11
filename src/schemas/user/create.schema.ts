@@ -12,7 +12,7 @@ const createUserSchema = yup.object().shape({
   avatar: yup.string().required(),
   created: yup.date().default(new Date()).optional(),
   lastAccess: yup.date().default(new Date()).optional(),
-  isActivate: yup.boolean().default(true).optional(),
+  isActive: yup.boolean().default(true).optional(),
   isAdmin: yup.boolean().default(false).optional(),
 });
 
