@@ -3,11 +3,22 @@ import supertest from "supertest";
 import { DataSource } from "typeorm";
 import app from "../../..";
 import { AppDataSource } from "../../../data-source";
+import { sign } from "jsonwebtoken";
 
 config();
 
 describe("User login test", () => {
   let connection: DataSource;
+
+  const token = (isAdm: boolean) => {
+    return sign(
+      { email: "test@mail.com", isAdmin: isAdm },
+      process.env.SECRET_KEY as string,
+      {
+        expiresIn: process.env.EXPIRES_IN as string,
+      }
+    );
+  };
 
   beforeAll(async () => {
     await AppDataSource.initialize()
@@ -43,7 +54,10 @@ describe("User login test", () => {
       name: "Jhon Doe",
     };
 
-    await supertest(app).post("/api/signup").send(userLogin);
+    await supertest(app)
+      .post("/api/signup")
+      .send(userLogin)
+      .set("Authorization", "Bearer " + token(true));
 
     const response = await supertest(app).post("/api/signin").send(userLogin);
 

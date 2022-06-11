@@ -41,7 +41,7 @@ export class User {
   isActive: boolean;
 
   @Column({ default: false })
-  isAdmin: string;
+  isAdmin: boolean;
 
   @OneToMany((type) => Establishment, (establishment) => establishment.user, {
     eager: true,

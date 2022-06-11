@@ -8,6 +8,7 @@ import { UserError } from "../errors/appError";
 import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
 import { config } from "dotenv";
+import ErrorHTTP from "../errors/ErrorHTTP";
 
 config();
 interface ILogin {
@@ -22,11 +23,16 @@ interface ILoginData {
 
 class UserService {
   createUser = async ({ validated }: Request): Promise<AssertsShape<any>> => {
-    const userRepository = AppDataSource.getRepository(User);
+    const userAlreadyExists = (await userRepository.findOne({
+      email: validated.email,
+    })) as User | null;
+    if (userAlreadyExists) {
+      throw new ErrorHTTP(409, "Email already exists");
+    }
     const user = await userRepository.save(
       Object.assign(new User(), validated)
     );
-    const createdUser = await userRepository.findOneBy({ id: user.id });
+    const createdUser = await userRepository.findOne({ id: user.id });
     return await serializedCreateUserSchema.validate(createdUser, {
       stripUnknown: true,
     });
@@ -46,9 +52,13 @@ class UserService {
       throw new UserError(401, "Email or password is incorrect");
     }
 
-    const token = sign({ id: user.email }, process.env.SECRET_KEY as string, {
-      expiresIn: process.env.EXPIRES_IN as string,
-    });
+    const token = sign(
+      { email: user.email, isAdmin: user.isAdmin },
+      process.env.SECRET_KEY as string,
+      {
+        expiresIn: process.env.EXPIRES_IN as string,
+      }
+    );
 
     return {
       status: 200,
