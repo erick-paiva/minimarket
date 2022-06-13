@@ -16,7 +16,7 @@ const validateToken = async (
   return verify(
     token,
     process.env.SECRET_KEY as string,
-    (err: any, decoded: any | JwtPayload) => {
+    (err: any | JwtPayload) => {
       if (err) {
         throw new ErrorHTTP(401, err.message);
       }
