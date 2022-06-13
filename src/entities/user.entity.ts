@@ -43,9 +43,7 @@ export class User {
   @Column({ default: false })
   isAdmin: boolean;
 
-  @OneToMany((type) => Establishment, (establishment) => establishment.user, {
-    eager: true,
-  })
+  @OneToMany((type) => Establishment, (establishment) => establishment.user)
   establishments: Establishment[];
 
   @BeforeInsert()

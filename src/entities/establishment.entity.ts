@@ -29,7 +29,10 @@ export class Establishment {
   @Column()
   urlLogo: string;
 
-  @ManyToOne((type) => User, (user) => user.establishments)
+  @ManyToOne((type) => User, (user) => user.establishments, {
+    eager: true,
+  })
+  @JoinColumn()
   user: User;
 
   @OneToMany((type) => Client, (client) => client.establishment, {
