@@ -2,9 +2,7 @@ import "express-async-errors";
 import { Router } from "express";
 import userController from "../controllers/user.controller";
 import { createUserSchema } from "../schemas";
-import validadeSchema from "../middlewares/validateSchema.middleware";
-import validateToken from "../middlewares/validateToken.middleware";
-import verifyAdmin from "../middlewares/verifyAdmin.middleware";
+import { validadeSchema, validateToken, verifyAdmin } from "../middlewares";
 
 const userRouter = Router();
 
@@ -16,5 +14,12 @@ userRouter.post(
   userController.createUser
 );
 userRouter.post("/signin", userController.loginUser);
+userRouter.get("/users", validateToken, userController.getUser);
+userRouter.get(
+  "/users/:id",
+  validateToken,
+  verifyAdmin,
+  userController.getById
+);
 
 export default userRouter;

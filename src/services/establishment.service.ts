@@ -3,7 +3,10 @@ import { Establishment } from "../entities/establishment.entity";
 import { User } from "../entities/user.entity";
 import ErrorHTTP from "../errors/ErrorHTTP";
 import { addressRepo, establishmentRepo, userRepo } from "../repositories";
-import { serializedCreateEstablishmentSchema } from "../schemas";
+import {
+  serializedCreateEstablishmentSchema,
+  serializedEstablishmentSchema,
+} from "../schemas";
 
 class EstablishmentService {
   createEstablishment = async ({ validated }: Request) => {
@@ -75,8 +78,22 @@ class EstablishmentService {
     );
   };
 
-  getEstablishments = async (req: Request) => {
-    return [];
+  getEstablishments = async ({ decoded }: Request) => {
+    const allEstablishments = await establishmentRepo.getAll();
+
+    if (decoded.isAdmin) {
+      return await serializedEstablishmentSchema.validate(allEstablishments, {
+        stripUnknown: true,
+      });
+    }
+
+    const userEstablishments = allEstablishments.filter(
+      ({ user }) => user.email === decoded.email
+    );
+
+    return await serializedEstablishmentSchema.validate(userEstablishments, {
+      stripUnknown: true,
+    });
   };
 }
 

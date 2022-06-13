@@ -1,12 +1,15 @@
 import { User } from "../entities/user.entity";
 import { Request } from "express";
-import { serializedCreateUserSchema } from "../schemas";
+import {
+  serializedCreateUserSchema,
+  serializedAllUsers,
+  serializedOneUser,
+} from "../schemas";
 import { AssertsShape } from "yup/lib/object";
-import { AppDataSource } from "../data-source";
 import userRepository from "../repositories/user.repository";
 import { UserError } from "../errors/appError";
 import { compare } from "bcrypt";
-import { sign } from "jsonwebtoken";
+import { sign, decode } from "jsonwebtoken";
 import { config } from "dotenv";
 import ErrorHTTP from "../errors/ErrorHTTP";
 
@@ -66,6 +69,36 @@ class UserService {
         token,
       },
     };
+  };
+
+  getUser = async (req: Request) => {
+    const token: string | any = req.headers.authorization?.split(" ")[1];
+
+    const decoded: any = decode(token);
+
+    if (!decoded.isAdmin) {
+      const user = (await userRepository.findOne({
+        email: decoded.email,
+      })) as User | null;
+
+      return serializedOneUser.validate(user);
+    } else {
+      const users = (await userRepository.all()) as User[];
+
+      return await serializedAllUsers.validate(users, { stripUnknown: true });
+    }
+  };
+
+  getByid = async (req: Request) => {
+    const { id } = req.params;
+
+    const user = await userRepository.findOne({ id: id });
+
+    if (!user) {
+      throw new ErrorHTTP(404, "User not found");
+    }
+
+    return await serializedOneUser.validate(user, { stripUnknown: true });
   };
 }
 

@@ -13,6 +13,10 @@ import {
   serializedCreateClientSchema,
 } from "./client/create.schema";
 
+import { serializedAllUsers, serializedOneUser } from "./user/user.schema";
+
+import { serializedEstablishmentSchema } from "./establishment/serializedEstablishment.schema";
+
 export {
   createUserSchema,
   serializedCreateUserSchema,
@@ -20,4 +24,7 @@ export {
   serializedCreateEstablishmentSchema,
   createClientSchema,
   serializedCreateClientSchema,
+  serializedEstablishmentSchema,
+  serializedAllUsers,
+  serializedOneUser,
 };

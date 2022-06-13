@@ -5,7 +5,6 @@ import UserService from "../services/user.service";
 class UserController {
   createUser = async (req: Request, res: Response) => {
     const user = await UserService.createUser(req);
-    console.log(user);
     return res.status(201).json(user);
   };
   loginUser = async (req: Request, res: Response) => {
@@ -15,6 +14,13 @@ class UserController {
     } catch (err) {
       return handleError(err, res);
     }
+  };
+  getUser = async (req: Request, res: Response) => {
+    return res.status(200).json(await UserService.getUser(req));
+  };
+
+  getById = async (req: Request, res: Response) => {
+    return res.status(200).json(await UserService.getByid(req));
   };
 }
 
