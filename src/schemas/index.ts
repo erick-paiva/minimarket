@@ -10,11 +10,14 @@ import {
 
 import { serializedAllUsers, serializedOneUser } from "./user/user.schema";
 
+import { serializedEstablishmentSchema } from "./establishment/serializedEstablishment.schema";
+
 export {
   createUserSchema,
   serializedCreateUserSchema,
   createEstablishmentSchema,
   serializedCreateEstablishmentSchema,
+  serializedEstablishmentSchema,
   serializedAllUsers,
   serializedOneUser,
 };

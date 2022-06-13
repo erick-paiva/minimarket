@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { JwtPayload, verify } from "jsonwebtoken";
+import { TDecoded } from "../@types/express";
+
 import ErrorHTTP from "../errors/ErrorHTTP";
 
 const validateToken = async (
@@ -16,10 +18,12 @@ const validateToken = async (
   return verify(
     token,
     process.env.SECRET_KEY as string,
-    (err: any | JwtPayload) => {
+    (err: any, decoded: any | JwtPayload) => {
       if (err) {
         throw new ErrorHTTP(401, err.message);
       }
+
+      req.decoded = decoded as TDecoded;
 
       return next();
     }
