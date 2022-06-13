@@ -8,9 +8,12 @@ import {
   serializedCreateEstablishmentSchema,
 } from "./establishment/create.schema";
 
+import { serializedEstablishmentSchema } from "./establishment/serializedEstablishment.schema";
+
 export {
   createUserSchema,
   serializedCreateUserSchema,
   createEstablishmentSchema,
   serializedCreateEstablishmentSchema,
+  serializedEstablishmentSchema,
 };

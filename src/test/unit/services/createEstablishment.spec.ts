@@ -10,9 +10,9 @@ config();
 describe("Post Establishment test", () => {
   let connection: DataSource;
 
-  const token = (isAdm: boolean) => {
+  let token = (isAdm: boolean) => {
     return sign(
-      { email: "test@mail.com", isAdmin: isAdm },
+      { email: "jhondoe@mail.com", isAdmin: isAdm },
       process.env.SECRET_KEY as string,
       {
         expiresIn: process.env.EXPIRES_IN as string,
@@ -44,7 +44,7 @@ describe("Post Establishment test", () => {
     const createUserResponse = await supertest(app)
       .post("/api/signup")
       .send(user)
-      .set("Authorization", "Bearer " + token(true));
+      .set("Authorization", `Beare ${token(true)}`);
     expect(createUserResponse.status).toBe(201);
 
     const loginResponse = await supertest(app)
@@ -69,7 +69,8 @@ describe("Post Establishment test", () => {
 
     const response = await supertest(app)
       .post("/api/establishment")
-      .send(establishment);
+      .send(establishment)
+      .set("Authorization", `Beare ${token(true)}`);
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("id");
     expect(response.body).toStrictEqual({
@@ -94,7 +95,10 @@ describe("Post Establishment test", () => {
       userId: "abc",
     };
 
-    const response = await supertest(app).post("/api/establishment").send(body);
+    const response = await supertest(app)
+      .post("/api/establishment")
+      .send(body)
+      .set("Authorization", `Beare ${token(true)}`);
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("error");
     expect(response.body).toStrictEqual({
@@ -114,7 +118,7 @@ describe("Post Establishment test", () => {
     const createUserResponse = await supertest(app)
       .post("/api/signup")
       .send(user)
-      .set("Authorization", "Bearer " + token(true));
+      .set("Authorization", `Beare ${token(true)}`);
     expect(createUserResponse.status).toBe(201);
 
     const loginResponse = await supertest(app)
@@ -139,7 +143,8 @@ describe("Post Establishment test", () => {
 
     const createEstablishmentResponse = await supertest(app)
       .post("/api/establishment")
-      .send(establishment);
+      .send(establishment)
+      .set("Authorization", `Beare ${token(true)}`);
     expect(createEstablishmentResponse.status).toBe(201);
 
     const body = {
@@ -157,7 +162,10 @@ describe("Post Establishment test", () => {
       userId: createUserResponse.body.id,
     };
 
-    const response = await supertest(app).post("/api/establishment").send(body);
+    const response = await supertest(app)
+      .post("/api/establishment")
+      .send(body)
+      .set("Authorization", `Beare ${token(true)}`);
     expect(response.status).toBe(409);
     expect(response.body).toHaveProperty("error");
     expect(response.body).toStrictEqual({
@@ -177,7 +185,7 @@ describe("Post Establishment test", () => {
     const createUserResponse = await supertest(app)
       .post("/api/signup")
       .send(user)
-      .set("Authorization", "Bearer " + token(true));
+      .set("Authorization", `Beare ${token(true)}`);
     expect(createUserResponse.status).toBe(201);
 
     const loginResponse = await supertest(app)
@@ -202,7 +210,8 @@ describe("Post Establishment test", () => {
 
     const createEstablishmentResponse = await supertest(app)
       .post("/api/establishment")
-      .send(establishment);
+      .send(establishment)
+      .set("Authorization", `Beare ${token(true)}`);
     expect(createEstablishmentResponse.status).toBe(201);
 
     const body = {
@@ -220,7 +229,10 @@ describe("Post Establishment test", () => {
       userId: createUserResponse.body.id,
     };
 
-    const response = await supertest(app).post("/api/establishment").send(body);
+    const response = await supertest(app)
+      .post("/api/establishment")
+      .send(body)
+      .set("Authorization", `Beare ${token(true)}`);
     expect(response.status).toBe(409);
     expect(response.body).toHaveProperty("error");
     expect(response.body).toStrictEqual({
@@ -240,7 +252,7 @@ describe("Post Establishment test", () => {
     const createUserResponse = await supertest(app)
       .post("/api/signup")
       .send(user)
-      .set("Authorization", "Bearer " + token(true));
+      .set("Authorization", `Beare ${token(true)}`);
     expect(createUserResponse.status).toBe(201);
 
     const loginResponse = await supertest(app)
@@ -265,7 +277,8 @@ describe("Post Establishment test", () => {
 
     const createEstablishmentResponse = await supertest(app)
       .post("/api/establishment")
-      .send(establishment);
+      .send(establishment)
+      .set("Authorization", `Beare ${token(true)}`);
     expect(createEstablishmentResponse.status).toBe(201);
 
     const body = {
@@ -283,7 +296,10 @@ describe("Post Establishment test", () => {
       userId: createUserResponse.body.id,
     };
 
-    const response = await supertest(app).post("/api/establishment").send(body);
+    const response = await supertest(app)
+      .post("/api/establishment")
+      .send(body)
+      .set("Authorization", `Beare ${token(true)}`);
     expect(response.status).toBe(409);
     expect(response.body).toHaveProperty("error");
     expect(response.body).toStrictEqual({
