@@ -15,5 +15,11 @@ userRouter.post(
 );
 userRouter.post("/signin", userController.loginUser);
 userRouter.get("/users", validateToken, userController.getUser);
+userRouter.get(
+  "/users/:id",
+  validateToken,
+  verifyAdmin,
+  userController.getById
+);
 
 export default userRouter;
