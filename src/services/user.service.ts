@@ -88,6 +88,18 @@ class UserService {
       return await serializedAllUsers.validate(users, { stripUnknown: true });
     }
   };
+
+  getByid = async (req: Request) => {
+    const { id } = req.params;
+
+    const user = await userRepository.findOne({ id: id });
+
+    if (!user) {
+      throw new ErrorHTTP(404, "User not found");
+    }
+
+    return await serializedOneUser.validate(user, { stripUnknown: true });
+  };
 }
 
 export default new UserService();
