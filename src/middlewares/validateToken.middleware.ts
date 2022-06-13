@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { JwtPayload, verify } from "jsonwebtoken";
 import { TDecoded } from "../@types/express";
+
 import ErrorHTTP from "../errors/ErrorHTTP";
 
 const validateToken = async (
