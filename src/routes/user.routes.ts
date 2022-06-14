@@ -21,5 +21,11 @@ userRouter.get(
   verifyAdmin,
   userController.getById
 );
+userRouter.patch(
+  "/users/isActive/:id",
+  validateToken,
+  verifyAdmin,
+  userController.isActive
+);
 
 export default userRouter;

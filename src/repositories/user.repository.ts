@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { Repository, UpdateResult } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
 
@@ -6,6 +6,7 @@ interface IUserRepository {
   save: (user: User) => Promise<User>;
   findOne: (payload: object) => Promise<User | null>;
   all: () => Promise<User[]>;
+  update: (id: string, payload: Partial<User>) => Promise<UpdateResult>;
 }
 
 class UserRepo implements IUserRepository {
@@ -22,6 +23,9 @@ class UserRepo implements IUserRepository {
   findOne = async (payload: object) => {
     return await this.ormRepo.findOneBy({ ...payload });
   };
+
+  update = async (id: string, payload: Partial<User>) =>
+    await this.ormRepo.update(id, { ...payload });
 }
 
 export default new UserRepo();

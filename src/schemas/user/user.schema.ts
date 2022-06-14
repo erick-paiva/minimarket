@@ -7,6 +7,7 @@ const serializedOneUser = yup.object().shape({
   contact: yup.string().required(),
   avatar: yup.string().required(),
   isAdmin: yup.boolean().required(),
+  isActive: yup.boolean().required(),
   created: yup.date().optional(),
   lastAccess: yup.date().optional(),
 });
@@ -19,6 +20,7 @@ const serializedAllUsers = yup.array().of(
     contact: yup.string().required(),
     avatar: yup.string().required(),
     isAdmin: yup.boolean().required(),
+    isActive: yup.boolean().required(),
     created: yup.date().optional(),
     lastAccess: yup.date().optional(),
   })
