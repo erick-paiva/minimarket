@@ -4,24 +4,21 @@ const createClientSchema = yup.object().shape({
   name: yup.string().required(),
   avatar: yup.string().required(),
   contact: yup.string().required(),
-  payday: yup.string().required(),
+  payDay: yup.number().required(),
   isDeptor: yup.boolean().default(false).required(),
   isLate: yup.boolean().default(false).required(),
   isActivate: yup.boolean().default(true).required(),
-  establishment: yup.string().required(),
-  sale: yup.string().required(),
+  establishmentId: yup.string().required(),
 });
 
 const responseObject = {
   name: yup.string().required(),
   avatar: yup.string().required(),
   contact: yup.string().required(),
-  payday: yup.date().required(),
+  payDay: yup.number().required(),
   isDeptor: yup.boolean().required(),
   isLate: yup.boolean().required(),
   isActivate: yup.boolean().required(),
-  establishment: yup.string().required(),
-  sale: yup.string().required(),
 };
 
 const newShape = Object.entries(responseObject)

@@ -4,7 +4,6 @@ import { handleError } from "../errors/appError";
 class ClientController {
   createClient = async (req: Request, res: Response) => {
     try {
-      // const { status, message } = ClientService.createClient();
       const client = await ClientService.createClient(req);
       return res.status(201).json(client);
     } catch (err) {

@@ -6,34 +6,37 @@ import { serializedCreateClientSchema } from "../schemas";
 
 class ClientService {
   createClient = async ({ validated }: Request) => {
-    const { name } = validated;
-    try {
-      const clientExists = (await clientRepo.findOne(name)) as Client | null;
+    const { establishment, contact } = validated;
 
-      if (clientExists) {
-        throw new ErrorHTTP(409, "Client already exists");
-      }
+    const establishmentExists = await establishmentRepo.findOne({
+      id: establishment,
+    });
 
-      const establishmentExists = await establishmentRepo.findOne({
-        id: validated.establishment,
-      });
+    if (!establishmentExists) {
+      throw new ErrorHTTP(404, "Establishment not found");
+    }
 
-      if (!establishmentExists) {
-        throw new ErrorHTTP(404, "Establishment not found");
-      }
+    const clientExists = establishmentExists.clients.find(
+      (client) => client.contact === contact
+    );
 
-      const client = await clientRepo.save(
-        Object.assign(new Client(), validated)
-      );
-
-      const createdClient = await clientRepo.findOne({ id: client.id });
-
-      return await serializedCreateClientSchema.validate(createdClient, {
-        stripUnknown: true,
-      });
-    } catch (err: any) {
+    if (clientExists) {
       throw new ErrorHTTP(409, "Client already exists");
     }
+
+    validated.establishment = establishmentExists;
+
+    const client = await clientRepo.save(validated as Client);
+
+    const createdClient = await clientRepo.findOne({
+      contact: validated.contact,
+    });
+
+    return await serializedCreateClientSchema.validate(createdClient, {
+      stripUnknown: true,
+    });
+
+    return "robson";
   };
 
   patchClient = () => {
