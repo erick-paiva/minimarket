@@ -35,8 +35,6 @@ class ClientService {
     return await serializedCreateClientSchema.validate(createdClient, {
       stripUnknown: true,
     });
-
-    return "robson";
   };
 
   patchClient = () => {
