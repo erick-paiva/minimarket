@@ -18,6 +18,10 @@ class UserController {
   getUser = async (req: Request, res: Response) => {
     return res.status(200).json(await UserService.getUser(req));
   };
+
+  getById = async (req: Request, res: Response) => {
+    return res.status(200).json(await UserService.getByid(req));
+  };
 }
 
 export default new UserController();
