@@ -6,7 +6,7 @@ import { validadeSchema } from "../middlewares";
 const productRouter = Router();
 
 productRouter.post(
-  "/product/:id",
+  "/product",
   validateToken,
   validadeSchema(createProductSchema),
   ProductController.createProduct

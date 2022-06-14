@@ -5,7 +5,8 @@ class ProductController {
   createProduct = async (req: Request, res: Response) => {
     const productToSave = req.body;
     const userEmail = req.decoded.email;
-    const establishmentId = req.params.id;
+    const establishmentId = req.body.establishmentId;
+    delete productToSave.establishmentId;
     const UserIsAdmin = req.decoded.isAdmin;
     try {
       const product = await ProductService.createProduct(
