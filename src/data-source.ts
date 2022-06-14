@@ -18,8 +18,14 @@ export const AppDataSource =
         url: process.env.DATABASE_URL,
         ssl: {
           rejectUnauthorized: false,
-        } ,
+        },
         logging: false,
-        entities: [path.join(__dirname, "./entities/**/*.{js,ts}")],
-        migrations: [path.join(__dirname, "./migrations/**/*.{js,ts}")],
+        entities:
+          process.env.NODE_ENV === "production"
+            ? ["dist/entities/*.js"]
+            : ["src/entities/*.ts"],
+        migrations:
+          process.env.NODE_ENV === "production"
+            ? ["dist/migrations/*.js"]
+            : ["src/migrations/*.ts"],
       });
