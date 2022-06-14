@@ -9,8 +9,8 @@ const userRouter = Router();
 userRouter.post(
   "/signup",
   validadeSchema(createUserSchema),
-  // validateToken,
-  // verifyAdmin,
+  validateToken,
+  verifyAdmin,
   userController.createUser
 );
 userRouter.post("/signin", userController.loginUser);

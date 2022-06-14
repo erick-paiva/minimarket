@@ -37,7 +37,6 @@ class ProductService {
     }
 
     productToSave.establishment = searchForEstablishment;
-    productToSave.urlImg = new Date();
 
     await ProductRepo.save(productToSave);
 
