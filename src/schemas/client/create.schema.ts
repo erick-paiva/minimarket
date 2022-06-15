@@ -21,7 +21,7 @@ const responseObject = {
   isActivate: yup.boolean().required(),
 };
 
-const newShape = Object.entries(responseObject)
+const newShape = Object.entries(responseObject
   .reverse()
   .reduce((prev, [key, value]) => ({ ...prev, [key]: value }), {});
 
