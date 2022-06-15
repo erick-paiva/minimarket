@@ -9,10 +9,16 @@ import {
 } from "./establishment/create.schema";
 
 import {
+  createClientSchema,
+  serializedCreateClientSchema,
+} from "./client/create.schema";
+
+import {
   serializedAllUsers,
   serializedOneUser,
   userUpdateSchema,
 } from "./user/user.schema";
+
 
 import { serializedEstablishmentSchema } from "./establishment/serializedEstablishment.schema";
 import { createProductSchema } from "./product/create.schema";
@@ -21,6 +27,8 @@ export {
   serializedCreateUserSchema,
   createEstablishmentSchema,
   serializedCreateEstablishmentSchema,
+  createClientSchema,
+  serializedCreateClientSchema,
   serializedEstablishmentSchema,
   serializedAllUsers,
   serializedOneUser,
