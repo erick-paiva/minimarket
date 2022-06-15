@@ -11,7 +11,7 @@ class ProductService {
     establishmentId: string,
     UserIsAdmin: boolean
   ) => {
-    const searchForEstablishment: Establishment | any =
+    const searchForEstablishment: Establishment =
       await establishmentRepository.findOne({
         id: establishmentId,
       });

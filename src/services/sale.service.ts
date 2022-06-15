@@ -7,7 +7,6 @@ class SaleService {
     return { status: 200, message: "patch sale" };
   };
   getSales = (establishmentId) => {
-    console.log(establishmentId);
     return { status: 200, message: "get sales" };
   };
 }
