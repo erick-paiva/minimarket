@@ -1,3 +1,4 @@
+import { hashSync } from "bcrypt";
 import * as yup from "yup";
 
 const serializedOneUser = yup.object().shape({
@@ -7,8 +8,9 @@ const serializedOneUser = yup.object().shape({
   contact: yup.string().required(),
   avatar: yup.string().required(),
   isAdmin: yup.boolean().required(),
-  created: yup.date().optional(),
-  lastAccess: yup.date().optional(),
+  isActive: yup.boolean().required(),
+  createdAt: yup.date().optional(),
+  updatedAt: yup.date().optional(),
 });
 
 const serializedAllUsers = yup.array().of(
@@ -19,9 +21,21 @@ const serializedAllUsers = yup.array().of(
     contact: yup.string().required(),
     avatar: yup.string().required(),
     isAdmin: yup.boolean().required(),
-    created: yup.date().optional(),
-    lastAccess: yup.date().optional(),
+    isActive: yup.boolean().required(),
+    createdAt: yup.date().optional(),
+    updatedAt: yup.date().optional(),
   })
 );
 
-export { serializedOneUser, serializedAllUsers };
+const userUpdateSchema = yup.object().shape({
+  name: yup.string().optional(),
+  email: yup.string().email().lowercase().optional(),
+  contact: yup.string().optional(),
+  avatar: yup.string().optional(),
+  password: yup
+    .string()
+    .transform((pwd: string) => hashSync(pwd, 8))
+    .optional(),
+});
+
+export { serializedOneUser, serializedAllUsers, userUpdateSchema };

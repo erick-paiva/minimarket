@@ -10,10 +10,10 @@ const createUserSchema = yup.object().shape({
     .transform((pwd: string) => hashSync(pwd, 8))
     .required(),
   avatar: yup.string().required(),
-  created: yup.date().default(new Date()).optional(),
-  lastAccess: yup.date().default(new Date()).optional(),
-  isActive: yup.boolean().default(true).optional(),
-  isAdmin: yup.boolean().default(false).optional(),
+  created: yup.date().optional(),
+  lastAccess: yup.date().optional(),
+  isActive: yup.boolean().optional(),
+  isAdmin: yup.boolean().optional(),
 });
 
 const serializedCreateUserSchema = yup.object().shape({
@@ -23,6 +23,7 @@ const serializedCreateUserSchema = yup.object().shape({
   contact: yup.string().required(),
   avatar: yup.string().required(),
   isAdmin: yup.boolean().required(),
+  isActive: yup.boolean().required(),
   created: yup.date().optional(),
   lastAccess: yup.date().optional(),
 });

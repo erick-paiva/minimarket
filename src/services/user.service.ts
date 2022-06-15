@@ -1,5 +1,5 @@
 import { User } from "../entities/user.entity";
-import { Request } from "express";
+import { Request, Response } from "express";
 import {
   serializedCreateUserSchema,
   serializedAllUsers,
@@ -99,6 +99,44 @@ class UserService {
     }
 
     return await serializedOneUser.validate(user, { stripUnknown: true });
+  };
+
+  isActive = async (req: Request) => {
+    const { id } = req.params;
+
+    const user = await userRepository.findOne({ id: id });
+
+    if (!user) {
+      throw new ErrorHTTP(404, "User not found");
+    }
+
+    await userRepository.update(user.id, {
+      ...({ isActive: !user.isActive } as User),
+    });
+
+    const updatedUser = await userRepository.findOne({ id: id });
+
+    return await serializedOneUser.validate(updatedUser, {
+      stripUnknown: true,
+    });
+  };
+
+  update = async ({ validated, params }: Request) => {
+    const { id } = params;
+
+    const user = await userRepository.findOne({ id: id });
+
+    if (!user) {
+      throw new ErrorHTTP(404, "User not found");
+    }
+
+    await userRepository.update(user.id, { ...(validated as User) });
+
+    const updatedUser = await userRepository.findOne({ id: id });
+
+    return await serializedOneUser.validate(updatedUser, {
+      stripUnknown: true,
+    });
   };
 }
 

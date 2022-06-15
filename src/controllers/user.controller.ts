@@ -22,6 +22,14 @@ class UserController {
   getById = async (req: Request, res: Response) => {
     return res.status(200).json(await UserService.getByid(req));
   };
+
+  isActive = async (req: Request, res: Response) => {
+    return res.status(200).json(await UserService.isActive(req));
+  };
+
+  update = async (req: Request, res: Response) => {
+    return res.status(200).json(await UserService.update(req));
+  };
 }
 
 export default new UserController();
