@@ -1,7 +1,7 @@
 import "express-async-errors";
 import { Router } from "express";
 import userController from "../controllers/user.controller";
-import { createUserSchema } from "../schemas";
+import { createUserSchema, userUpdateSchema } from "../schemas";
 import { validadeSchema, validateToken, verifyAdmin } from "../middlewares";
 
 const userRouter = Router();
@@ -20,6 +20,19 @@ userRouter.get(
   validateToken,
   verifyAdmin,
   userController.getById
+);
+userRouter.patch(
+  "/users/isActive/:id",
+  validateToken,
+  verifyAdmin,
+  userController.isActive
+);
+userRouter.patch(
+  "/users/:id",
+  validadeSchema(userUpdateSchema),
+  validateToken,
+  verifyAdmin,
+  userController.update
 );
 
 export default userRouter;

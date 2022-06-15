@@ -5,5 +5,6 @@ const saleRouter = Router();
 
 saleRouter.post("/sale", SaleController.createSale);
 saleRouter.patch("/sale/:id", SaleController.patchSale);
+saleRouter.get("/sale/:establishmentId", SaleController.getSales);
 
 export default saleRouter;
