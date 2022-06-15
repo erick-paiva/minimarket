@@ -12,6 +12,7 @@ declare global {
       validated: User | Establishment;
       user: User;
       decoded: TDecoded;
+      establishment: Establishment;
     }
   }
 }

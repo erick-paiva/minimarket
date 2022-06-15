@@ -4,25 +4,28 @@ import {
 } from "./user/create.schema";
 
 import {
-  createEstablishmentSchema,
-  serializedCreateEstablishmentSchema,
-} from "./establishment/create.schema";
-
-import {
   serializedAllUsers,
   serializedOneUser,
   userUpdateSchema,
 } from "./user/user.schema";
 
-import { serializedEstablishmentSchema } from "./establishment/serializedEstablishment.schema";
+import { createEstablishmentSchema } from "./establishment/create.schema";
+
+import {
+  serializedObjEstablishmentSchema,
+  serializedArrEstablishmentSchema,
+} from "./establishment/serializedEstablishment.schema";
+
+import { updateEstablishmentSchema } from "./establishment/update.schema";
 
 export {
   createUserSchema,
   serializedCreateUserSchema,
-  createEstablishmentSchema,
-  serializedCreateEstablishmentSchema,
-  serializedEstablishmentSchema,
+  userUpdateSchema,
   serializedAllUsers,
   serializedOneUser,
-  userUpdateSchema,
+  createEstablishmentSchema,
+  updateEstablishmentSchema,
+  serializedObjEstablishmentSchema,
+  serializedArrEstablishmentSchema,
 };

@@ -6,6 +6,10 @@ interface IEstablishmentRepo {
   save: (establishment: Partial<Establishment>) => Promise<Establishment>;
   findOne: (payload: object) => Promise<Establishment | null>;
   getAll: () => Promise<Establishment[]>;
+  update: (
+    id: string,
+    payload: Partial<Establishment>
+  ) => Promise<UpdateResult>;
 }
 
 class EstablishmentRepo implements IEstablishmentRepo {
@@ -24,6 +28,10 @@ class EstablishmentRepo implements IEstablishmentRepo {
   };
 
   getAll = async () => await this.ormRepo.find();
+
+  update = async (id: string, payload: Partial<Establishment>) => {
+    return await this.ormRepo.update(id, { ...payload });
+  };
 }
 
 export default new EstablishmentRepo();
