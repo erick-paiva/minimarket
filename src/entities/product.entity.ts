@@ -30,7 +30,7 @@ export class Product {
   unitType: string;
 
   @Column()
-  urlImg: Date;
+  urlImg: string;
 
   @ManyToOne((type) => Establishment, (establishment) => establishment.products)
   establishment: Establishment;

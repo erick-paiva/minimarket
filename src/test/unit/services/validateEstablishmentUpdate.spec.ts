@@ -10,16 +10,6 @@ config();
 describe("Post Establishment test", () => {
   let connection: DataSource;
 
-  let token = (isAdm: boolean) => {
-    return sign(
-      { email: "jhondoe@mail.com", isAdmin: isAdm },
-      process.env.SECRET_KEY as string,
-      {
-        expiresIn: process.env.EXPIRES_IN as string,
-      }
-    );
-  };
-
   beforeEach(async () => {
     await AppDataSource.initialize()
       .then((res) => (connection = res))
@@ -32,28 +22,47 @@ describe("Post Establishment test", () => {
     await connection.destroy();
   });
 
-  test("Return: Establishment as JSON response | Status code: 201", async () => {
-    const user = {
-      name: "jhon Doe",
-      email: "jhondoe@mail.com",
-      contact: "044999999999",
-      password: "12345",
-      avatar: "https://images.uncyc.org/pt/1/18/Dobby_HarryPotter.jpg",
-    };
+  const user = {
+    name: "jhon Doe",
+    email: "jhondoe@mail.com",
+    contact: "044999999999",
+    password: "12345",
+    avatar: "https://images.uncyc.org/pt/1/18/Dobby_HarryPotter.jpg",
+  };
 
+  const user2 = {
+    name: "jhoanna",
+    email: "jhoanna@mail.com",
+    contact: "055999999999",
+    password: "12345",
+    avatar: "https://images.uncyc.org/pt/1/18/Dobby_HarryPotter.jpg",
+  };
+
+  let token = (isAdm: boolean) => {
+    return sign(
+      { email: user.email, isAdmin: isAdm },
+      process.env.SECRET_KEY as string,
+      {
+        expiresIn: process.env.EXPIRES_IN as string,
+      }
+    );
+  };
+
+  test("Return: Establishment updated as JSON response | Status code: 200", async () => {
     const createUserResponse = await supertest(app)
       .post("/api/signup")
       .send(user)
       .set("Authorization", `Beare ${token(true)}`);
     expect(createUserResponse.status).toBe(201);
 
-    const loginResponse = await supertest(app)
-      .post("/api/signin")
-      .send({ email: user.email, password: user.password });
-    expect(loginResponse.status).toBe(200);
+    const createUser2Response = await supertest(app)
+      .post("/api/signup")
+      .send(user2)
+      .set("Authorization", `Beare ${token(true)}`);
+    expect(createUserResponse.status).toBe(201);
 
     const establishment = {
-      name: "Via c",
+      name: "Bar do Zé",
       cnpj: "30.0155138.77/0008-24",
       address: {
         street: "Rua c",
@@ -67,37 +76,75 @@ describe("Post Establishment test", () => {
       userId: createUserResponse.body.id,
     };
 
-    const response = await supertest(app)
+    const createEstablishmentResponse = await supertest(app)
       .post("/api/establishment")
       .send(establishment)
       .set("Authorization", `Beare ${token(true)}`);
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty("id");
-    expect(response.body).toStrictEqual({
-      id: response.body.id,
-      ...establishment,
+    expect(createEstablishmentResponse.status).toBe(201);
+    expect(createEstablishmentResponse.body.id).toBeDefined();
+
+    let { id } = createEstablishmentResponse.body;
+
+    establishment.name = "Bar do Jhoe";
+    establishment.cnpj = "33.333666.33/0033-33";
+    establishment.contact = "02111999999";
+    establishment.address = Object.assign(establishment.address, {
+      street: "Rua Arlindo Bonfin",
+      number: 17471,
     });
+    establishment.userId = createUser2Response.body.id;
+
+    const response = await supertest(app)
+      .patch(`/api/establishment/${id}`)
+      .send(establishment)
+      .set("Authorization", `Beare ${token(true)}`);
+    expect(response.status).toBe(200);
+    expect(response.body.id).toBeDefined();
   });
 
   test("Return: Body error, User not found | Status code: 404", async () => {
-    const body = {
-      name: "Via c",
+    const createUserResponse = await supertest(app)
+      .post("/api/signup")
+      .send(user)
+      .set("Authorization", `Beare ${token(true)}`);
+    expect(createUserResponse.status).toBe(201);
+
+    const establishment = {
+      name: "Bar do Zé",
       cnpj: "30.0155138.77/0008-24",
       address: {
-        street: "Rua z",
+        street: "Rua c",
         number: 14011,
         zipCode: "25090-29",
         district: "Gova",
       },
-      contact: "001427546",
+      contact: "02299999999",
       urlLogo:
         "https://cdn.pixabay.com/photo/2017/03/16/21/18/logo-2150297_960_7230.png",
-      userId: "abc",
+      userId: createUserResponse.body.id,
     };
 
-    const response = await supertest(app)
+    const createEstablishmentResponse = await supertest(app)
       .post("/api/establishment")
-      .send(body)
+      .send(establishment)
+      .set("Authorization", `Beare ${token(true)}`);
+    expect(createEstablishmentResponse.status).toBe(201);
+    expect(createEstablishmentResponse.body.id).toBeDefined();
+
+    let { id } = createEstablishmentResponse.body;
+
+    establishment.name = "Bar do Jhoe";
+    establishment.cnpj = "33.333666.33/0033-33";
+    establishment.contact = "02111999999";
+    establishment.address = Object.assign(establishment.address, {
+      street: "Rua Arlindo Bonfin",
+      number: 17471,
+    });
+    establishment.userId = "xxxxxxxxxxxxxxxxxxx";
+
+    const response = await supertest(app)
+      .patch(`/api/establishment/${id}`)
+      .send(establishment)
       .set("Authorization", `Beare ${token(true)}`);
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("error");
@@ -107,24 +154,11 @@ describe("Post Establishment test", () => {
   });
 
   test("Return: Body error, Establishment with cnpj ${body.cnpj} already registered | Status code: 409", async () => {
-    const user = {
-      name: "jhon Doe",
-      email: "jhondoe@mail.com",
-      contact: "044999999999",
-      password: "12345",
-      avatar: "https://images.uncyc.org/pt/1/18/Dobby_HarryPotter.jpg",
-    };
-
     const createUserResponse = await supertest(app)
       .post("/api/signup")
       .send(user)
       .set("Authorization", `Beare ${token(true)}`);
     expect(createUserResponse.status).toBe(201);
-
-    const loginResponse = await supertest(app)
-      .post("/api/signin")
-      .send({ email: user.email, password: user.password });
-    expect(loginResponse.status).toBe(200);
 
     const establishment = {
       name: "Via c",
@@ -147,51 +181,33 @@ describe("Post Establishment test", () => {
       .set("Authorization", `Beare ${token(true)}`);
     expect(createEstablishmentResponse.status).toBe(201);
 
-    const body = {
-      name: "Via Z",
-      cnpj: "30.0155138.77/0008-24",
-      address: {
-        street: "Rua z",
-        number: 10000,
-        zipCode: "25000-29",
-        district: "Gova",
-      },
-      contact: "02199999999",
-      urlLogo:
-        "https://cdn.pixabay.com/photo/2017/03/16/21/18/logo-2150297_960_7230.png",
-      userId: createUserResponse.body.id,
-    };
+    let { id } = createEstablishmentResponse.body;
+
+    establishment.name = "Bar do Jhoe";
+    establishment.contact = "02111999999";
+    establishment.address = Object.assign(establishment.address, {
+      street: "Rua Arlindo Bonfin",
+      number: 17471,
+    });
+    establishment.userId = createUserResponse.body.id;
 
     const response = await supertest(app)
-      .post("/api/establishment")
-      .send(body)
+      .patch(`/api/establishment/${id}`)
+      .send(establishment)
       .set("Authorization", `Beare ${token(true)}`);
     expect(response.status).toBe(409);
     expect(response.body).toHaveProperty("error");
     expect(response.body).toStrictEqual({
-      error: `Establishment with cnpj ${body.cnpj} already registered`,
+      error: `Establishment with cnpj ${establishment.cnpj} already registered.`,
     });
   });
 
   test("Return: Body error, Address number ${body.address.number} already registered | Status code: 409", async () => {
-    const user = {
-      name: "jhon Doe",
-      email: "jhondoe@mail.com",
-      contact: "044999999999",
-      password: "12345",
-      avatar: "https://images.uncyc.org/pt/1/18/Dobby_HarryPotter.jpg",
-    };
-
     const createUserResponse = await supertest(app)
       .post("/api/signup")
       .send(user)
       .set("Authorization", `Beare ${token(true)}`);
     expect(createUserResponse.status).toBe(201);
-
-    const loginResponse = await supertest(app)
-      .post("/api/signin")
-      .send({ email: user.email, password: user.password });
-    expect(loginResponse.status).toBe(200);
 
     const establishment = {
       name: "Via c",
@@ -214,51 +230,30 @@ describe("Post Establishment test", () => {
       .set("Authorization", `Beare ${token(true)}`);
     expect(createEstablishmentResponse.status).toBe(201);
 
-    const body = {
-      name: "Via Z",
-      cnpj: "30.1234567.77/0008-24",
-      address: {
-        street: "Rua z",
-        number: 14011,
-        zipCode: "25000-29",
-        district: "Gova",
-      },
-      contact: "02188888888",
-      urlLogo:
-        "https://cdn.pixabay.com/photo/2017/03/16/21/18/logo-2150297_960_7230.png",
-      userId: createUserResponse.body.id,
-    };
+    let { id } = createEstablishmentResponse.body;
+
+    establishment.name = "Bar do Jhoe";
+    establishment.contact = "02111999999";
+    establishment.cnpj = "33.333666.33/0033-33";
+    establishment.userId = createUserResponse.body.id;
 
     const response = await supertest(app)
-      .post("/api/establishment")
-      .send(body)
+      .patch(`/api/establishment/${id}`)
+      .send(establishment)
       .set("Authorization", `Beare ${token(true)}`);
     expect(response.status).toBe(409);
     expect(response.body).toHaveProperty("error");
     expect(response.body).toStrictEqual({
-      error: `Address number ${body.address.number} already registered`,
+      error: `Address number ${establishment.address.number} already registered`,
     });
   });
 
   test("Return: Body error, Establishment with contact ${body.contact} already registered | Status code: 409", async () => {
-    const user = {
-      name: "jhon Doe",
-      email: "jhondoe@mail.com",
-      contact: "044999999999",
-      password: "12345",
-      avatar: "https://images.uncyc.org/pt/1/18/Dobby_HarryPotter.jpg",
-    };
-
     const createUserResponse = await supertest(app)
       .post("/api/signup")
       .send(user)
       .set("Authorization", `Beare ${token(true)}`);
     expect(createUserResponse.status).toBe(201);
-
-    const loginResponse = await supertest(app)
-      .post("/api/signin")
-      .send({ email: user.email, password: user.password });
-    expect(loginResponse.status).toBe(200);
 
     const establishment = {
       name: "Via c",
@@ -281,29 +276,24 @@ describe("Post Establishment test", () => {
       .set("Authorization", `Beare ${token(true)}`);
     expect(createEstablishmentResponse.status).toBe(201);
 
-    const body = {
-      name: "Via Z",
-      cnpj: "30.1234567.77/0008-24",
-      address: {
-        street: "Rua z",
-        number: 1777,
-        zipCode: "25000-29",
-        district: "Gova",
-      },
-      contact: "02299999999",
-      urlLogo:
-        "https://cdn.pixabay.com/photo/2017/03/16/21/18/logo-2150297_960_7230.png",
-      userId: createUserResponse.body.id,
-    };
+    let { id } = createEstablishmentResponse.body;
+
+    establishment.name = "Bar do Jhoe";
+    establishment.cnpj = "33.333666.33/0033-33";
+    establishment.address = Object.assign(establishment.address, {
+      street: "Rua Arlindo Bonfin",
+      number: 17471,
+    });
+    establishment.userId = createUserResponse.body.id;
 
     const response = await supertest(app)
-      .post("/api/establishment")
-      .send(body)
+      .patch(`/api/establishment/${id}`)
+      .send(establishment)
       .set("Authorization", `Beare ${token(true)}`);
     expect(response.status).toBe(409);
     expect(response.body).toHaveProperty("error");
     expect(response.body).toStrictEqual({
-      error: `Establishment with contact ${body.contact} already registered`,
+      error: `Establishment with contact ${establishment.contact} already registered`,
     });
   });
 });

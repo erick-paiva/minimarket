@@ -19,5 +19,15 @@ class SaleController {
       return handleError(err, res);
     }
   };
+  getSales = async (req: Request, res: Response) => {
+    const { establishmentId } = req.params;
+
+    try {
+      const { status, message } = SaleService.getSales(establishmentId);
+      return res.status(status).json({ message: message });
+    } catch (err) {
+      return handleError(err, res);
+    }
+  };
 }
 export default new SaleController();

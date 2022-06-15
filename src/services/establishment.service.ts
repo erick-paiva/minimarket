@@ -123,6 +123,23 @@ class EstablishmentService {
       }
     }
 
+    if (validated.userId) {
+      try {
+        const userFound = (await userRepo.findOne({
+          id: validated.userId,
+        })) as User | null;
+
+        if (!userFound) {
+          throw new Error();
+        }
+
+        delete validated.userId;
+        validated.user = userFound;
+      } catch (err: any) {
+        throw new ErrorHTTP(404, "User not found");
+      }
+    }
+
     if (validated.address) {
       const { address } = validated;
 
@@ -142,26 +159,9 @@ class EstablishmentService {
       await addressRepo.update(establishment.address.id, {
         ...address,
       });
+
+      delete validated.address;
     }
-
-    if (validated.userId) {
-      try {
-        const userFound = (await userRepo.findOne({
-          id: validated.userId,
-        })) as User | null;
-
-        if (!userFound) {
-          throw new Error();
-        }
-
-        validated.user = userFound;
-      } catch (err: any) {
-        throw new ErrorHTTP(404, "User not found");
-      }
-    }
-
-    delete validated.address;
-    delete validated.userId;
 
     await establishmentRepo.update(establishment.id, {
       ...(validated as Establishment),
