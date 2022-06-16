@@ -1,4 +1,3 @@
-import { type } from "os";
 import { User } from "../entities";
 import { Address } from "../entities/address.entity";
 import { Establishment } from "../entities/establishment.entity";
@@ -12,6 +11,7 @@ declare global {
       validated: User | Establishment;
       user: User;
       decoded: TDecoded;
+      establishment: Establishment;
     }
   }
 }
