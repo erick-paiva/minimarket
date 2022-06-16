@@ -28,5 +28,22 @@ class ProductController {
       return handleError(err, res);
     }
   };
+
+  getProducts = async (req: Request, res: Response) => {
+    const { establishmentId } = req.params;
+    const UserIsAdmin = req.decoded.isAdmin;
+    const userEmail = req.decoded.email;
+
+    try {
+      const products = await ProductService.getProducts(
+        establishmentId,
+        userEmail,
+        UserIsAdmin
+      );
+      return res.status(200).json(products);
+    } catch (err) {
+      return handleError(err, res);
+    }
+  };
 }
 export default new ProductController();
