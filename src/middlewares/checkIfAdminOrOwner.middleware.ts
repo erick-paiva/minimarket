@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { AppDataSource } from "../data-source";
-import { identifiesIfTheRepositoryExists } from "../utils/stablesh";
+import { identifiesIfTheRepositoryExists } from "../utils/establishment";
 
 const checkIfAdminOrOwner = async (
   req: Request,
