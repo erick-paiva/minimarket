@@ -1,7 +1,7 @@
 import { Router } from "express";
 import ClientController from "../controllers/clients.controller";
 import { validadeSchema, validateToken, verifyAdmin } from "../middlewares";
-import { createClientSchema } from "../schemas";
+import { clientUpdateSchema, createClientSchema } from "../schemas";
 
 const clientRouter = Router();
 
@@ -12,6 +12,12 @@ clientRouter.post(
   verifyAdmin,
   ClientController.createClient
 );
-clientRouter.patch("/client/:id", ClientController.patchClient);
+clientRouter.patch(
+  "/client/:id",
+  validadeSchema(clientUpdateSchema),
+  validateToken,
+  verifyAdmin,
+  ClientController.patchClient
+);
 
 export default clientRouter;

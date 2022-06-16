@@ -11,6 +11,7 @@ import {
 import {
   createClientSchema,
   serializedCreateClientSchema,
+  clientUpdateSchema,
 } from "./client/create.schema";
 
 import {
@@ -18,7 +19,6 @@ import {
   serializedOneUser,
   userUpdateSchema,
 } from "./user/user.schema";
-
 
 import { serializedEstablishmentSchema } from "./establishment/serializedEstablishment.schema";
 import { createProductSchema } from "./product/create.schema";
@@ -34,4 +34,5 @@ export {
   serializedOneUser,
   createProductSchema,
   userUpdateSchema,
+  clientUpdateSchema,
 };

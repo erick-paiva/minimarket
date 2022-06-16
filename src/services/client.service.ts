@@ -37,8 +37,22 @@ class ClientService {
     });
   };
 
-  patchClient = () => {
-    return { status: 200, message: "patch client" };
+  patchClient = async ({ validated, params }: Request) => {
+    const { id } = params;
+
+    const client = await clientRepo.findOne({ id: id });
+
+    if (!client) {
+      throw new ErrorHTTP(404, "Client not found");
+    }
+
+    await clientRepo.update(client.id, { ...(validated as Client) });
+
+    const updatedClient = await clientRepo.findOne({ id: id });
+
+    return await serializedCreateClientSchema.validate(updatedClient, {
+      stripUnknown: true,
+    });
   };
 }
 
