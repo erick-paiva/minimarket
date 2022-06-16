@@ -32,5 +32,4 @@ const getEstablishmentByIdOr404 = async (
     throw new ErrorHTTP(404, `The id ${req.params.id} is not valid`);
   }
 };
-
 export default getEstablishmentByIdOr404;

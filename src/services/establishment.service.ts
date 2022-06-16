@@ -178,6 +178,12 @@ class EstablishmentService {
       }
     );
   };
+
+  getOneEstablishment = async ({ establishment }) => {
+    return await serializedObjEstablishmentSchema.validate(establishment, {
+      stripUnknown: true,
+    });
+  };
 }
 
 export default new EstablishmentService();
