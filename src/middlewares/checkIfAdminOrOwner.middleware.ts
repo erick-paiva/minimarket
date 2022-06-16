@@ -32,7 +32,6 @@ const checkIfAdminOrOwner = async (
       },
     });
 
-    console.log(responseDb, "responseDb");
     const isOwner = Object.values(responseDb).find(
       (ele) => ele.email === user.email
     );
