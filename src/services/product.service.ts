@@ -48,6 +48,31 @@ class ProductService {
   patchProduct = () => {
     return { status: 200, message: "patch product" };
   };
+  getProducts = async (
+    establishmentId: string,
+    userEmail: string,
+    UserIsAdmin: boolean
+  ) => {
+    const searchForEstablishment: Establishment =
+      await establishmentRepository.findOne({
+        id: establishmentId,
+      });
+    if (!searchForEstablishment) {
+      throw new ErrorHTTP(
+        404,
+        "Establishment not found. Try with other establishmentId"
+      );
+    }
+    const establishmentOwner = searchForEstablishment.user;
+    if (establishmentOwner.email !== userEmail && !UserIsAdmin) {
+      throw new ErrorHTTP(
+        401,
+        "You're not the owner of this establishment. So you can't see the products."
+      );
+    }
+    const establishmentProducts = searchForEstablishment.products;
+    return establishmentProducts;
+  };
 }
 
 export default new ProductService();

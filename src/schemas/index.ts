@@ -1,18 +1,8 @@
+/* USER*/
 import {
   createUserSchema,
   serializedCreateUserSchema,
 } from "./user/create.schema";
-
-import {
-  createEstablishmentSchema,
-  serializedCreateEstablishmentSchema,
-} from "./establishment/create.schema";
-
-import {
-  createClientSchema,
-  serializedCreateClientSchema,
-  clientUpdateSchema,
-} from "./client/create.schema";
 
 import {
   serializedAllUsers,
@@ -20,19 +10,40 @@ import {
   userUpdateSchema,
 } from "./user/user.schema";
 
-import { serializedEstablishmentSchema } from "./establishment/serializedEstablishment.schema";
-import { createProductSchema } from "./product/create.schema";
-export {
-  createUserSchema,
-  serializedCreateUserSchema,
-  createEstablishmentSchema,
-  serializedCreateEstablishmentSchema,
+/* CLIENT*/
+import {
   createClientSchema,
   serializedCreateClientSchema,
-  serializedEstablishmentSchema,
+  clientUpdateSchema,
+} from "./client/create.schema";
+
+/* ESTABLISHMENT*/
+import {
+  createEstablishmentSchema,
+  serializedObjEstablishmentSchema,
+  serializedArrEstablishmentSchema,
+  updateEstablishmentSchema,
+} from "./establishment";
+
+/* PRODUCT*/
+import { createProductSchema } from "./product/create.schema";
+
+export {
+  /* USER*/
+  createUserSchema,
+  serializedCreateUserSchema,
+  userUpdateSchema,
   serializedAllUsers,
   serializedOneUser,
-  createProductSchema,
-  userUpdateSchema,
+  /* ESTABLISHMENT*/
+  createEstablishmentSchema,
+  updateEstablishmentSchema,
+  serializedObjEstablishmentSchema,
+  serializedArrEstablishmentSchema,
+  /* CLIENTE*/
+  createClientSchema,
+  serializedCreateClientSchema,
   clientUpdateSchema,
+  /* PRODUCT*/
+  createProductSchema,
 };

@@ -10,5 +10,15 @@ class EstablishmentController {
     const establishments = await EstablishmentService.getEstablishments(req);
     return res.status(200).json(establishments);
   };
+
+  updateEstablishment = async (req: Request, res: Response) => {
+    const establishment = await EstablishmentService.updateEstablishment(req);
+    return res.status(200).json(establishment);
+  };
+
+  getOneEstablishment = async (req: Request, res: Response) => {
+    const establishments = await EstablishmentService.getOneEstablishment(req);
+    return res.status(200).json(establishments);
+  };
 }
 export default new EstablishmentController();
