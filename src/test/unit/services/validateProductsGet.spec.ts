@@ -118,6 +118,7 @@ describe("Get products test", () => {
       contact: faker.phone.imei(),
       password: faker.mersenne.rand().toString(),
       avatar: faker.image.avatar(),
+      isAdmin: true,
     };
     const createUserResponse = await request(app)
       .post("/api/signup")

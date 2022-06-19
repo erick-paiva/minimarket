@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { Repository, UpdateResult } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { Client } from "../entities/client.entity";
 
@@ -6,6 +6,7 @@ interface IClientRepository {
   save: (client: Client) => Promise<Client>;
   findOne: (payload: object) => Promise<Client | null>;
   all: () => Promise<Client[]>;
+  update: (id: string, payload: Partial<Client>) => Promise<UpdateResult>;
 }
 
 class ClientRepo implements IClientRepository {
@@ -22,6 +23,9 @@ class ClientRepo implements IClientRepository {
   };
 
   all = async () => await this.ormRepo.find();
+
+  update = async (id: string, payload: Partial<Client>) =>
+    await this.ormRepo.update(id, { ...payload });
 }
 
 export default new ClientRepo();
