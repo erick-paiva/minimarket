@@ -16,6 +16,11 @@ const createUserSchema = yup.object().shape({
   isAdmin: yup.boolean().optional(),
 });
 
+const loginUserSchema = yup.object().shape({
+  email: yup.string().email().lowercase().required(),
+  password: yup.string().required(),
+});
+
 const serializedCreateUserSchema = yup.object().shape({
   id: yup.string().uuid().required(),
   name: yup.string().required(),
@@ -28,4 +33,4 @@ const serializedCreateUserSchema = yup.object().shape({
   lastAccess: yup.date().optional(),
 });
 
-export { createUserSchema, serializedCreateUserSchema };
+export { createUserSchema, serializedCreateUserSchema, loginUserSchema };
