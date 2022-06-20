@@ -920,7 +920,7 @@
       }
     }
   },
-  "host": "virtserver.swaggerhub.com",
-  "schemes": ["https"],
-  "basePath": "/RobsonMT/Caps/1.0.0"
+  "host": "localhost",
+  "basePath": ":3000/api",
+  "schemes": ["http"]
 }

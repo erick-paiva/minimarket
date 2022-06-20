@@ -3,6 +3,8 @@ import express, { NextFunction, Request, Response } from "express";
 import registerRouters from "./routes";
 import { errorHandling } from "./middlewares";
 import { AppError } from "./errors/appError";
+import swaggerUiExpress from "swagger-ui-express";
+import swaggerDocument from "./swagger.json";
 
 const app = express();
 
@@ -11,6 +13,12 @@ app.use(express.json());
 registerRouters(app);
 
 app.use(errorHandling);
+
+app.use(
+  "/api-documentation",
+  swaggerUiExpress.serve,
+  swaggerUiExpress.setup(swaggerDocument)
+);
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   if (err instanceof AppError) {
