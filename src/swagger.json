@@ -1,0 +1,926 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a simple API",
+    "version": "1.0.0",
+    "title": "Capstone Q4",
+    "contact": {
+      "email": "you@your-company.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags": [
+    {
+      "name": "auth",
+      "description": "User authentication"
+    },
+    {
+      "name": "user",
+      "description": "User routes"
+    },
+    {
+      "name": "client",
+      "description": "Client routes"
+    },
+    {
+      "name": "establishment",
+      "description": "Establishment routes"
+    },
+    {
+      "name": "sale",
+      "description": "Sale routes"
+    },
+    {
+      "name": "product",
+      "description": "Products routes"
+    }
+  ],
+  "paths": {
+    "/signin": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "user login",
+        "operationId": "userLogin",
+        "description": "Login route, returns user access token if credentials are correct.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "LoginUser",
+            "description": "User credentials.",
+            "schema": {
+              "type": "object",
+              "required": ["email", "password"],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "jhondoe@mail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "kytr235fv"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "example": {
+                "token": "fhjhfjshfhl767gg76aa-ajiarigj"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Invalid credentials"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": ["password is a required field"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signup": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "create user",
+        "operationId": "creaetUser",
+        "description": "Route to create a new user",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "CreateUser",
+            "description": "Create new user",
+            "schema": {
+              "type": "object",
+              "required": ["firstName", "lastName", "email", "password"],
+              "properties": {
+                "firstName": {
+                  "type": "string",
+                  "example": "Jhon"
+                },
+                "lastName": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "jhondoe@mail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "kytr235fv"
+                },
+                "isAdm": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "example": {
+                "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                "firstName": "jhon",
+                "lastName": "Doe",
+                "email": "jhondoe@mail.com",
+                "password": "kytr235fv",
+                "isAdm": true,
+                "createdAt": "2022-06-05 15:44:40.290",
+                "updatedAt": "2022-06-05 15:44:40.290"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": ["password is a required field"]
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Email already exists"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["user"],
+        "summary": "get all users",
+        "operationId": "GetUsers",
+        "description": "This route is to get all users. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "You are not allowed to access this information"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/:id": {
+      "get": {
+        "tags": ["user"],
+        "summary": "get user by id",
+        "operationId": "GetUserById",
+        "description": "This route is to get the user by ID. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "example": {
+                "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                "firstName": "jhon",
+                "lastName": "Doe",
+                "email": "jhondoe@mail.com",
+                "password": "kytr235fv",
+                "isAdm": true,
+                "createdAt": "2022-06-05 15:44:40.290",
+                "updatedAt": "2022-06-05 15:44:40.290"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "403": {
+            "description": "Forbiden",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "You can't access information of another user"
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["user"],
+        "summary": "update user by id",
+        "operationId": "UpdateUserById",
+        "description": "This route is to update user by ID. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Update user",
+            "description": "update one user",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string",
+                  "example": "Jhon"
+                },
+                "lastName": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "jhondoe2@mail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "jkhghdhejnfs"
+                },
+                "isAdm": {
+                  "type": "boolean",
+                  "example": false
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "example": {
+                "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                "firstName": "Jhon",
+                "lastName": "Doe",
+                "email": "jhondoe2@mail.com",
+                "password": "jkhghdhejnfs",
+                "isAdm": false,
+                "createdAt": "2022-06-05 15:44:40.290",
+                "updatedAt": "2022-06-05 15:50:10.110"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "User not found"
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "User already exists"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/establishments": {
+      "get": {
+        "tags": ["establishment"],
+        "summary": "get all establishiments",
+        "operationId": "GetAllEstablishments",
+        "description": "This route is to get all users. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "You are not allowed to access this information"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/establishments/:id": {
+      "get": {
+        "tags": ["establishment"],
+        "summary": "get establishment by id",
+        "operationId": "GetEstablishmentById",
+        "description": "This route is to get the user by ID. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "example": {
+                "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                "firstName": "jhon",
+                "lastName": "Doe",
+                "email": "jhondoe@mail.com",
+                "password": "kytr235fv",
+                "isAdm": true,
+                "createdAt": "2022-06-05 15:44:40.290",
+                "updatedAt": "2022-06-05 15:44:40.290"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "403": {
+            "description": "Forbiden",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "You can't access information of another user"
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["establishment"],
+        "summary": "update Establishment by id",
+        "operationId": "UpdateEstablishmentById",
+        "description": "This route is to update user by ID. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Update user",
+            "description": "update one user",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string",
+                  "example": "Jhon"
+                },
+                "lastName": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "jhondoe2@mail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "jkhghdhejnfs"
+                },
+                "isAdm": {
+                  "type": "boolean",
+                  "example": false
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "example": {
+                "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                "firstName": "Jhon",
+                "lastName": "Doe",
+                "email": "jhondoe2@mail.com",
+                "password": "jkhghdhejnfs",
+                "isAdm": false,
+                "createdAt": "2022-06-05 15:44:40.290",
+                "updatedAt": "2022-06-05 15:50:10.110"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "User not found"
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "User already exists"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/establishments/name/:name": {
+      "get": {
+        "tags": ["establishment"],
+        "summary": "get establishiments by name",
+        "operationId": "GetAEstablishmentByName",
+        "description": "This route is to get all users. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "You are not allowed to access this information"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients": {
+      "get": {
+        "tags": ["client"],
+        "summary": "get all clients",
+        "operationId": "GetAllClients",
+        "description": "This route is to get all users. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "You are not allowed to access this information"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/establishments/:id/clients": {
+      "get": {
+        "tags": ["client"],
+        "summary": "get all clients",
+        "operationId": "GetAllEstablishmentIdClients",
+        "description": "This route is to get all users. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "You are not allowed to access this information"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/establishments/:id/clients/:id": {
+      "get": {
+        "tags": ["client"],
+        "summary": "get all clients",
+        "operationId": "GetAllEstablishmentIdClientsId",
+        "description": "This route is to get all users. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "You are not allowed to access this information"
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["client"],
+        "summary": "get all clients",
+        "operationId": "GetAllEstablishmentIdClientsIdc",
+        "description": "This route is to get all users. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "You are not allowed to access this information"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sale": {
+      "get": {
+        "tags": ["sale"],
+        "summary": "get all sale",
+        "operationId": "getAllSale",
+        "description": "This route is to get all users. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "You are not allowed to access this information"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": ["product"],
+        "summary": "get all products",
+        "operationId": "getAllProducts",
+        "description": "This route is to get all users. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "You are not allowed to access this information"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": ["firstName", "lastName", "email", "password"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "firstName": {
+          "type": "string",
+          "example": "Jhon"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "example": "jhondoe@mail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "kytr235fv"
+        },
+        "isAdm": {
+          "type": "boolean",
+          "example": true
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2022-06-05 15:44:40.290"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2022-06-05 15:44:40.290"
+        }
+      }
+    },
+    "Establishment": {
+      "type": "object",
+      "required": ["firstName", "lastName", "email", "password"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "firstName": {
+          "type": "string",
+          "example": "Jhon"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "example": "jhondoe@mail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "kytr235fv"
+        },
+        "isAdm": {
+          "type": "boolean",
+          "example": true
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2022-06-05 15:44:40.290"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2022-06-05 15:44:40.290"
+        }
+      }
+    },
+    "UserRelationship": {
+      "type": "object",
+      "required": ["firstName", "lastName", "email", "password"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "firstName": {
+          "type": "string",
+          "example": "Jhon"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "example": "jhondoe@mail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "kytr235fv"
+        },
+        "isAdm": {
+          "type": "boolean",
+          "example": true
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2022-06-05 15:44:40.290"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2022-06-05 15:44:40.290"
+        },
+        "courses": {
+          "$ref": "#/definitions/Establishment"
+        }
+      }
+    }
+  },
+  "host": "virtserver.swaggerhub.com",
+  "schemes": ["https"],
+  "basePath": "/RobsonMT/Caps/1.0.0"
+}
