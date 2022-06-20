@@ -26,6 +26,14 @@ establishmentRouter.get(
   EstablishmentController.getEstablishments
 );
 
+establishmentRouter.get(
+  "/establishment/:id",
+  validateToken,
+  getEstablishmentByIdOr404,
+  checkIfAdminOrOwner,
+  EstablishmentController.getOneEstablishment
+);
+
 establishmentRouter.patch(
   "/establishment/:id",
   validateToken,
@@ -33,14 +41,6 @@ establishmentRouter.patch(
   getEstablishmentByIdOr404,
   validadeSchema(updateEstablishmentSchema),
   EstablishmentController.updateEstablishment
-);
-
-establishmentRouter.get(
-  "/establishment/:id",
-  validateToken,
-  getEstablishmentByIdOr404,
-  checkIfAdminOrOwner,
-  EstablishmentController.getOneEstablishment
 );
 
 export default establishmentRouter;

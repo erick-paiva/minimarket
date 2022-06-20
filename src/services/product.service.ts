@@ -45,9 +45,11 @@ class ProductService {
     });
     return getNewProduct;
   };
+
   patchProduct = () => {
     return { status: 200, message: "patch product" };
   };
+
   getProducts = async (
     establishmentId: string,
     userEmail: string,
