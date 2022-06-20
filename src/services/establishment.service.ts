@@ -1,8 +1,10 @@
 import { Request } from "express";
+import { Address } from "../entities/address.entity";
 import { Establishment } from "../entities/establishment.entity";
 import { User } from "../entities/user.entity";
 import ErrorHTTP from "../errors/ErrorHTTP";
 import { addressRepo, establishmentRepo, userRepo } from "../repositories";
+import adressRepository from "../repositories/adress.repository";
 import {
   serializedArrEstablishmentSchema,
   serializedObjEstablishmentSchema,
@@ -96,6 +98,12 @@ class EstablishmentService {
     });
   };
 
+  getOneEstablishment = async ({ establishment }) => {
+    return await serializedObjEstablishmentSchema.validate(establishment, {
+      stripUnknown: true,
+    });
+  };
+
   updateEstablishment = async ({ validated, establishment }: Request) => {
     if (validated.cnpj) {
       const cnpjAlreadyExists = await establishmentRepo.findOne({
@@ -156,16 +164,17 @@ class EstablishmentService {
         }
       }
 
-      await addressRepo.update(establishment.address.id, {
-        ...address,
+      await adressRepository.update(establishment.address.id, {
+        ...(address as Address),
       });
 
-      delete validated.address;
+      validated.address = Object.assign(
+        establishment.address,
+        validated.address
+      );
     }
 
-    await establishmentRepo.update(establishment.id, {
-      ...(validated as Establishment),
-    });
+    await establishmentRepo.update(establishment.id, { ...validated });
 
     const updatedEstablishment = await establishmentRepo.findOne({
       id: establishment.id,

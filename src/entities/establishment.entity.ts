@@ -31,6 +31,7 @@ export class Establishment {
 
   @ManyToOne((type) => User, (user) => user.establishments, {
     eager: true,
+    // cascade: true,
   })
   @JoinColumn()
   user: User;

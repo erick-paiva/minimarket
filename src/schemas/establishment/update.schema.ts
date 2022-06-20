@@ -11,7 +11,7 @@ const updateEstablishmentSchema = yup.object().shape({
     number: yup.number().max(99999).optional(),
     zipCode: yup.string().optional(),
     district: yup.string().optional(),
-  }),
+  }).optional(),
 });
 
 export { updateEstablishmentSchema };

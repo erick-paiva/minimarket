@@ -14,6 +14,7 @@ import {
 import {
   createClientSchema,
   serializedCreateClientSchema,
+  clientUpdateSchema,
 } from "./client/create.schema";
 
 /* ESTABLISHMENT*/
@@ -42,6 +43,7 @@ export {
   /* CLIENTE*/
   createClientSchema,
   serializedCreateClientSchema,
+  clientUpdateSchema,
   /* PRODUCT*/
   createProductSchema,
 };

@@ -12,6 +12,7 @@ const createClientSchema = yup.object().shape({
 });
 
 const responseObject = {
+  id: yup.string().required(),
   name: yup.string().required(),
   avatar: yup.string().required(),
   contact: yup.string().required(),
@@ -21,10 +22,20 @@ const responseObject = {
   isActivate: yup.boolean().required(),
 };
 
+const clientUpdateSchema = yup.object().shape({
+  name: yup.string().optional(),
+  avatar: yup.string().optional(),
+  contact: yup.string().optional(),
+  payDay: yup.number().optional(),
+  isDeptor: yup.boolean().optional(),
+  isLate: yup.boolean().optional(),
+  isActivate: yup.boolean().optional(),
+});
+
 const newShape = Object.entries(responseObject)
   .reverse()
   .reduce((prev, [key, value]) => ({ ...prev, [key]: value }), {});
 
 const serializedCreateClientSchema = yup.object().shape(newShape);
 
-export { createClientSchema, serializedCreateClientSchema };
+export { createClientSchema, serializedCreateClientSchema, clientUpdateSchema };

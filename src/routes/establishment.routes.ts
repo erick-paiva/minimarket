@@ -8,6 +8,7 @@ import {
   verifyAdmin,
 } from "../middlewares";
 import { updateEstablishmentSchema } from "../schemas";
+import checkIfAdminOrOwner from "../middlewares/checkIfAdminOrOwner.middleware";
 
 const establishmentRouter = Router();
 
@@ -23,6 +24,14 @@ establishmentRouter.get(
   "/establishment",
   validateToken,
   EstablishmentController.getEstablishments
+);
+
+establishmentRouter.get(
+  "/establishment/:id",
+  validateToken,
+  getEstablishmentByIdOr404,
+  checkIfAdminOrOwner,
+  EstablishmentController.getOneEstablishment
 );
 
 establishmentRouter.patch(
