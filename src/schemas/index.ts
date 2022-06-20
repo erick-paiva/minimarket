@@ -2,6 +2,7 @@
 import {
   createUserSchema,
   serializedCreateUserSchema,
+  loginUserSchema,
 } from "./user/create.schema";
 
 import {
@@ -35,6 +36,7 @@ export {
   userUpdateSchema,
   serializedAllUsers,
   serializedOneUser,
+  loginUserSchema,
   /* ESTABLISHMENT*/
   createEstablishmentSchema,
   updateEstablishmentSchema,
