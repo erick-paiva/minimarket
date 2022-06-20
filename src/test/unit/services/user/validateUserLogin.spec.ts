@@ -1,8 +1,8 @@
 import { config } from "dotenv";
 import supertest from "supertest";
 import { DataSource } from "typeorm";
-import app from "../../..";
-import { AppDataSource } from "../../../data-source";
+import app from "../../../..";
+import { AppDataSource } from "../../../../data-source";
 import { sign } from "jsonwebtoken";
 
 config();
@@ -42,6 +42,32 @@ describe("User login test", () => {
     expect(response.body.token).not.toBeDefined();
     expect(response.body.error).toBeDefined();
     expect(response.status).toBe(404);
+  });
+
+  it("Should return 400 bad request if the user does not pass the email key", async () => {
+    const userLogin = {
+      password: "1234",
+    };
+
+    const response = await supertest(app).post("/api/signin").send(userLogin);
+    expect(response.body.token).not.toBeDefined();
+    expect(response.body.message).toBeDefined();
+    expect(response.body.message).toStrictEqual(["email is a required field"]);
+    expect(response.status).toBe(400);
+  });
+
+  it("Should return 400 bad request if the user does not pass the password key", async () => {
+    const userLogin = {
+      email: "invalidemail@email.com",
+    };
+
+    const response = await supertest(app).post("/api/signin").send(userLogin);
+    expect(response.body.token).not.toBeDefined();
+    expect(response.body.message).toBeDefined();
+    expect(response.body.message).toStrictEqual([
+      "password is a required field",
+    ]);
+    expect(response.status).toBe(400);
   });
 
   it("Should return 200 ok and the user token if the user exists", async () => {
