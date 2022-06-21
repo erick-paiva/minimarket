@@ -17,7 +17,7 @@ export class Sale {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @Column() //data padrao
   date: Date;
 
   @Column()

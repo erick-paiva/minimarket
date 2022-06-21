@@ -40,6 +40,7 @@ class UserService {
       stripUnknown: true,
     });
   };
+  
   loginUser = async (userData: ILoginData): Promise<ILogin> => {
     const { email, password } = userData as ILoginData;
 

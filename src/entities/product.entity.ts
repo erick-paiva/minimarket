@@ -21,16 +21,16 @@ export class Product {
   description: string;
 
   @Column()
-  salePrice: string;
+  salePrice: number; //mudado
 
   @Column()
-  costPrice: string;
+  costPrice: number; //mudado
 
   @Column()
   unitType: string;
 
   @Column()
-  urlImg: Date;
+  urlImg: string;
 
   @ManyToOne((type) => Establishment, (establishment) => establishment.products)
   establishment: Establishment;
