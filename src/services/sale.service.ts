@@ -1,19 +1,16 @@
 import { config } from "dotenv";
 import { Request } from "express";
+import { AppDataSource } from "../data-source";
 import { Client } from "../entities/client.entity";
 import { Payment } from "../entities/payment.entity";
 import { Product } from "../entities/product.entity";
 import { Sale } from "../entities/sale.entity";
 import { User } from "../entities/user.entity";
 import ErrorHTTP from "../errors/ErrorHTTP";
-import {
-  userRepo,
-  saleRepo,
-  clientRepo,
-  productRepo,
-  paymentRepo,
-} from "../repositories";
+import { userRepo, saleRepo, clientRepo } from "../repositories";
+import productRepository from "../repositories/product.repository";
 import { serializedCreateSaleSchema } from "../schemas/sale/create.schema";
+import { identifiesIfTheRepositoryExists } from "../utils/establishment";
 
 config();
 
@@ -42,10 +39,10 @@ class SaleService {
     if (!clientFound) {
       throw new ErrorHTTP(404, "Client not found");
     }
-
+    const paymentFound = AppDataSource.getRepository(Payment);
     // Pegando o tipo do pagamaneto
-    const payment = (await paymentRepo.findOne({
-      id: validated.paymentId,
+    const payment = (await paymentFound.findOne({
+      where: { id: validated.paymentId },
     })) as Payment | null;
 
     // Instanciando a venda
@@ -54,10 +51,12 @@ class SaleService {
     // Pegando os produtos do response
     const products = validated.products;
 
+    console.log(products, "products");
+
     // For que verifica se tem os produtos e adiciano na venda
-    for (let i = 0; i < products.length; i++) {
+    for (let i = 0; i < products.lenght; i++) {
       const product = products[i];
-      const productFound = (await userRepo.findOne({
+      const productFound = (await productRepository.findOne({
         id: product.id,
       })) as Product | null;
 
@@ -75,8 +74,10 @@ class SaleService {
     // Salvando a venda
     const newSale = await saleRepo.save(sale);
 
+    console.log(newSale);
+
     //Retornando o sale
-    return serializedCreateSaleSchema.validate(newSale, {
+    return await serializedCreateSaleSchema.validate(newSale, {
       stripUnknown: true,
     });
   };
