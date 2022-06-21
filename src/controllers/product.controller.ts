@@ -6,6 +6,8 @@ class ProductController {
     const productToSave = req.body;
     const userEmail = req.decoded.email;
     const establishmentId = req.body.establishmentId;
+    const categories = req.body.categories;
+    delete productToSave.categories;
     delete productToSave.establishmentId;
     const UserIsAdmin = req.decoded.isAdmin;
     try {
@@ -13,7 +15,8 @@ class ProductController {
         productToSave,
         userEmail,
         establishmentId,
-        UserIsAdmin
+        UserIsAdmin,
+        categories
       );
       return res.status(201).json(product);
     } catch (err) {
@@ -21,12 +24,7 @@ class ProductController {
     }
   };
   patchProduct = async (req: Request, res: Response) => {
-    try {
-      const { status, message } = ProductService.patchProduct();
-      return res.status(status).json({ message: message });
-    } catch (err) {
-      return handleError(err, res);
-    }
+    return res.status(200).json(await ProductService.patchProduct(req));
   };
 
   getProducts = async (req: Request, res: Response) => {

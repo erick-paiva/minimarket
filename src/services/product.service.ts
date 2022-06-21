@@ -1,16 +1,28 @@
+import { AppDataSource } from "../data-source";
 import ProductRepo from "../repositories/product.repository";
+import { Request } from "express";
 import establishmentRepository from "../repositories/establishment.repository";
 import { Product } from "../entities/product.entity";
+import { Category } from "../entities/category.entity";
 import { Establishment } from "../entities/establishment.entity";
 import ErrorHTTP from "../errors/ErrorHTTP";
+import { serializedCreateproductSchema } from "../schemas";
 
 class ProductService {
   createProduct = async (
     productToSave: Product,
     userEmail: string,
     establishmentId: string,
-    UserIsAdmin: boolean
+    UserIsAdmin: boolean,
+    categories: string[]
   ) => {
+    const categoryRepository = AppDataSource.getRepository(Category);
+    const allCategoriesNames: string[] = [];
+    const allCategories: Category[] = [];
+    (await categoryRepository.find()).forEach((category) => {
+      allCategories.push(category);
+      allCategoriesNames.push(category.name);
+    });
     const searchForEstablishment: Establishment =
       await establishmentRepository.findOne({
         id: establishmentId,
@@ -36,18 +48,60 @@ class ProductService {
       );
     }
 
+    categories.forEach((category) => {
+      if (!allCategoriesNames.includes(category)) {
+        throw new ErrorHTTP(404, `The category ${category} is not valid`);
+      }
+    });
+
+    const getCategories = () => {
+      const result: Category[] = [];
+
+      categories.forEach((category) => {
+        allCategories.forEach((repoCategory) => {
+          if (category === repoCategory.name) {
+            result.push(repoCategory);
+          }
+        });
+      });
+      return result;
+    };
+
     productToSave.establishment = searchForEstablishment;
+    productToSave.categories = getCategories();
 
     await ProductRepo.save(productToSave);
 
     const getNewProduct = await ProductRepo.findOne({
       name: productToSave.name,
     });
-    return getNewProduct;
+
+    return await serializedCreateproductSchema.validate(getNewProduct, {
+      stripUnknown: true,
+    });
   };
 
-  patchProduct = () => {
-    return { status: 200, message: "patch product" };
+  patchProduct = async ({ validated, params }: Request) => {
+    const categoryRepository = AppDataSource.getRepository(Category);
+    const { id } = params;
+
+    const product = await ProductRepo.findOne({ id: id });
+
+    if (!product) {
+      throw new ErrorHTTP(404, "Product not found");
+    }
+
+    if (validated.categories !== undefined) {
+      throw new ErrorHTTP(404, "You cannot change categories");
+    }
+
+    await ProductRepo.update(product.id, { ...(validated as Product) });
+
+    const updatedProduct = await ProductRepo.findOne({ id: id });
+
+    return await serializedCreateproductSchema.validate(updatedProduct, {
+      stripUnknown: true,
+    });
   };
 
   getProducts = async (

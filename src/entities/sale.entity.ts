@@ -7,6 +7,7 @@ import {
   ManyToMany,
   JoinTable,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
 } from "typeorm";
 import { Client } from "./client.entity";
 import { Payment } from "./payment.entity";
@@ -17,11 +18,14 @@ export class Sale {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column() //data padrao
+  @CreateDateColumn()
   date: Date;
 
   @Column()
   paidDate: Date;
+
+  @Column()
+  isPaid: Boolean;
 
   @ManyToOne((type) => Client, (client) => client.sales)
   client: Client;
