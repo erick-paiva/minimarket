@@ -20,10 +20,10 @@ export class Product {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ type: "numeric" })
   salePrice: number; //mudado
 
-  @Column()
+  @Column({ type: "numeric" })
   costPrice: number; //mudado
 
   @Column()

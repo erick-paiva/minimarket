@@ -2,10 +2,11 @@ import { config } from "dotenv";
 import request from "supertest";
 import { faker } from "@faker-js/faker";
 import { DataSource } from "typeorm";
-import app from "../../..";
-import { AppDataSource } from "../../../data-source";
+
 import { sign } from "jsonwebtoken";
 import { v4 as uuid } from "uuid";
+import { AppDataSource } from "../../../../data-source";
+import app from "../../../..";
 
 config();
 

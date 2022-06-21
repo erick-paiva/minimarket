@@ -1,11 +1,10 @@
-import { config } from "dotenv";
-import request from "supertest";
 import { faker } from "@faker-js/faker";
+import { config } from "dotenv";
 import { DataSource } from "typeorm";
-import app from "../../..";
-import { AppDataSource } from "../../../data-source";
+import { AppDataSource } from "../../../../data-source";
+import request from "supertest";
+import app from "../../../..";
 import { sign } from "jsonwebtoken";
-import supertest from "supertest";
 
 config();
 
@@ -37,8 +36,8 @@ describe("Create product test", () => {
   const productData = {
     name: faker.lorem.word(),
     description: faker.lorem.paragraph(),
-    salePrice: faker.mersenne.rand(6, 15).toString(),
-    costPrice: faker.mersenne.rand(1, 5).toString(),
+    salePrice: faker.mersenne.rand(6, 15),
+    costPrice: faker.mersenne.rand(1, 5),
     unitType: faker.lorem.word(),
     urlImg: faker.image.imageUrl(),
     establishmentId: "",
@@ -123,8 +122,8 @@ describe("Create product test", () => {
   test("Should be return 400 if request do not have product name", async () => {
     const productDataWithoutName = {
       description: faker.lorem.paragraph(),
-      salePrice: faker.mersenne.rand(6, 15).toString(),
-      costPrice: faker.mersenne.rand(1, 5).toString(),
+      salePrice: faker.mersenne.rand(6, 15),
+      costPrice: faker.mersenne.rand(1, 5),
       unitType: faker.lorem.word(),
       urlImg: faker.image.imageUrl(),
       establishmentId: "",
