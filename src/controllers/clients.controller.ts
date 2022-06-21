@@ -13,5 +13,18 @@ class ClientController {
   patchClient = async (req: Request, res: Response) => {
     return res.status(200).json(await ClientService.patchClient(req));
   };
+
+  getEstablishmentClients = async (req: Request, res: Response) => {
+    const establishmentId = req.params.id;
+    const userEmail = req.decoded.email;
+    const userIsAdmin = req.decoded.isAdmin;
+
+    const clients = await ClientService.getEstablishmentClients(
+      establishmentId,
+      userEmail,
+      userIsAdmin
+    );
+    return res.status(200).json(clients);
+  };
 }
 export default new ClientController();
