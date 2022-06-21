@@ -1,8 +1,8 @@
 import { config } from "dotenv";
 import supertest from "supertest";
 import { DataSource } from "typeorm";
-import app from "../../..";
-import { AppDataSource } from "../../../data-source";
+import app from "../../../..";
+import { AppDataSource } from "../../../../data-source";
 import { sign } from "jsonwebtoken";
 
 config();
@@ -72,11 +72,7 @@ describe("Post Establishment test", () => {
       .send(establishment)
       .set("Authorization", `Beare ${token(true)}`);
     expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty("id");
-    expect(response.body).toStrictEqual({
-      id: response.body.id,
-      ...establishment,
-    });
+    expect(response.body.id).toBeDefined();
   });
 
   test("Return: Body error, User not found | Status code: 404", async () => {

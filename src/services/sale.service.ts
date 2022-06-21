@@ -84,6 +84,9 @@ class SaleService {
   patchSale = () => {
     return { status: 200, message: "patch sale" };
   };
+  getSales = (establishmentId) => {
+    return { status: 200, message: "get sales" };
+  };
 }
 
 export default new SaleService();

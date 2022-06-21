@@ -3,3 +3,4 @@
 .env
 .lock*
 yarn.lock
+coverage

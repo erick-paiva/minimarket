@@ -1,7 +1,11 @@
 import "express-async-errors";
 import { Router } from "express";
 import userController from "../controllers/user.controller";
-import { createUserSchema } from "../schemas";
+import {
+  createUserSchema,
+  loginUserSchema,
+  userUpdateSchema,
+} from "../schemas";
 import { validadeSchema, validateToken, verifyAdmin } from "../middlewares";
 
 const userRouter = Router();
@@ -13,13 +17,30 @@ userRouter.post(
   verifyAdmin,
   userController.createUser
 );
-userRouter.post("/signin", userController.loginUser);
+userRouter.post(
+  "/signin",
+  validadeSchema(loginUserSchema),
+  userController.loginUser
+);
 userRouter.get("/users", validateToken, userController.getUser);
 userRouter.get(
   "/users/:id",
   validateToken,
   verifyAdmin,
   userController.getById
+);
+userRouter.patch(
+  "/users/isActive/:id",
+  validateToken,
+  verifyAdmin,
+  userController.isActive
+);
+userRouter.patch(
+  "/users/:id",
+  validadeSchema(userUpdateSchema),
+  validateToken,
+  verifyAdmin,
+  userController.update
 );
 
 export default userRouter;

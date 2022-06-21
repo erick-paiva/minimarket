@@ -1,9 +1,10 @@
 import * as yup from "yup";
+import { newShape } from "../../utils";
 
-const shape = {
+const objectShape = {
   id: yup.string().required(),
-  cnpj: yup.string().required(),
   name: yup.string().required(),
+  cnpj: yup.string().required(),
   contact: yup.string().required(),
   urlLogo: yup.string().required(),
   address: yup.object().shape({
@@ -15,15 +16,16 @@ const shape = {
   user: yup.object().shape({
     email: yup.string().required(),
     name: yup.string().required(),
+    id: yup.string().required(),
   }),
 };
 
-const newShape = Object.entries(shape)
-  .reverse()
-  .reduce((prev, [key, value]) => ({ ...prev, [key]: value }), {});
-
-const serializedEstablishmentSchema = yup
+const serializedArrEstablishmentSchema = yup
   .array()
-  .of(yup.object().shape(newShape));
+  .of(yup.object().shape(newShape(objectShape)));
 
-export { serializedEstablishmentSchema };
+const serializedObjEstablishmentSchema = yup
+  .object()
+  .shape(newShape(objectShape));
+
+export { serializedArrEstablishmentSchema, serializedObjEstablishmentSchema };

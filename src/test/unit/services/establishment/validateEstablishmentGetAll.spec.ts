@@ -1,9 +1,10 @@
 import { config } from "dotenv";
 import supertest from "supertest";
 import { DataSource } from "typeorm";
-import app from "../../..";
-import { AppDataSource } from "../../../data-source";
+
 import { sign } from "jsonwebtoken";
+import { AppDataSource } from "../../../../data-source";
+import app from "../../../..";
 
 config();
 
