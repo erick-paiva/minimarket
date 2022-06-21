@@ -21,7 +21,7 @@ export class Sale {
   @CreateDateColumn()
   date: Date;
 
-  @Column()
+  @Column({ nullable: true })
   paidDate: Date;
 
   @Column()
