@@ -2,10 +2,13 @@ import { config } from "dotenv";
 import request from "supertest";
 import { faker } from "@faker-js/faker";
 import { DataSource } from "typeorm";
-import app from "../../..";
-import { AppDataSource } from "../../../data-source";
-import { generateToken, createAnStablishment } from "../../utils/mainFunctions";
 import { v4 as uuid } from "uuid";
+import {
+  createAnStablishment,
+  generateToken,
+} from "../../../utils/mainFunctions";
+import app from "../../../..";
+import { AppDataSource } from "../../../../data-source";
 
 config();
 
@@ -27,8 +30,8 @@ describe("Patch product test", () => {
   const productData = {
     name: faker.lorem.word(),
     description: faker.lorem.paragraph(),
-    salePrice: faker.mersenne.rand(6, 15).toString(),
-    costPrice: faker.mersenne.rand(1, 5).toString(),
+    salePrice: faker.mersenne.rand(6, 15),
+    costPrice: faker.mersenne.rand(1, 5),
     unitType: faker.lorem.word(),
     urlImg: faker.image.imageUrl(),
     establishmentId: "",

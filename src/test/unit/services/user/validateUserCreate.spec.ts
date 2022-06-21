@@ -2,9 +2,9 @@ import { config } from "dotenv";
 import request from "supertest";
 import { faker } from "@faker-js/faker";
 import { DataSource } from "typeorm";
-import app from "../../..";
-import { AppDataSource } from "../../../data-source";
 import { sign } from "jsonwebtoken";
+import { AppDataSource } from "../../../../data-source";
+import app from "../../../..";
 
 config();
 
@@ -38,7 +38,7 @@ describe("User Create test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.phoneNumber();
+    const contact = faker.phone.number();
 
     const userData = { name, email, password, avatar, contact };
 
@@ -56,7 +56,7 @@ describe("User Create test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.phoneNumber();
+    const contact = faker.phone.number();
 
     const userData = { name, email, password, avatar, contact };
 
@@ -79,7 +79,7 @@ describe("User Create test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.phoneNumber();
+    const contact = faker.phone.number();
 
     const userData = { name, email, password, avatar, contact };
 
@@ -94,7 +94,7 @@ describe("User Create test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.phoneNumber();
+    const contact = faker.phone.number();
 
     const userData = { name, email, password, avatar, contact };
 
@@ -111,7 +111,7 @@ describe("User Create test", () => {
     const name = faker.name.firstName();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.phoneNumber();
+    const contact = faker.phone.number();
 
     const userData = { name, password, avatar, contact };
 
@@ -131,7 +131,7 @@ describe("User Create test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = 1234;
     const avatar = faker.image.avatar();
-    const contact = faker.phone.phoneNumber();
+    const contact = faker.phone.number();
 
     const userData = { name, password, avatar, contact, email };
 

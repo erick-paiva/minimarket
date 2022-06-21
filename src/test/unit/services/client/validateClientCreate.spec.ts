@@ -2,9 +2,9 @@ import { config } from "dotenv";
 import request from "supertest";
 import { faker } from "@faker-js/faker";
 import { DataSource } from "typeorm";
-import app from "../../..";
-import { AppDataSource } from "../../../data-source";
 import { sign } from "jsonwebtoken";
+import { AppDataSource } from "../../../../data-source";
+import app from "../../../..";
 
 config();
 
@@ -42,7 +42,7 @@ describe("Client Create test", () => {
     email,
     password,
     avatar,
-    contact: faker.phone.phoneNumber(),
+    contact: faker.phone.number(),
   };
 
   const establishmentData = {

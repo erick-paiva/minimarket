@@ -2,14 +2,15 @@ import { config } from "dotenv";
 import request from "supertest";
 import { faker } from "@faker-js/faker";
 import { DataSource } from "typeorm";
-import app from "../../..";
-import { AppDataSource } from "../../../data-source";
+
 import { sign } from "jsonwebtoken";
 import { v4 as uuid } from "uuid";
+import { AppDataSource } from "../../../../data-source";
+import app from "../../../..";
 
 config();
 
-describe("User update test", () => {
+describe("User get test", () => {
   let connection: DataSource;
 
   const token = (isAdm: boolean) => {
@@ -34,12 +35,12 @@ describe("User update test", () => {
     await connection.destroy();
   });
 
-  test("Should be able to update the specified user", async () => {
+  test("Should be able to get the specific user", async () => {
     const name = faker.name.firstName();
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.phoneNumber();
+    const contact = faker.phone.number();
 
     const userData = { name, email, password, avatar, contact };
 
@@ -49,17 +50,16 @@ describe("User update test", () => {
       .set("Authorization", "Bearer " + token(true));
 
     const response = await request(app)
-      .patch(`/api/users/${user.body.id}`)
-      .send({ name: "Kenzinho" })
+      .get(`/api/users/${user.body.id}`)
       .set("Authorization", "Bearer " + token(true));
-
     expect(response.status).toBe(200);
-    expect(response.body.name).toBe("Kenzinho");
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("email");
   });
 
-  test("Should not be able to find the specified user", async () => {
+  test("Should not find any user", async () => {
     const response = await request(app)
-      .patch(`/api/users/${uuid()}`)
+      .get(`/api/users/${uuid()}`)
       .set("Authorization", "Bearer " + token(true));
 
     expect(response.status).toBe(404);

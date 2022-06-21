@@ -31,6 +31,7 @@ describe("Get establishment test", () => {
 
     const response = await supertest(app)
       .get(`/api/establishment/${uuid}`)
+      .send()
       .set("Authorization", "Bearer " + adminToken);
     expect(response.status).toBe(404);
     expect(response.body.error).toBeDefined();
@@ -45,6 +46,7 @@ describe("Get establishment test", () => {
 
     const response = await supertest(app)
       .get(`/api/establishment/${establishment?.id}`)
+      .send()
       .set("Authorization", "Bearer " + anotherUserToken);
     expect(response.status).toBe(401);
     expect(response.body.message).toBeDefined();
@@ -56,6 +58,7 @@ describe("Get establishment test", () => {
 
     const response = await supertest(app)
       .get(`/api/establishment/${establishment?.id}`)
+      .send()
       .set("Authorization", "Bearer " + token);
     expect(response.status).toBe(200);
     expect(response.body).toStrictEqual(establishment);
@@ -67,6 +70,7 @@ describe("Get establishment test", () => {
 
     const response = await supertest(app)
       .get(`/api/establishment/${establishment?.id}`)
+      .send()
       .set("Authorization", "Bearer " + adminToken);
     expect(response.status).toBe(200);
     expect(response.body).toStrictEqual(establishment);

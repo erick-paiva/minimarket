@@ -29,7 +29,7 @@ const generateUserWithToken = async (admin: boolean = false) => {
     email: faker.internet.email().toLocaleLowerCase(),
     password: faker.internet.password(),
     avatar: faker.image.avatar(),
-    contact: faker.phone.phoneNumber(),
+    contact: faker.phone.number(),
   } as Partial<User>;
 
   if (admin) {
@@ -63,7 +63,7 @@ const createAnStablishment = async () => {
         zipCode: `33.333-${generateRandomNumbers(100, 200)}`,
         district: faker.address.city(),
       },
-      contact: faker.phone.phoneNumber(),
+      contact: faker.phone.number(),
       urlLogo: faker.image.avatar(),
       userId: user.user.id,
     })

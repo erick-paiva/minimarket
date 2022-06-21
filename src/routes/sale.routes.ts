@@ -7,8 +7,8 @@ const saleRouter = Router();
 
 saleRouter.post(
   "/sale",
-  validadeSchema(createSaleSchema),
   validateToken,
+  validadeSchema(createSaleSchema),
   SaleController.createSale
 );
 // saleRouter.patch("/sale/:id", SaleController.patchSale);

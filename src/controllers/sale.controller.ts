@@ -4,12 +4,8 @@ import { handleError } from "../errors/appError";
 
 class SaleController {
   createSale = async (req: Request, res: Response) => {
-    try {
-      const sale = SaleService.createSale(req);
-      return res.status(201).json(sale);
-    } catch (err) {
-      return handleError(err, res);
-    }
+    const sale = await SaleService.createSale(req);
+    return res.status(201).json(sale);
   };
   getSales = async (req: Request, res: Response) => {
     const { establishmentId } = req.params;

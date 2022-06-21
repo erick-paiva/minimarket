@@ -1,7 +1,6 @@
 import {
   Entity,
   Column,
-  OneToOne,
   JoinColumn,
   ManyToOne,
   ManyToMany,
@@ -21,8 +20,8 @@ export class Sale {
   @CreateDateColumn()
   date: Date;
 
-  @Column()
-  paidDate: Date;
+  @Column({ nullable: true })
+  paidDate: string;
 
   @Column()
   isPaid: Boolean;
@@ -30,16 +29,16 @@ export class Sale {
   @ManyToOne((type) => Client, (client) => client.sales)
   client: Client;
 
-  @OneToOne((type) => Payment, {
+  @ManyToOne((type) => Payment, {
     eager: true,
   })
   @JoinColumn()
   payment: Payment;
 
-  @Column()
+  @Column({ type: "numeric" })
   saleTotal: number;
 
-  @Column()
+  @Column({ type: "numeric" })
   remainToPlay: number;
 
   @ManyToMany((type) => Product, {
