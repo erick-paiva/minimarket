@@ -2,14 +2,13 @@ import * as yup from "yup";
 
 // Yup para criação de venda
 const createSaleSchema = yup.object().shape({
-  date: yup.date().default(new Date()),
   clientId: yup.string().uuid().required(),
   paymentId: yup.string().uuid().required(),
   products: yup
     .array()
     .of(
       yup.object().shape({
-        id: yup.string().uuid().required(),
+        productId: yup.string().uuid().required(),
         quantity: yup.number().required(),
       })
     )

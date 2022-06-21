@@ -2,10 +2,9 @@ import { config } from "dotenv";
 import request from "supertest";
 import { faker } from "@faker-js/faker";
 import { DataSource } from "typeorm";
-import app from "../../..";
-import { AppDataSource } from "../../../data-source";
 import { sign } from "jsonwebtoken";
-import { v4 as uuid } from "uuid";
+import { AppDataSource } from "../../../../data-source";
+import app from "../../../..";
 
 config();
 
@@ -34,34 +33,39 @@ describe("User get test", () => {
     await connection.destroy();
   });
 
-  test("Should be able to get the specific user", async () => {
+  test("Should be able to get all users", async () => {
+    const response = await request(app)
+      .get("/api/users")
+      .set("Authorization", "Bearer " + token(true));
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("map");
+  });
+
+  test("Should be able to get your own user", async () => {
     const name = faker.name.firstName();
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.phoneNumber();
+    const contact = faker.phone.number();
 
     const userData = { name, email, password, avatar, contact };
 
-    const user = await request(app)
+    await request(app)
       .post("/api/signup")
       .send(userData)
       .set("Authorization", "Bearer " + token(true));
 
-    const response = await request(app)
-      .get(`/api/users/${user.body.id}`)
+    const login = await request(app)
+      .post("/api/signin")
+      .send(userData)
       .set("Authorization", "Bearer " + token(true));
+
+    const response = await request(app)
+      .get("/api/users")
+      .set("Authorization", "Bearer " + login.body.token);
+
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("email");
-  });
-
-  test("Should not find any user", async () => {
-    const response = await request(app)
-      .get(`/api/users/${uuid()}`)
-      .set("Authorization", "Bearer " + token(true));
-
-    expect(response.status).toBe(404);
-    expect(response.body.error).toBe("User not found");
   });
 });

@@ -1,7 +1,6 @@
 import { config } from "dotenv";
 import supertest from "supertest";
 import { DataSource } from "typeorm";
-
 import { sign } from "jsonwebtoken";
 import { AppDataSource } from "../../../../data-source";
 import app from "../../../..";
@@ -44,8 +43,8 @@ describe("Post Establishment test", () => {
 
     const createUserResponse = await supertest(app)
       .post("/api/signup")
-      .set("Authorization", `Beare ${token(true)}`)
-      .send(user);
+      .send(user)
+      .set("Authorization", `Beare ${token(true)}`);
     expect(createUserResponse.status).toBe(201);
 
     const loginResponse = await supertest(app)

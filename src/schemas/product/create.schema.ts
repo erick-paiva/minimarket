@@ -3,8 +3,8 @@ import * as yup from "yup";
 const createProductSchema = yup.object().shape({
   name: yup.string().required(),
   description: yup.string().required(),
-  salePrice: yup.string().required(),
-  costPrice: yup.string().required(),
+  salePrice: yup.number().required(),
+  costPrice: yup.number().required(),
   unitType: yup.string().required(),
   urlImg: yup.string().required(),
   establishmentId: yup.string().required(),
