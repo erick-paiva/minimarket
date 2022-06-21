@@ -23,10 +23,10 @@ export class initialCommit1654875777960 implements MigrationInterface {
       `CREATE TABLE "establishments" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "cnpj" character varying NOT NULL, "contact" character varying NOT NULL, "urlLogo" character varying NOT NULL, "userId" uuid, "addressId" uuid, CONSTRAINT "UQ_88bbb5a2aba9ffa0d05384ac144" UNIQUE ("cnpj"), CONSTRAINT "UQ_6a660a2a399ce9971c3dcbb2371" UNIQUE ("contact"), CONSTRAINT "REL_06edbd9c4ab6f29aaa067f0499" UNIQUE ("addressId"), CONSTRAINT "PK_7fb6da6c365114ccb61b091bbdf" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "payments" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "formOfPagament" character varying NOT NULL, CONSTRAINT "PK_197ab7af18c93fbb0c9b28b4a59" PRIMARY KEY ("id"))`
+      `CREATE TABLE "payments" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "formOfPagament" character varying , CONSTRAINT "PK_197ab7af18c93fbb0c9b28b4a59" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "sales" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "date" TIMESTAMP NOT NULL, "paidDate" TIMESTAMP NOT NULL, "saleTotal" integer NOT NULL, "remainToPlay" integer NOT NULL, "clientId" uuid, "paymentId" uuid, CONSTRAINT "REL_0412bbfa60d1c8fc17cb49c28f" UNIQUE ("paymentId"), CONSTRAINT "PK_4f0bc990ae81dba46da680895ea" PRIMARY KEY ("id"))`
+      `CREATE TABLE "sales" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "date" TIMESTAMP NOT NULL, "paidDate" TIMESTAMP, "saleTotal" integer NOT NULL, "remainToPlay" integer NOT NULL, "clientId" uuid, "paymentId" uuid, CONSTRAINT "REL_0412bbfa60d1c8fc17cb49c28f" UNIQUE ("paymentId"), CONSTRAINT "PK_4f0bc990ae81dba46da680895ea" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "clients" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "avatar" character varying NOT NULL, "contact" character varying NOT NULL, "payDay" integer NOT NULL, "isDeptor" boolean NOT NULL, "isLate" boolean NOT NULL, "isActivate" boolean NOT NULL, "establishmentId" uuid, CONSTRAINT "PK_f1ab7cf3a5714dbc6bb4e1c28a4" PRIMARY KEY ("id"))`
