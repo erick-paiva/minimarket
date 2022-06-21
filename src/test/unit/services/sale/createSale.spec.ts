@@ -7,8 +7,6 @@ import { sign } from "jsonwebtoken";
 import { faker } from "@faker-js/faker";
 import request from "supertest";
 import { serializedCreateSaleSchema } from "../../../../schemas/sale/create.schema";
-import { Client } from "../../../../entities/client.entity";
-import clientsController from "../../../../controllers/clients.controller";
 
 config();
 
@@ -110,10 +108,10 @@ describe("Client Create test", () => {
   });
 
   // TESTAR CRIAÇÃO COM ERRO DE CLIENTE
-  test("Should be able to create a new sale", async () => {
+  test("Should return an error on the client", async () => {
     // montando o corpo da requisição
     const saleData = {
-      clientId: "gfhjhkhjkhtdfdf",
+      clientId: createClient(clientData),
       paymentId: getPayment(1),
       products: [{ productId: getProduct(1), quantity: 1 }],
     };
@@ -127,9 +125,25 @@ describe("Client Create test", () => {
     expect(response.status).toBe(404);
     expect(response.body.message).toBe("Client not found");
   });
-});
 
-// passando cliente que nao existe
-// passando tipo de pagamento que nao existe
-// passando produto que nao existe
-// passando quantidade errada
+  // TESTAR CRIAÇÃO COM ERRO NO PRODUTO
+  test("Should return an error in the product", async () => {
+    // montando o corpo da requisição
+    const saleData = {
+      clientId: createClient(clientData),
+      paymentId: getPayment(1),
+      products: [{ productId: "gfjjninkj;lm;mlkmjkhvkh", quantity: 1 }],
+    };
+
+    // Testando a criação da venda
+    const response = await request(app)
+      .post("/api/sale")
+      .send(saleData)
+      .set("Authorization", "Bearer " + token(true));
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe(
+      `Product ${saleData.products[0].productId} not found`
+    );
+  });
+});
