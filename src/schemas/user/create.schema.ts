@@ -21,7 +21,7 @@ const loginUserSchema = yup.object().shape({
   password: yup.string().required(),
 });
 
-const serializedCreateUserSchema = yup.object().shape({
+const responseObject = {
   id: yup.string().uuid().required(),
   name: yup.string().required(),
   email: yup.string().email().lowercase().required(),
@@ -29,8 +29,14 @@ const serializedCreateUserSchema = yup.object().shape({
   avatar: yup.string().required(),
   isAdmin: yup.boolean().required(),
   isActive: yup.boolean().required(),
-  created: yup.date().optional(),
-  lastAccess: yup.date().optional(),
-});
+  createdAt: yup.date().optional(),
+  updatedAt: yup.date().optional(),
+};
+
+const newShape = Object.entries(responseObject)
+  .reverse()
+  .reduce((prev, [key, value]) => ({ ...prev, [key]: value }), {});
+
+const serializedCreateUserSchema = yup.object().shape(newShape);
 
 export { createUserSchema, serializedCreateUserSchema, loginUserSchema };

@@ -42,6 +42,7 @@ describe("Create product test", () => {
     unitType: faker.lorem.word(),
     urlImg: faker.image.imageUrl(),
     establishmentId: "",
+    categories: [],
   };
 
   const establishmentData = {
