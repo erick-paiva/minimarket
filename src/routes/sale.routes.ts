@@ -11,6 +11,6 @@ saleRouter.post(
   validateToken,
   SaleController.createSale
 );
-saleRouter.patch("/sale/:id", SaleController.patchSale);
+// saleRouter.patch("/sale/:id", SaleController.patchSale);
 saleRouter.get("/sale/:establishmentId", SaleController.getSales);
 export default saleRouter;
