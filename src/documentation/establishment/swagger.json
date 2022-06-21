@@ -1,394 +1,360 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "description": "This is a simple API",
-        "version": "1.0.0",
-        "title": "Capstone Q4",
-        "contact": {
-            "email": "you@your-company.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        }
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a simple API",
+    "version": "1.0.0",
+    "title": "Capstone Q4",
+    "contact": {
+      "email": "you@your-company.com"
     },
-    "tags": [
-        {
-            "name": "establishment",
-            "description": "Establishment routes"
-        }
-    ],
-    "paths": {
-        "/establishment": {
-            "post": {
-                "tags": [
-                    "establishment"
-                ],
-                "summary": "post establishment",
-                "operationId": "postEstablishment",
-                "description": "Creates a new establishment in the application",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "creation",
-                        "description": "create an establishment",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/Establishment"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "array",
-                            "example": [
-                                {
-                                    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
-                                    "name": "mercadinho",
-                                    "cnpj": "11.0000.33/3333-11",
-                                    "contact": "035999947333",
-                                    "urlLogo": "https://www.google.com/image",
-                                    "address": {
-                                        "district": "centro",
-                                        "zipCode": "12345-678",
-                                        "number": 123,
-                                        "street": "rua"
-                                    },
-                                    "user": {
-                                        "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
-                                        "name": "mercadinho",
-                                        "email": "jhondoe@gmail.com"
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "bad request",
-                        "schema": {
-                            "type": "array",
-                            "example": [
-                                {
-                                    "error": "Missing authorization token."
-                                },
-                                {
-                                    "message": [
-                                        "name is a required field",
-                                        "cnpj is a required field",
-                                        "contact is a required field",
-                                        "urlLogo is a required field",
-                                        "address is a required field",
-                                        "userId is a required field"
-                                    ]
-                                }
-                            ]
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "type": "array",
-                            "example": [
-                                {
-                                    "error": "Address number 123 already registered"
-                                },
-                                {
-                                    "error": "Establishment with cnpj 11.0000.33/3333-12 already registered"
-                                },
-                                {
-                                    "error": "Establishment with contact 035999947334 already registered"
-                                },
-                                {
-                                    "error": "User not found"
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "get": {
-                "tags": [
-                    "establishment"
-                ],
-                "summary": "get one establishment",
-                "operationId": "getEstablishment",
-                "description": "Returns the establishment by id",
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "array",
-                            "example": [
-                                {
-                                    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
-                                    "name": "mercadinho",
-                                    "cnpj": "11.0000.33/3333-11",
-                                    "contact": "035999947333",
-                                    "urlLogo": "https://www.google.com/image",
-                                    "address": {
-                                        "district": "centro",
-                                        "zipCode": "12345-678",
-                                        "number": 123,
-                                        "street": "rua"
-                                    },
-                                    "user": {
-                                        "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
-                                        "name": "mercadinho",
-                                        "email": "jhondoe@gmail.com"
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "example": {
-                                "message": [
-                                    "Missing authorization token."
-                                ]
-                            }
-                        }
-                    }
-                }
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags": [
+    {
+      "name": "establishment",
+      "description": "Establishment routes"
+    }
+  ],
+  "paths": {
+    "/establishment": {
+      "post": {
+        "tags": ["establishment"],
+        "summary": "post establishment",
+        "operationId": "postEstablishment",
+        "description": "Creates a new establishment in the application",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "creation",
+            "description": "create an establishment",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/Establishment"
             }
-        },
-        "/establishment/:id": {
-            "patch": {
-                "tags": [
-                    "establishment"
-                ],
-                "summary": "patch establishment",
-                "operationId": "patchEstablishment",
-                "description": "Edit the values of an establishment",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "edition",
-                        "description": "Edit the values of an establishment",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/Establishment"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "array",
-                            "example": [
-                                {
-                                    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
-                                    "name": "mercadinho",
-                                    "cnpj": "11.0000.33/3333-11",
-                                    "contact": "035999947333",
-                                    "urlLogo": "https://www.google.com/image",
-                                    "address": {
-                                        "district": "centro",
-                                        "zipCode": "12345-678",
-                                        "number": 123,
-                                        "street": "rua"
-                                    },
-                                    "user": {
-                                        "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
-                                        "name": "mercadinho",
-                                        "email": "jhondoe@gmail.com"
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "bad request",
-                        "schema": {
-                            "type": "array",
-                            "example": [
-                                {
-                                    "error": "Missing authorization token."
-                                },
-                                {
-                                    "message": [
-                                        "name is a required field",
-                                        "cnpj is a required field",
-                                        "contact is a required field",
-                                        "urlLogo is a required field",
-                                        "address is a required field",
-                                        "userId is a required field"
-                                    ]
-                                },
-                                {
-                                    "error": "The id 123 is not valid"
-                                }
-                            ]
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "array",
-                            "example": [
-                                {
-                                    "error": "User not found"
-                                },
-                                {
-                                    "error": "Establishment with id 9cc26733-4de1-4a60-88af-082a7a8fb0d2 not found."
-                                }
-                            ]
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "type": "array",
-                            "example": [
-                                {
-                                    "error": "Address number 123 already registered"
-                                },
-                                {
-                                    "error": "Establishment with cnpj 11.0000.33/3333-12 already registered"
-                                },
-                                {
-                                    "error": "Establishment with contact 035999947334 already registered"
-                                }
-                            ]
-                        }
-                    }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "type": "array",
+              "example": [
+                {
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                  "name": "mercadinho",
+                  "cnpj": "11.0000.33/3333-11",
+                  "contact": "035999947333",
+                  "urlLogo": "https://www.google.com/image",
+                  "address": {
+                    "district": "centro",
+                    "zipCode": "12345-678",
+                    "number": 123,
+                    "street": "rua"
+                  },
+                  "user": {
+                    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                    "name": "mercadinho",
+                    "email": "jhondoe@gmail.com"
+                  }
                 }
-            },
-            "get": {
-                "tags": [
-                    "auth"
-                ],
-                "summary": "get all establishments",
-                "operationId": "getEstablishments",
-                "description": "Returns all establishments",
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "object",
-                            "example": {
-                                "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
-                                "name": "mercadinho",
-                                "cnpj": "11.0000.33/3333-11",
-                                "contact": "035999947333",
-                                "urlLogo": "https://www.google.com/image",
-                                "address": {
-                                    "district": "centro",
-                                    "zipCode": "12345-678",
-                                    "number": 123,
-                                    "street": "rua"
-                                },
-                                "user": {
-                                    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
-                                    "name": "mercadinho",
-                                    "email": "jhondoe@gmail.com"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "example": {
-                                "error": [
-                                    "Establishment with id 9cc26733-4de1-4a60-88af-082a7a8fb0d2 not found."
-                                ]
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "object",
-                            "example": {
-                                "message": [
-                                    "Unauthorized"
-                                ]
-                            }
-                        }
-                    }
-                }
+              ]
             }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "type": "array",
+              "example": [
+                {
+                  "error": "Missing authorization token."
+                },
+                {
+                  "message": [
+                    "name is a required field",
+                    "cnpj is a required field",
+                    "contact is a required field",
+                    "urlLogo is a required field",
+                    "address is a required field",
+                    "userId is a required field"
+                  ]
+                }
+              ]
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "array",
+              "example": [
+                {
+                  "error": "Address number 123 already registered"
+                },
+                {
+                  "error": "Establishment with cnpj 11.0000.33/3333-12 already registered"
+                },
+                {
+                  "error": "Establishment with contact 035999947334 already registered"
+                },
+                {
+                  "error": "User not found"
+                }
+              ]
+            }
+          }
         }
+      },
+      "get": {
+        "tags": ["establishment"],
+        "summary": "get one establishment",
+        "operationId": "getEstablishment",
+        "description": "Returns the establishment by id",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "type": "array",
+              "example": [
+                {
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                  "name": "mercadinho",
+                  "cnpj": "11.0000.33/3333-11",
+                  "contact": "035999947333",
+                  "urlLogo": "https://www.google.com/image",
+                  "address": {
+                    "district": "centro",
+                    "zipCode": "12345-678",
+                    "number": 123,
+                    "street": "rua"
+                  },
+                  "user": {
+                    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                    "name": "mercadinho",
+                    "email": "jhondoe@gmail.com"
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": ["Missing authorization token."]
+              }
+            }
+          }
+        }
+      }
     },
-    "definitions": {
-        "Establishment": {
-            "type": "object",
-            "required": [
-                "name",
-                "address",
-                "contact",
-                "urlLogo",
-                "userId"
-            ],
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "format": "uuid",
-                    "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+    "/establishment/:id": {
+      "patch": {
+        "tags": ["establishment"],
+        "summary": "patch establishment",
+        "operationId": "patchEstablishment",
+        "description": "Edit the values of an establishment",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "edition",
+            "description": "Edit the values of an establishment",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/Establishment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "type": "array",
+              "example": [
+                {
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                  "name": "mercadinho",
+                  "cnpj": "11.0000.33/3333-11",
+                  "contact": "035999947333",
+                  "urlLogo": "https://www.google.com/image",
+                  "address": {
+                    "district": "centro",
+                    "zipCode": "12345-678",
+                    "number": 123,
+                    "street": "rua"
+                  },
+                  "user": {
+                    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                    "name": "mercadinho",
+                    "email": "jhondoe@gmail.com"
+                  }
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "schema": {
+              "type": "array",
+              "example": [
+                {
+                  "error": "Missing authorization token."
                 },
-                "name": {
-                    "type": "string",
-                    "example": "Jhon"
+                {
+                  "message": [
+                    "name is a required field",
+                    "cnpj is a required field",
+                    "contact is a required field",
+                    "urlLogo is a required field",
+                    "address is a required field",
+                    "userId is a required field"
+                  ]
                 },
-                "cpnj": {
-                    "type": "string",
-                    "example": "11.0000.33/3333-12"
+                {
+                  "error": "The id 123 is not valid"
+                }
+              ]
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "array",
+              "example": [
+                {
+                  "error": "User not found"
                 },
+                {
+                  "error": "Establishment with id 9cc26733-4de1-4a60-88af-082a7a8fb0d2 not found."
+                }
+              ]
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "array",
+              "example": [
+                {
+                  "error": "Address number 123 already registered"
+                },
+                {
+                  "error": "Establishment with cnpj 11.0000.33/3333-12 already registered"
+                },
+                {
+                  "error": "Establishment with contact 035999947334 already registered"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["auth"],
+        "summary": "get all establishments",
+        "operationId": "getEstablishments",
+        "description": "Returns all establishments",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "type": "object",
+              "example": {
+                "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                "name": "mercadinho",
+                "cnpj": "11.0000.33/3333-11",
+                "contact": "035999947333",
+                "urlLogo": "https://www.google.com/image",
                 "address": {
-                    "type": "object",
-                    "required": [
-                        "street",
-                        "number",
-                        "city",
-                        "zipCode",
-                        "district"
-                    ],
-                    "example": {
-                        "street": "Rua dos Bobos",
-                        "number": 0,
-                        "city": "São Paulo",
-                        "zipCode": "01001000",
-                        "district": "Centro"
-                    }
+                  "district": "centro",
+                  "zipCode": "12345-678",
+                  "number": 123,
+                  "street": "rua"
                 },
-                "contact": {
-                    "type": "string",
-                    "example": "123456789012"
-                },
-                "urlLogo": {
-                    "type": "string",
-                    "example": "https://www.google.com/image"
-                },
-                "userId": {
-                    "type": "string",
-                    "format": "uuid",
-                    "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+                "user": {
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                  "name": "mercadinho",
+                  "email": "jhondoe@gmail.com"
                 }
+              }
             }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": [
+                  "Establishment with id 9cc26733-4de1-4a60-88af-082a7a8fb0d2 not found."
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": ["Unauthorized"]
+              }
+            }
+          }
         }
-    },
-    "host": "localhost:3000",
-    "basePath": "/api",
-    "schemes": [
-        "http"
-    ]
+      }
+    }
+  },
+  "definitions": {
+    "Establishment": {
+      "type": "object",
+      "required": ["name", "address", "contact", "urlLogo", "userId"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "name": {
+          "type": "string",
+          "example": "Jhon"
+        },
+        "cpnj": {
+          "type": "string",
+          "example": "11.0000.33/3333-12"
+        },
+        "address": {
+          "type": "object",
+          "required": ["street", "number", "city", "zipCode", "district"],
+          "example": {
+            "street": "Rua dos Bobos",
+            "number": 0,
+            "city": "São Paulo",
+            "zipCode": "01001000",
+            "district": "Centro"
+          }
+        },
+        "contact": {
+          "type": "string",
+          "example": "123456789012"
+        },
+        "urlLogo": {
+          "type": "string",
+          "example": "https://www.google.com/image"
+        },
+        "userId": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        }
+      }
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "schemes": ["http"]
 }

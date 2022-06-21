@@ -43,7 +43,7 @@ describe("User update test", () => {
     email,
     password,
     avatar,
-    contact: faker.phone.phoneNumber(),
+    contact: faker.phone.number(),
   };
 
   const establishmentData = {

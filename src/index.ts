@@ -5,7 +5,7 @@ import { errorHandling } from "./middlewares";
 import { AppError } from "./errors/appError";
 import swaggerUiExpress from "swagger-ui-express";
 import swaggerDocument from "./swagger.json";
-import swaggerDocumentEst from "./documentation/establishment/swagger.json";
+// import swaggerDocumentEst from "./documentation/establishment/swagger.json";
 
 const app = express();
 
@@ -21,11 +21,11 @@ app.use(
   swaggerUiExpress.setup(swaggerDocument)
 );
 
-app.use(
-  "/api-documentation-est",
-  swaggerUiExpress.serve,
-  swaggerUiExpress.setup(swaggerDocumentEst)
-);
+// app.use(
+//   "/api-documentation-est",
+//   swaggerUiExpress.serve,
+//   swaggerUiExpress.setup(swaggerDocumentEst)
+// );
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   if (err instanceof AppError) {
