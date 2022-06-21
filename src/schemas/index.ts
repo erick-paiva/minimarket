@@ -27,7 +27,11 @@ import {
 } from "./establishment";
 
 /* PRODUCT*/
-import { createProductSchema } from "./product/create.schema";
+import {
+  createProductSchema,
+  productUpdateSchema,
+  serializedCreateproductSchema,
+} from "./product/create.schema";
 
 export {
   /* USER*/
@@ -48,4 +52,6 @@ export {
   clientUpdateSchema,
   /* PRODUCT*/
   createProductSchema,
+  productUpdateSchema,
+  serializedCreateproductSchema,
 };
