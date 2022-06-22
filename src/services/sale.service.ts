@@ -9,7 +9,6 @@ import { userRepo, saleRepo, clientRepo, PaymentRepo } from "../repositories";
 import productRepository from "../repositories/product.repository";
 import saleRepository from "../repositories/sale.repository";
 import { serializedCreateSaleSchema } from "../schemas/sale/create.schema";
-
 class SaleService {
   createSale = async ({ validated }: Request) => {
     const userFound = (await userRepo.findOne({
@@ -59,7 +58,7 @@ class SaleService {
     sale.remainToPlay = 0;
 
     const newSale = await saleRepo.save(sale);
-
+    await clientRepo.update(clientFound.id, { isDeptor: true });
     return await serializedCreateSaleSchema.validate(newSale, {
       stripUnknown: true,
     });
@@ -101,7 +100,18 @@ class SaleService {
     newSale.paidDate = new Date().toString();
 
     await saleRepository.update(sale.id, { ...newSale });
-
+    if (newSale.isPaid === true) {
+      const clients = await clientRepo.all();
+      const client = clients.find((client) =>
+        client.sales.find((sale) => sale.id === saleId)
+      );
+      const notPayedSales = client.sales.filter(
+        (sale) => sale.isPaid === false
+      );
+      if (notPayedSales.length === 0) {
+        await clientRepo.update(client.id, { isDeptor: false });
+      }
+    }
     return {
       status: 200,
       message: {

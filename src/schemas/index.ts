@@ -18,6 +18,7 @@ import {
   clientUpdateSchema,
 } from "./client/create.schema";
 
+import { serializedArrClient } from "./client/serializedClients";
 /* ESTABLISHMENT*/
 import {
   createEstablishmentSchema,
@@ -50,6 +51,7 @@ export {
   createClientSchema,
   serializedCreateClientSchema,
   clientUpdateSchema,
+  serializedArrClient,
   /* PRODUCT*/
   createProductSchema,
   productUpdateSchema,
