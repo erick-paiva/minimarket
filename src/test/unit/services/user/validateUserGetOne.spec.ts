@@ -40,7 +40,7 @@ describe("User get test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = "(19)238534950";
+    const contact = faker.phone.number();
 
     const userData = { name, email, password, avatar, contact };
 

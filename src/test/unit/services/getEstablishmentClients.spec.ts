@@ -41,7 +41,7 @@ describe(" Get establishment clients  test", () => {
     isLate: false,
     isActivate: true,
     establishmentId: "",
-    contact: "(19)15432856",
+    contact: faker.phone.number(),
   };
 
   test("Should be able to get the clients of an establishment", async () => {
