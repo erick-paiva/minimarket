@@ -4,6 +4,10 @@ import { sign } from "jsonwebtoken";
 import app from "../..";
 import { User } from "../../entities/user.entity";
 import { generateRandomNumbers } from "./auxiliaryFunctions";
+import { AppDataSource } from "../../data-source";
+import { Payment } from "../../entities/payment.entity";
+import { Category } from "../../entities/category.entity";
+import { defaultCategories, paymentMethods } from "./defaultValues";
 
 const generateToken = (isAdm: boolean) => {
   return sign(
@@ -72,4 +76,129 @@ const createAnStablishment = async () => {
   return { establishment: response.body, token: user.token };
 };
 
-export { generateUserWithToken, generateToken, login, createAnStablishment };
+const createAnClient = async () => {
+  const user = await generateUserWithToken(true);
+  const { establishment } = await createAnStablishment();
+
+  const response = await supertest(app)
+    .post("/api/client")
+    .send({
+      name: faker.name.firstName(),
+      avatar: faker.image.avatar(),
+      contact: faker.phone.number(),
+      payDay: generateRandomNumbers(1, 31),
+      establishmentId: establishment.id,
+      isActicvate: true,
+      isLate: false,
+      isActivate: true,
+      isDeptor: true,
+    })
+    .set("Authorization", "Bearer " + user.token);
+
+  return { client: response.body, token: user.token };
+};
+
+const createAnProduct = async () => {
+  const user = await generateUserWithToken(true);
+  const { establishment } = await createAnStablishment();
+
+  const response = await supertest(app)
+    .post("/api/product")
+    .send({
+      name: faker.name.firstName(),
+      description: faker.name.firstName(),
+      salePrice: generateRandomNumbers(10, 1000),
+      costPrice: generateRandomNumbers(10, 1000),
+      payday: generateRandomNumbers(1, 31),
+      unitType: "unidade",
+      urlImg: faker.image.food(),
+      establishmentId: establishment.id,
+      categories: ["Congelados"],
+    })
+    .set("Authorization", "Bearer " + user.token);
+
+  return { product: response.body, token: user.token };
+};
+
+const createAnPaymentMethod = async (methods = paymentMethods) => {
+  const paymentRepo = AppDataSource.getRepository(Payment);
+  let payments;
+  try {
+    payments = await paymentRepo
+      .createQueryBuilder()
+      .insert()
+      .values(methods as Partial<Payment>[])
+      .execute();
+  } catch (error) {
+    return { error: "Payment Already exists" };
+  }
+
+  return { payments: payments };
+};
+
+const createAnCategory = async (categoryes = defaultCategories) => {
+  const categoryRepo = AppDataSource.getRepository(Category);
+
+  let category;
+
+  try {
+    category = await categoryRepo
+      .createQueryBuilder()
+      .insert()
+      .values(categoryes as Partial<Category>[])
+      .execute();
+  } catch (error) {
+    return { error: "Category Already exists" };
+  }
+
+  return { category: category };
+};
+
+const getPaymentMethods = async () => {
+  await createAnPaymentMethod();
+  await createAnCategory();
+
+  const user = await generateUserWithToken(true);
+
+  const response = await supertest(app)
+    .get("/api/paymentMethods")
+    .set("Authorization", "Bearer " + user.token);
+
+  return { payments: response.body, token: user.token };
+};
+
+const createAnSale = async (inCash = true) => {
+  const { client, token } = await createAnClient();
+  const { payments } = await getPaymentMethods();
+  const { product } = await createAnProduct();
+
+  const saleData = {
+    clientId: client.id,
+    paymentId: payments[inCash ? 0 : 1].id,
+    products: [
+      {
+        productId: product.id,
+        quantity: generateRandomNumbers(1, 1000),
+      },
+    ],
+  };
+
+  const response = await supertest(app)
+    .post("/api/sale")
+    .send(saleData)
+    .set("Authorization", "Bearer " + token);
+
+  return { sale: response.body, saleData, token: token };
+};
+
+export {
+  generateUserWithToken,
+  generateToken,
+  login,
+  createAnStablishment,
+  createAnClient,
+  createAnSale,
+  createAnProduct,
+  createAnPaymentMethod,
+  createAnCategory,
+};
