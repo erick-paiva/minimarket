@@ -117,8 +117,6 @@ describe("Post Establishment test", () => {
       userId: user.id,
     });
 
-    // console.log(establishment);
-
     const response = await supertest(app)
       .patch(`/api/establishment/${establishment.id}`)
       .send(establishment)

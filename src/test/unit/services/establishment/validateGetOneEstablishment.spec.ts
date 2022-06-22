@@ -67,7 +67,6 @@ describe("Get establishment test", () => {
   it("Should return 200 ok if the user is not the owner but is admin", async () => {
     const { establishment } = await createAnStablishment();
     const adminToken = generateToken(true);
-    console.log(establishment);
     const response = await supertest(app)
       .get(`/api/establishment/${establishment?.id}`)
       .send()
