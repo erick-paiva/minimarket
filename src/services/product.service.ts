@@ -44,7 +44,7 @@ class ProductService {
     if (productAlreadyExists) {
       throw new ErrorHTTP(
         409,
-        `You already have a product calls  ${productAlreadyExists.name.toLocaleLowerCase()}`
+        `You already have a product calls ${productAlreadyExists.name.toLocaleLowerCase()}`
       );
     }
 
@@ -82,7 +82,6 @@ class ProductService {
   };
 
   patchProduct = async ({ validated, params }: Request) => {
-    const categoryRepository = AppDataSource.getRepository(Category);
     const { id } = params;
 
     const product = await ProductRepo.findOne({ id: id });
