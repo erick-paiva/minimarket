@@ -58,4 +58,8 @@ const serializedCreateSaleSchema = yup.object().shape({
     .required(),
 });
 
-export { createSaleSchema, serializedCreateSaleSchema };
+const updateSaleSchema = yup.object().shape({
+  payment: yup.number().required(),
+});
+
+export { createSaleSchema, serializedCreateSaleSchema, updateSaleSchema };
