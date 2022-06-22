@@ -14,14 +14,12 @@ clientRouter.post(
   "/client",
   validadeSchema(createClientSchema),
   validateToken,
-  verifyAdmin,
   ClientController.createClient
 );
 clientRouter.patch(
   "/client/:id",
   validadeSchema(clientUpdateSchema),
   validateToken,
-  verifyAdmin,
   ClientController.patchClient
 );
 

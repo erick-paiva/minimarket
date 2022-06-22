@@ -589,6 +589,11 @@
     "/establishment/{id}": {
       "get": {
         "tags": ["establishment"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "summary": "get one establishment",
         "operationId": "getEstablishment",
         "description": "Returns the establishment by id",
@@ -760,21 +765,44 @@
       }
     },
 
-    "/clients": {
-      "get": {
+    "/client": {
+      "post": {
         "tags": ["client"],
-        "summary": "get all clients",
-        "operationId": "GetAllClients",
-        "description": "This route is to get all users. Only admin users have access.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "post clients",
+        "operationId": "postClients",
+        "description": "This route is to post an user. Only admin users have access.",
         "consumes": ["application/json"],
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "creation",
+            "description": "create an client",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/Client"
+            }
+          }
+        ],
         "responses": {
-          "200": {
+          "201": {
             "description": "Ok",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
+              "type": "object",
+              "example": {
+                "id": "5db63df3-1f8d-49de-a046-a91e354cd257",
+                "name": "Kenzo",
+                "avatar": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
+                "contact": "40028922",
+                "payDay": 7,
+                "isDeptor": false,
+                "isLate": false,
+                "isActivate": true
               }
             }
           },
@@ -783,7 +811,7 @@
             "schema": {
               "type": "object",
               "example": {
-                "message": "Missing authorization token."
+                "error": "Missing authorization token."
               }
             }
           },
@@ -792,104 +820,72 @@
             "schema": {
               "type": "object",
               "example": {
-                "message": "You are not allowed to access this information"
+                "error": "You're not the owner of this establishment."
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "Client already exists"
               }
             }
           }
         }
       }
     },
-    "/establishments/:id/clients": {
-      "get": {
-        "tags": ["client"],
-        "summary": "get all clients",
-        "operationId": "GetAllEstablishmentIdClients",
-        "description": "This route is to get all users. Only admin users have access.",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "Ok",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "type": "object",
-              "example": {
-                "message": "Missing authorization token."
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "type": "object",
-              "example": {
-                "message": "You are not allowed to access this information"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/establishments/:id/clients/:id": {
-      "get": {
-        "tags": ["client"],
-        "summary": "get all clients",
-        "operationId": "GetAllEstablishmentIdClientsId",
-        "description": "This route is to get all users. Only admin users have access.",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "Ok",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "schema": {
-              "type": "object",
-              "example": {
-                "message": "Missing authorization token."
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "type": "object",
-              "example": {
-                "message": "You are not allowed to access this information"
-              }
-            }
-          }
-        }
-      },
+    "/client/{id}": {
       "patch": {
         "tags": ["client"],
-        "summary": "get all clients",
-        "operationId": "GetAllEstablishmentIdClientsIdc",
-        "description": "This route is to get all users. Only admin users have access.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Edit the values of an client",
+        "operationId": "patchClient",
+        "description": "This route is to patch an client by passing the id. Only admin users have access.",
         "consumes": ["application/json"],
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "name": "creation",
+            "description": "patch an client",
+            "schema": {
+              "type": "object",
+              "example": {
+                "name": "jonathan joestar",
+                "avatar": "https://i.pinimg.com/originals/30/2c/5e/302c5e9ca27dcd4cc6b9a0611079c876.jpg"
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Ok",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
+              "type": "object",
+              "example": {
+                "id": "10bc1f8b-b3bf-44cc-90fd-eb3a45e9ff83",
+                "name": "jonathan joestar",
+                "avatar": "https://i.pinimg.com/originals/30/2c/5e/302c5e9ca27dcd4cc6b9a0611079c876.jpg",
+                "contact": "40028922",
+                "payDay": 7,
+                "isDeptor": false,
+                "isLate": false,
+                "isActivate": true,
+                "establishmentId": "59a6a1fa-c380-4da4-ae15-5aaf1f82de1f"
               }
             }
           },
@@ -898,7 +894,7 @@
             "schema": {
               "type": "object",
               "example": {
-                "message": "Missing authorization token."
+                "error": "Missing authorization token."
               }
             }
           },
@@ -907,7 +903,100 @@
             "schema": {
               "type": "object",
               "example": {
-                "message": "You are not allowed to access this information"
+                "error": "You're not the owner of this establishment."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "Client not found"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/client/{establishmentId}": {
+      "get": {
+        "tags": ["client"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "get all clients of the passed establishmentId",
+        "operationId": "getEstablishmentClients",
+        "description": "This route is to get an client by passing the id. Only admin users or the establishment owner have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "establishmentId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "example": [
+                {
+                  "id": "10bc1f8b-b3bf-44cc-90fd-eb3a45e9ff83",
+                  "name": "Kenzo",
+                  "avatar": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
+                  "contact": "40028922",
+                  "payDay": 7,
+                  "isDeptor": false,
+                  "isLate": false,
+                  "isActivate": true,
+                  "sales": []
+                },
+                {
+                  "id": "86ceb63f-a401-48e7-b262-9702527cf507",
+                  "name": "Dio Brando",
+                  "avatar": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
+                  "contact": "400289222",
+                  "payDay": 7,
+                  "isDeptor": false,
+                  "isLate": false,
+                  "isActivate": true,
+                  "sales": []
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "Missing authorization token."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "You're not the owner of this establishment."
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "Establishment not found"
               }
             }
           }
@@ -1360,6 +1449,53 @@
         },
         "courses": {
           "$ref": "#/definitions/Establishment"
+        }
+      }
+    },
+    "Client": {
+      "type": "object",
+      "required": [
+        "name",
+        "avatar",
+        "contact",
+        "payDay",
+        "isDeptor",
+        "isLate",
+        "isActivate",
+        "establishmentId"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Kenzo"
+        },
+        "avatar": {
+          "type": "string",
+          "example": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg"
+        },
+        "contact": {
+          "type": "string",
+          "example": "40028922"
+        },
+        "payDay": {
+          "type": "number",
+          "example": 7
+        },
+        "isDeptor": {
+          "type": "boolean",
+          "example": false
+        },
+        "isLate": {
+          "type": "boolean",
+          "example": false
+        },
+        "isActivate": {
+          "type": "boolean",
+          "example": true
+        },
+        "establishmentId": {
+          "type": "string",
+          "example": "Insert the establishmentID"
         }
       }
     },
