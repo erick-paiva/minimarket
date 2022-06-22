@@ -94,7 +94,7 @@ describe("User Create test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.number();
+    const contact = "(19)329532980";
 
     const userData = { name, email, password, avatar, contact };
 

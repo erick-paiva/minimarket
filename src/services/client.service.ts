@@ -3,6 +3,7 @@ import { Client } from "../entities/client.entity";
 import ErrorHTTP from "../errors/ErrorHTTP";
 import { clientRepo, establishmentRepo } from "../repositories";
 import { serializedCreateClientSchema } from "../schemas";
+import establishmentRepository from "../repositories/establishment.repository";
 
 class ClientService {
   createClient = async ({ validated }: Request) => {
@@ -53,6 +54,24 @@ class ClientService {
     return await serializedCreateClientSchema.validate(updatedClient, {
       stripUnknown: true,
     });
+  };
+  getEstablishmentClients = async (
+    establishmentId: string,
+    userEmail: string,
+    userIsAdmin: boolean
+  ) => {
+    const establishment = await establishmentRepository.findOne({
+      id: establishmentId,
+    });
+
+    if (!establishment) {
+      throw new ErrorHTTP(404, "Establishment not found");
+    }
+    if (establishment.user.email !== userEmail && !userIsAdmin) {
+      throw new ErrorHTTP(401, "You're not the owner of this establishment");
+    }
+    const clients = establishment.clients;
+    return clients;
   };
 }
 
