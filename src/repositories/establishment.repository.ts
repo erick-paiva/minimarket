@@ -2,6 +2,7 @@ import { Repository, UpdateResult } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { Establishment } from "../entities/establishment.entity";
 
+type TFindEstb = { estId: string; ownerEmail: string };
 interface IEstablishmentRepo {
   save: (establishment: Partial<Establishment>) => Promise<Establishment>;
   findOne: (payload: object) => Promise<Establishment | null>;

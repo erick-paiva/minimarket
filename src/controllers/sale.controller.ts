@@ -19,15 +19,9 @@ class SaleController {
     }
   };
 
-  getSales = async (req: Request, res: Response) => {
-    const { establishmentId } = req.params;
-
-    try {
-      const { status, message } = SaleService.getSales(establishmentId);
-      return res.status(status).json({ message: message });
-    } catch (err) {
-      return handleError(err, res);
-    }
+  getSales = async (_: Request, res: Response) => {
+    const sales = await SaleService.getSales();
+    return res.status(200).json(sales);
   };
 }
 export default new SaleController();

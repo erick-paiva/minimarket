@@ -7,8 +7,10 @@ import { User } from "../entities/user.entity";
 import ErrorHTTP from "../errors/ErrorHTTP";
 import { userRepo, saleRepo, clientRepo, PaymentRepo } from "../repositories";
 import productRepository from "../repositories/product.repository";
-import saleRepository from "../repositories/sale.repository";
-import { serializedCreateSaleSchema } from "../schemas/sale/create.schema";
+import {
+  serializedObjSaleSchema,
+  serializedArrSaleSchema,
+} from "../schemas/sale/serializedSale.schema";
 
 class SaleService {
   createSale = async ({ validated }: Request) => {
@@ -60,13 +62,13 @@ class SaleService {
 
     const newSale = await saleRepo.save(sale);
 
-    return await serializedCreateSaleSchema.validate(newSale, {
+    return await serializedObjSaleSchema.validate(newSale, {
       stripUnknown: true,
     });
   };
 
   patchSale = async (saleId: string, payment: number) => {
-    const sale = await saleRepository.findOne({
+    const sale = await saleRepo.findOne({
       id: saleId,
     });
 
@@ -100,7 +102,7 @@ class SaleService {
 
     newSale.paidDate = new Date().toString();
 
-    await saleRepository.update(sale.id, { ...newSale });
+    await saleRepo.update(sale.id, { ...newSale });
 
     return {
       status: 200,
@@ -112,8 +114,11 @@ class SaleService {
     };
   };
 
-  getSales = (establishmentId) => {
-    return { status: 200, message: "get sales" };
+  getSales = async () => {
+    const sales = await saleRepo.all();
+    return await serializedArrSaleSchema.validate(sales, {
+      stripUnknown: true,
+    });
   };
 }
 

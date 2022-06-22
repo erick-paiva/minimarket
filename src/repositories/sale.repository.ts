@@ -17,7 +17,11 @@ class saleRepo implements ISaleRepository {
 
   save = async (sale: Partial<Sale>) => await this.ormRepo.save(sale);
 
-  all = async () => await this.ormRepo.find();
+  all = async () => {
+    return await this.ormRepo.find({
+      relations: ["client"],
+    });
+  };
 
   findOne = async (payload: object) => {
     return await this.ormRepo.findOneBy({ ...payload });
