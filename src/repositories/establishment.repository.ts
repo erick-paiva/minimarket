@@ -6,6 +6,7 @@ type TFindEstb = { estId: string; ownerEmail: string };
 interface IEstablishmentRepo {
   save: (establishment: Partial<Establishment>) => Promise<Establishment>;
   findOne: (payload: object) => Promise<Establishment | null>;
+  findEstSalesById: (id: string) => Promise<Establishment>;
   getAll: () => Promise<Establishment[]>;
   update: (
     id: string,
@@ -26,6 +27,15 @@ class EstablishmentRepo implements IEstablishmentRepo {
 
   findOne = async (payload: object) => {
     return await this.ormRepo.findOneBy({ ...payload });
+  };
+
+  findEstSalesById = async (id: string) => {
+    return await this.ormRepo
+      .createQueryBuilder("establishment")
+      .innerJoin("establishment.sales", "sales")
+      .innerJoinAndSelect("establishment.sales", "sales")
+      .where("establishment.id = :id", { id: id })
+      .getOne();
   };
 
   getAll = async () => await this.ormRepo.find();

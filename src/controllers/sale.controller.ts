@@ -19,8 +19,8 @@ class SaleController {
     }
   };
 
-  getSales = async (_: Request, res: Response) => {
-    const sales = await SaleService.getSales();
+  getSales = async (req: Request, res: Response) => {
+    const sales = await SaleService.getSales(req);
     return res.status(200).json(sales);
   };
 }

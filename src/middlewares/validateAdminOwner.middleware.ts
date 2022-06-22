@@ -8,24 +8,22 @@ const validateAdminOrEstOwner = async (
   next: NextFunction
 ) => {
   try {
-    if (req.decoded?.isAdmin === false) {
-      throw new ErrorHTTP(
-        403,
-        "You are not authorized to perform this action."
-      );
+    if (req.decoded.isAdmin === false) {
+      const establishment = await establishmentRepo.findOne({
+        id: req.params.establishmentId,
+      });
+
+      if (!establishment) {
+        throw new Error();
+      }
+
+      if (establishment.user.email !== req.decoded.email) {
+        throw new ErrorHTTP(
+          403,
+          "You are not authorized to perform this action."
+        );
+      }
     }
-
-    const establishment = await establishmentRepo.findOne({
-      id: req.params.id,
-    });
-
-    console.log(establishment, "establishment");
-
-    if (!establishment) {
-      throw new Error();
-    }
-
-    req.establishment = establishment;
 
     return next();
   } catch (error: any) {

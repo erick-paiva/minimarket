@@ -5,7 +5,13 @@ import { Product } from "../entities/product.entity";
 import { Sale } from "../entities/sale.entity";
 import { User } from "../entities/user.entity";
 import ErrorHTTP from "../errors/ErrorHTTP";
-import { userRepo, saleRepo, clientRepo, PaymentRepo } from "../repositories";
+import {
+  userRepo,
+  saleRepo,
+  clientRepo,
+  PaymentRepo,
+  establishmentRepo,
+} from "../repositories";
 import productRepository from "../repositories/product.repository";
 import {
   serializedObjSaleSchema,
@@ -29,6 +35,15 @@ class SaleService {
     if (!clientFound) {
       throw new ErrorHTTP(404, "Client not found");
     }
+
+    const EstablishmentFound = await establishmentRepo.findOne({
+      id: validated.establishmentId,
+    });
+
+    if (!EstablishmentFound) {
+      throw new ErrorHTTP(404, "Establishment not found");
+    }
+
     const payment = (await PaymentRepo.findOne({
       id: validated.paymentId,
     })) as Payment | null;
@@ -57,6 +72,7 @@ class SaleService {
     sale.isPaid = payment.formOfPagament === "À vista" ? true : false;
     sale.paidDate = new Date().toString();
     sale.payment = payment;
+    sale.establishment = EstablishmentFound;
     sale.products = productsA;
     sale.remainToPlay = 0;
 
@@ -114,8 +130,13 @@ class SaleService {
     };
   };
 
-  getSales = async () => {
-    const sales = await saleRepo.all();
+  getSales = async ({ params }: Request) => {
+    const salesData = await saleRepo.all();
+
+    const sales = salesData.filter(
+      (sale) => sale.establishment.id === params.establishmentId
+    );
+
     return await serializedArrSaleSchema.validate(sales, {
       stripUnknown: true,
     });
