@@ -5,10 +5,20 @@ import { Product } from "../entities/product.entity";
 import { Sale } from "../entities/sale.entity";
 import { User } from "../entities/user.entity";
 import ErrorHTTP from "../errors/ErrorHTTP";
-import { userRepo, saleRepo, clientRepo, PaymentRepo } from "../repositories";
+import {
+  userRepo,
+  saleRepo,
+  clientRepo,
+  PaymentRepo,
+  establishmentRepo,
+} from "../repositories";
 import productRepository from "../repositories/product.repository";
 import saleRepository from "../repositories/sale.repository";
-import { serializedCreateSaleSchema } from "../schemas/sale/create.schema";
+import {
+  serializedObjSaleSchema,
+  serializedArrSaleSchema,
+} from "../schemas/sale/serializedSale.schema";
+
 class SaleService {
   createSale = async ({ validated }: Request) => {
     const userFound = (await userRepo.findOne({
@@ -26,6 +36,15 @@ class SaleService {
     if (!clientFound) {
       throw new ErrorHTTP(404, "Client not found");
     }
+
+    const EstablishmentFound = await establishmentRepo.findOne({
+      id: validated.establishmentId,
+    });
+
+    if (!EstablishmentFound) {
+      throw new ErrorHTTP(404, "Establishment not found");
+    }
+
     const payment = (await PaymentRepo.findOne({
       id: validated.paymentId,
     })) as Payment | null;
@@ -54,18 +73,20 @@ class SaleService {
     sale.isPaid = payment.formOfPagament === "À vista" ? true : false;
     sale.paidDate = new Date().toString();
     sale.payment = payment;
+    sale.establishment = EstablishmentFound;
     sale.products = productsA;
     sale.remainToPlay = 0;
 
     const newSale = await saleRepo.save(sale);
     await clientRepo.update(clientFound.id, { isDeptor: true });
-    return await serializedCreateSaleSchema.validate(newSale, {
+
+    return await serializedObjSaleSchema.validate(newSale, {
       stripUnknown: true,
     });
   };
 
   patchSale = async (saleId: string, payment: number) => {
-    const sale = await saleRepository.findOne({
+    const sale = await saleRepo.findOne({
       id: saleId,
     });
 
@@ -112,6 +133,8 @@ class SaleService {
         await clientRepo.update(client.id, { isDeptor: false });
       }
     }
+    await saleRepo.update(sale.id, { ...newSale });
+
     return {
       status: 200,
       message: {
@@ -122,8 +145,16 @@ class SaleService {
     };
   };
 
-  getSales = (establishmentId) => {
-    return { status: 200, message: "get sales" };
+  getSales = async ({ params }: Request) => {
+    const salesData = await saleRepo.all();
+
+    const sales = salesData.filter(
+      (sale) => sale.establishment.id === params.establishmentId
+    );
+
+    return await serializedArrSaleSchema.validate(sales, {
+      stripUnknown: true,
+    });
   };
 }
 

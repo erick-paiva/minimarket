@@ -10,6 +10,7 @@ import {
 import { Address } from "./address.entity";
 import { Client } from "./client.entity";
 import { Product } from "./product.entity";
+import { Sale } from "./sale.entity";
 import { User } from "./user.entity";
 
 @Entity("establishments")
@@ -31,7 +32,6 @@ export class Establishment {
 
   @ManyToOne((type) => User, (user) => user.establishments, {
     eager: true,
-    // cascade: true,
   })
   @JoinColumn()
   user: User;
@@ -51,4 +51,9 @@ export class Establishment {
   })
   @JoinColumn()
   address: Address;
+
+  @OneToMany((type) => Sale, (sale) => sale.establishment, {
+    eager: true,
+  })
+  sales: Sale[];
 }
