@@ -1054,7 +1054,7 @@
                   "formOfPagament": "À vista"
                 },
                 "saleTotal": 18,
-                "remainToPlay": 0,
+                "remainToPay": 0,
                 "products": [
                   {
                     "id": "258e6eea-4a14-4364-aa18-2b07796e68db",

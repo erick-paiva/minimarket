@@ -41,7 +41,7 @@ export class Sale {
   saleTotal: number;
 
   @Column({ type: "numeric" })
-  remainToPlay: number;
+  remainToPay: number;
 
   @ManyToMany((type) => Product, {
     eager: true,

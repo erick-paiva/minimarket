@@ -75,7 +75,7 @@ class SaleService {
     sale.payment = payment;
     sale.establishment = EstablishmentFound;
     sale.products = productsA;
-    sale.remainToPlay = 0;
+    sale.remainToPay = 0;
 
     const newSale = await saleRepo.save(sale);
     await clientRepo.update(clientFound.id, { isDeptor: true });
@@ -101,21 +101,21 @@ class SaleService {
     const newSale = {} as Partial<Sale>;
 
     let newPayment =
-      sale.remainToPlay > 0
-        ? sale.remainToPlay - payment
+      sale.remainToPay > 0
+        ? sale.remainToPay - payment
         : sale.saleTotal - payment;
     let thing = 0;
 
     if (newPayment < 0) {
       thing = newPayment * -1;
       newSale.isPaid = true;
-      newSale.remainToPlay = 0;
+      newSale.remainToPay = 0;
     } else if (newPayment === 0) {
       newSale.isPaid = true;
-      newSale.remainToPlay = 0;
+      newSale.remainToPay = 0;
     } else {
       newSale.isPaid = false;
-      newSale.remainToPlay = newPayment;
+      newSale.remainToPay = newPayment;
     }
 
     newSale.paidDate = new Date().toString();
@@ -139,7 +139,7 @@ class SaleService {
       status: 200,
       message: {
         isPaid: newSale.isPaid,
-        remainToPay: newSale.remainToPlay,
+        remainToPay: newSale.remainToPay,
         thing,
       },
     };
@@ -149,12 +149,31 @@ class SaleService {
     const salesData = await saleRepo.all();
 
     const sales = salesData.filter(
-      (sale) => sale.establishment.id === params.establishmentId
+      (sale) => sale.establishment.id === params.id
     );
 
     return await serializedArrSaleSchema.validate(sales, {
       stripUnknown: true,
     });
+  };
+
+  getSaleById = async ({ params }: Request) => {
+    try {
+      const sale = await saleRepo.findOneBy(params.id);
+
+      if (!sale) {
+        throw new ErrorHTTP(404, `Sale with id ${params.id} not found.`);
+      }
+
+      return await serializedObjSaleSchema.validate(sale[0], {
+        stripUnknown: true,
+      });
+    } catch (err: any) {
+      if (err instanceof ErrorHTTP) {
+        throw new ErrorHTTP(404, `Sale with id ${params.id} not found.`);
+      }
+      throw new ErrorHTTP(404, `The id ${params.id} is not valid`);
+    }
   };
 }
 
