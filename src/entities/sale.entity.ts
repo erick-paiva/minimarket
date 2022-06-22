@@ -7,8 +7,10 @@ import {
   JoinTable,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  OneToOne,
 } from "typeorm";
 import { Client } from "./client.entity";
+import { Establishment } from "./establishment.entity";
 import { Payment } from "./payment.entity";
 import { Product } from "./product.entity";
 
@@ -46,4 +48,8 @@ export class Sale {
   })
   @JoinTable()
   products: Product[];
+
+  @ManyToOne(() => Establishment)
+  @JoinColumn([{ name: "establishmentId", referencedColumnName: "id" }])
+  establishment: Establishment;
 }
