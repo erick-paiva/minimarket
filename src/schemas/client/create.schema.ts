@@ -5,9 +5,9 @@ const createClientSchema = yup.object().shape({
   avatar: yup.string().required(),
   contact: yup.string().required(),
   payDay: yup.number().required(),
-  isDeptor: yup.boolean().default(false).required(),
-  isLate: yup.boolean().default(false).required(),
-  isActivate: yup.boolean().default(true).required(),
+  isDeptor: yup.boolean().default(false),
+  isLate: yup.boolean().default(false),
+  isActivate: yup.boolean().default(true),
   establishmentId: yup.string().required(),
 });
 
