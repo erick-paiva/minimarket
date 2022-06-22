@@ -1004,38 +1004,318 @@
       }
     },
     "/sale": {
+      "post": {
+        "tags": ["sale"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "adds an sale",
+        "description": "adds a sale and returns the created sale",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "LoginUser",
+            "description": "User credentials.",
+            "schema": {
+              "type": "object",
+              "example": {
+                "clientId": "Insert the clientId",
+                "paymentId": "Insert the paymentId",
+                "products": [
+                  {
+                    "productId": "Insert the productId",
+                    "quantity": 1
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "sale created",
+            "schema": {
+              "type": "object",
+              "example": {
+                "id": "fd7514ae-bfd4-4003-8859-44c402103c42",
+                "date": "2022-06-22T19:35:30.969Z",
+                "isPaid": true,
+                "paidDate": "2022-06-22T19:35:30.000Z",
+                "client": {
+                  "id": "d3927977-3244-43e4-a8f5-4684b5098822",
+                  "name": "flavinhho do pneu"
+                },
+                "payment": {
+                  "id": "b8ef0d30-4ab7-4c7f-9ad4-a77f5f23f040",
+                  "formOfPagament": "À vista"
+                },
+                "saleTotal": 18,
+                "remainToPlay": 0,
+                "products": [
+                  {
+                    "id": "258e6eea-4a14-4364-aa18-2b07796e68db",
+                    "name": "carne de boi"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "messenger": {
+                  "type": "string",
+                  "example": "User not found | Client not found | Product  not found"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "tags": ["sale"],
-        "summary": "get all sale",
-        "operationId": "getAllSale",
-        "description": "This route is to get all users. Only admin users have access.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "get sales",
+        "operationId": "getSales",
+        "description": "This route is to get all sales. Only administrators or the owner of the establishment have access.",
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Ok",
             "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "d290f1ee-6c54-4b01-90e6-d7018968f0851"
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2022-06-21T22:53:08.520Z"
+                },
+                "client": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "d290f1ee-6c54-4b01-90e6-d7018968f0851"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Julio Pereira Cliente"
+                    }
+                  }
+                },
+                "paidDate": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2022-06-21T22:53:08.520Z"
+                },
+                "isPaid": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "saleTotal": {
+                  "type": "number",
+                  "example": 37.8
+                },
+                "remaintPay": {
+                  "type": "number",
+                  "example": 0
+                },
+                "payment": {
+                  "type": "object",
+                  "properties": {
+                    "Id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "d290f1ee-6c54-4b01-90e6-d7018968f0851"
+                    },
+                    "formOfPagament": {
+                      "type": "string",
+                      "example": "À vista"
+                    }
+                  }
+                },
+                "products": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "d290f1ee-6c54-4b01-90e6-d7018968f0851"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Banana"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "messenger": {
+                  "type": "string",
+                  "example": "User not found | Establishment not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sale/{saleId}": {
+      "get": {
+        "tags": ["sale"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "get an by id sale",
+        "operationId": "getProductById",
+        "description": "This route is to get a product by id. Only administrators or the owner of the establishment have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "saleId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
               "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
+              "example": [
+                {
+                  "id": "d290f1ee-6c54-4b01-90e6-d7018968f0851",
+                  "date": "2022-06-21T22:53:08.520Z",
+                  "client": {
+                    "id": "d290f1ee-6c54-4b01-90e6-d7018968f0851",
+                    "name": "Julio Pereira Cliente"
+                  },
+                  "paidDate": "2022-06-21T22:53:08.520Z",
+                  "isPaid": true,
+                  "saleTotal": 37.8,
+                  "remaintPay": 0,
+                  "payment": {
+                    "Id": "d290f1ee-6c54-4b01-90e6-d7018968f0851",
+                    "formOfPagament": "À vista"
+                  },
+                  "products": [
+                    {
+                      "id": "d290f1ee-6c54-4b01-90e6-d7018968f0851",
+                      "name": "Banana"
+                    }
+                  ]
+                }
+              ]
             }
           },
-          "400": {
-            "description": "Bad Request",
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "messenger": {
+                  "type": "string",
+                  "example": "User not found | Establishment not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["sale"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "patch an by id sale",
+        "operationId": "patchProductById",
+        "description": "This route is to patch a product by id. Only administrators or the owner of the establishment have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "saleId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "patchSale",
+            "description": "sale credentials.",
             "schema": {
               "type": "object",
               "example": {
-                "message": "Missing authorization token."
+                "payment": 1
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized",
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
             "schema": {
               "type": "object",
               "example": {
-                "message": "You are not allowed to access this information"
+                "message": {
+                  "isPaid": false,
+                  "remainToPay": 99,
+                  "thing": 0
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "Sale not found"
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "this sale is already paid"
               }
             }
           }
