@@ -33,6 +33,12 @@ import {
   serializedCreateproductSchema,
 } from "./product/create.schema";
 
+/* SALE*/
+import {
+  serializedObjSaleSchema,
+  serializedArrSaleSchema,
+} from "./sale/serializedSale.schema";
+
 export {
   /* USER*/
   createUserSchema,
@@ -54,4 +60,7 @@ export {
   createProductSchema,
   productUpdateSchema,
   serializedCreateproductSchema,
+  /* PRODUCT*/
+  serializedObjSaleSchema,
+  serializedArrSaleSchema,
 };
