@@ -16,6 +16,7 @@ saleRouter.post(
 );
 saleRouter.patch(
   "/sale/:id",
+  validateToken,
   validadeSchema(updateSaleSchema),
   SaleController.patchSale
 );
