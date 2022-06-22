@@ -10,7 +10,7 @@ const validateAdminOrEstOwner = async (
   try {
     if (req.decoded.isAdmin === false) {
       const establishment = await establishmentRepo.findOne({
-        id: req.params.establishmentId,
+        id: req.params.id,
       });
 
       if (!establishment) {

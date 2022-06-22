@@ -15,7 +15,7 @@ const serializedObject = {
     formOfPagament: yup.string().required(),
   }),
   saleTotal: yup.number().required(),
-  remainToPlay: yup.number().required(),
+  remainToPay: yup.number().required(),
   products: yup.array().of(
     yup.object().shape({
       name: yup.string().required(),

@@ -23,10 +23,17 @@ saleRouter.patch(
 );
 
 saleRouter.get(
-  "/sale/:establishmentId",
+  "/sale/establishment/:id",
   validateToken,
   validateAdminOrEstOwner,
   SaleController.getSales
+);
+
+saleRouter.get(
+  "/sale/:id",
+  validateToken,
+  validateAdminOrEstOwner,
+  SaleController.getSaleById
 );
 
 export default saleRouter;
