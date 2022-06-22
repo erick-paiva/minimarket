@@ -1123,7 +1123,7 @@
                   "products": [
                     {
                       "id": "9c840000-1393-44da-8719-94512d7bd5c2",
-                      "name": "carne de boo"
+                      "name": "carne"
                     }
                   ]
                 }
@@ -1189,7 +1189,7 @@
                 "paidDate": "2022-06-22T21:38:48.000Z",
                 "client": {
                   "id": "16968e0f-bfad-439c-a1b0-c249a66e5579",
-                  "name": "flavinhho do pnew"
+                  "name": "flavinhho do pneu"
                 },
                 "payment": {
                   "id": "b3773113-dc08-4891-a091-9c341f018de1",
@@ -1200,7 +1200,7 @@
                 "products": [
                   {
                     "id": "9c840000-1393-44da-8719-94512d7bd5c2",
-                    "name": "carne de boo"
+                    "name": "carne"
                   }
                 ]
               }
