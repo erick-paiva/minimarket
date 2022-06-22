@@ -5,7 +5,7 @@ import { Sale } from "../entities/sale.entity";
 interface ISaleRepository {
   save: (sale: Sale) => Promise<Sale>;
   findOne: (payload: object) => Promise<Sale | null>;
-  findSalesByEstId: (id: string) => Promise<Sale[]>;
+  findOneBy: (id: string) => Promise<Sale[]>;
   all: () => Promise<Sale[]>;
 }
 
@@ -28,12 +28,11 @@ class saleRepo implements ISaleRepository {
     return await this.ormRepo.findOneBy({ ...payload });
   };
 
-  findSalesByEstId = async (id: string) => {
-    return await this.ormRepo
-      .createQueryBuilder("sale")
-      .innerJoin("sale.client", "client")
-      .innerJoinAndSelect("client.products", "product")
-      .execute();
+  findOneBy = async (id: string) => {
+    return await this.ormRepo.find({
+      relations: ["client", "establishment"],
+      where: { id: id },
+    });
   };
 
   update = async (id: string, payload: Partial<Sale>) =>

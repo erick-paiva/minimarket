@@ -23,5 +23,10 @@ class SaleController {
     const sales = await SaleService.getSales(req);
     return res.status(200).json(sales);
   };
+
+  getSaleById = async (req: Request, res: Response) => {
+    const sales = await SaleService.getSaleById(req);
+    return res.status(200).json(sales);
+  };
 }
 export default new SaleController();
