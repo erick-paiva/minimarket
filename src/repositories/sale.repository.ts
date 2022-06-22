@@ -22,6 +22,9 @@ class saleRepo implements ISaleRepository {
   findOne = async (payload: object) => {
     return await this.ormRepo.findOneBy({ ...payload });
   };
+
+  update = async (id: string, payload: Partial<Sale>) =>
+    await this.ormRepo.update(id, { ...payload });
 }
 
 export default new saleRepo();

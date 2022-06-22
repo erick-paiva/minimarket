@@ -7,6 +7,7 @@ import { User } from "../entities/user.entity";
 import ErrorHTTP from "../errors/ErrorHTTP";
 import { userRepo, saleRepo, clientRepo, PaymentRepo } from "../repositories";
 import productRepository from "../repositories/product.repository";
+import saleRepository from "../repositories/sale.repository";
 import { serializedCreateSaleSchema } from "../schemas/sale/create.schema";
 
 class SaleService {
@@ -64,8 +65,51 @@ class SaleService {
     });
   };
 
-  patchSale = () => {
-    return { status: 200, message: "patch sale" };
+  patchSale = async (saleId: string, payment: number) => {
+    const sale = await saleRepository.findOne({
+      id: saleId,
+    });
+
+    if (!sale) {
+      throw new ErrorHTTP(404, "Sale not found");
+    }
+
+    if (sale.isPaid) {
+      return { status: 409, message: "this sale is already paid" };
+    }
+
+    const newSale = {} as Partial<Sale>;
+
+    let newPayment =
+      sale.remainToPlay > 0
+        ? sale.remainToPlay - payment
+        : sale.saleTotal - payment;
+    let thing = 0;
+
+    if (newPayment < 0) {
+      thing = newPayment * -1;
+      newSale.isPaid = true;
+      newSale.remainToPlay = 0;
+    } else if (newPayment === 0) {
+      newSale.isPaid = true;
+      newSale.remainToPlay = 0;
+    } else {
+      newSale.isPaid = false;
+      newSale.remainToPlay = newPayment;
+    }
+
+    newSale.paidDate = new Date().toString();
+
+    await saleRepository.update(sale.id, { ...newSale });
+
+    return {
+      status: 200,
+      message: {
+        isPaid: newSale.isPaid,
+        remainToPay: newSale.remainToPlay,
+        thing,
+      },
+    };
   };
 
   getSales = (establishmentId) => {
