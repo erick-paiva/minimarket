@@ -42,7 +42,7 @@ describe("Client Create test", () => {
     email,
     password,
     avatar,
-    contact: faker.phone.number(),
+    contact: "(12)876543212",
   };
 
   const establishmentData = {

@@ -40,7 +40,7 @@ describe("User update test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.number();
+    const contact = "(19)394304534";
 
     const userData = { name, email, password, avatar, contact };
 

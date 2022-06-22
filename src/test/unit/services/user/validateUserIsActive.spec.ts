@@ -40,7 +40,7 @@ describe("User isActive test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.number();
+    const contact = "(23)490640340";
     const isActive = false;
 
     const userData = { name, email, password, avatar, contact, isActive };

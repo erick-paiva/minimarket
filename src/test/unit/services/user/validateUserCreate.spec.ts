@@ -38,7 +38,7 @@ describe("User Create test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.number();
+    const contact = "(19)3053405483";
 
     const userData = { name, email, password, avatar, contact };
 
@@ -56,7 +56,7 @@ describe("User Create test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.number();
+    const contact = "(18)34593489";
 
     const userData = { name, email, password, avatar, contact };
 
@@ -79,7 +79,7 @@ describe("User Create test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.number();
+    const contact = "(19)3495305930";
 
     const userData = { name, email, password, avatar, contact };
 
@@ -94,7 +94,7 @@ describe("User Create test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.number();
+    const contact = "(19)329532980";
 
     const userData = { name, email, password, avatar, contact };
 
@@ -111,7 +111,7 @@ describe("User Create test", () => {
     const name = faker.name.firstName();
     const password = faker.internet.password();
     const avatar = faker.image.avatar();
-    const contact = faker.phone.number();
+    const contact = "(19)235939523";
 
     const userData = { name, password, avatar, contact };
 
@@ -131,7 +131,7 @@ describe("User Create test", () => {
     const email = faker.internet.email().toLocaleLowerCase();
     const password = 1234;
     const avatar = faker.image.avatar();
-    const contact = faker.phone.number();
+    const contact = "(19)23852353";
 
     const userData = { name, password, avatar, contact, email };
 
