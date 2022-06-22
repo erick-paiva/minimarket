@@ -953,21 +953,46 @@
         }
       }
     },
-    "/products": {
-      "get": {
+    "/product": {
+      "post": {
         "tags": ["product"],
-        "summary": "get all products",
-        "operationId": "getAllProducts",
-        "description": "This route is to get all users. Only admin users have access.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "post product",
+        "operationId": "postProduct",
+        "description": "This route is create a new product. Only admin users have access.",
         "consumes": ["application/json"],
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "CreateProduct",
+            "description": "Create new Product",
+            "schema": {
+              "type": "object",
+              "example": {
+                "name": "Carne",
+                "description": "carne de qualidade",
+                "salePrice": 10,
+                "costPrice": 5,
+                "unitType": "kg",
+                "urlImg": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
+                "establishmentId": "Insert the establishmentID",
+                "categories": ["Carnes"]
+              }
+            }
+          }
+        ],
         "responses": {
-          "200": {
+          "201": {
             "description": "Ok",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/User"
+                "$ref": "#/definitions/product"
               }
             }
           },
@@ -986,6 +1011,205 @@
               "type": "object",
               "example": {
                 "message": "You are not allowed to access this information"
+              }
+            }
+          },
+          "404": {
+            "description": "Notfound",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "The category c4rnes is not valid"
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "You already have a product calls carne"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/{id}": {
+      "patch": {
+        "tags": ["product"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "patch product",
+        "operationId": "patchProduct",
+        "description": "This route is to patch a product. Only admin users have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "body",
+            "name": "PatchProduct",
+            "description": "Patch Product",
+            "schema": {
+              "type": "object",
+              "example": {
+                "name": "Frango",
+                "description": "Frango suculento"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "example": {
+                "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                "name": "Frango",
+                "description": "Frango suculento",
+                "salePrice": 2,
+                "costPrice": 3,
+                "unitType": "kg",
+                "urlImg": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
+                "categories": [
+                  {
+                    "name": "Carnes",
+                    "image": "https://www.saboravida.com.br/wp-content/uploads/2019/12/veja-como-preparar-diferentes-cortes-de-carnes-800x445.jpg"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "Missing authorization token."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "Missing admin permision."
+              }
+            }
+          },
+          "404": {
+            "description": "Notfound",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "Product not found"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/{establishmentId}": {
+      "get": {
+        "tags": ["product"],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "get products",
+        "operationId": "getProduct",
+        "description": "This route is to get all products. Only administrators or the owner of the establishment have access.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "establishmentId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "example": [
+                {
+                  "id": "ce987c7a-8de9-4f0e-9d37-4275983adb38",
+                  "name": "Carne",
+                  "description": "carne de qualidade",
+                  "salePrice": "10",
+                  "costPrice": "5",
+                  "unitType": "kg",
+                  "urlImg": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
+                  "categories": [
+                    {
+                      "id": "0d92a386-818e-4867-bc95-441e00092b4d",
+                      "name": "Carnes",
+                      "image": "https://www.saboravida.com.br/wp-content/uploads/2019/12/veja-como-preparar-diferentes-cortes-de-carnes-800x445.jpg"
+                    }
+                  ]
+                },
+                {
+                  "id": "b5c6ac95-c887-47e2-9fb4-d4acb3290015",
+                  "name": "Frango",
+                  "description": "Frango suculento",
+                  "salePrice": "10",
+                  "costPrice": "5",
+                  "unitType": "qwdwd",
+                  "urlImg": "wdwdwd",
+                  "categories": [
+                    {
+                      "id": "0d92a386-818e-4867-bc95-441e00092b4d",
+                      "name": "Carnes",
+                      "image": "https://www.saboravida.com.br/wp-content/uploads/2019/12/veja-como-preparar-diferentes-cortes-de-carnes-800x445.jpg"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "Missing authorization token."
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "You're not the owner of this establishment. So you can't see the products."
+              }
+            }
+          },
+          "404": {
+            "description": "Notfound",
+            "schema": {
+              "type": "object",
+              "example": {
+                "error": "Establishment not found. Try with other establishmentId"
               }
             }
           }
@@ -1136,6 +1360,50 @@
         },
         "courses": {
           "$ref": "#/definitions/Establishment"
+        }
+      }
+    },
+    "product": {
+      "type": "object",
+      "required": ["firstName", "lastName", "email", "password"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        },
+        "name": {
+          "type": "string",
+          "example": "Carne"
+        },
+        "description": {
+          "type": "string",
+          "example": "Carne suculenta"
+        },
+        "salePrice": {
+          "type": "number",
+          "example": 2
+        },
+        "costPrice": {
+          "type": "number",
+          "example": 3
+        },
+        "unitType": {
+          "type": "string",
+          "example": "kg"
+        },
+        "urlImg": {
+          "type": "string",
+          "example": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg"
+        },
+        "categories": {
+          "type": "array",
+          "example": [
+            {
+              "name": "Carnes",
+              "image": "https://www.saboravida.com.br/wp-content/uploads/2019/12/veja-como-preparar-diferentes-cortes-de-carnes-800x445.jpg"
+            }
+          ]
         }
       }
     }
