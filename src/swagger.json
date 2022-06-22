@@ -1064,20 +1064,19 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "400": {
+            "description": "Bad Request",
             "schema": {
               "type": "object",
-              "properties": {
-                "messenger": {
-                  "type": "string",
-                  "example": "User not found | Client not found | Product  not found"
-                }
+              "example": {
+                "message": "Missing authorization token."
               }
             }
           }
         }
-      },
+      }
+    },
+    "/sale/establishment/{establishmentId}": {
       "get": {
         "tags": ["sale"],
         "security": [
@@ -1085,89 +1084,58 @@
             "Bearer": []
           }
         ],
-        "summary": "get sales",
+        "summary": "get all sales from the informed establishment",
         "operationId": "getSales",
         "description": "This route is to get all sales. Only administrators or the owner of the establishment have access.",
         "consumes": ["application/json"],
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "establishmentId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Ok",
             "schema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string",
-                  "format": "uuid",
-                  "example": "d290f1ee-6c54-4b01-90e6-d7018968f0851"
-                },
-                "date": {
-                  "type": "string",
-                  "format": "date-time",
-                  "example": "2022-06-21T22:53:08.520Z"
-                },
-                "client": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "example": "d290f1ee-6c54-4b01-90e6-d7018968f0851"
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": "Julio Pereira Cliente"
+              "type": "array",
+              "example": [
+                {
+                  "id": "0db396b6-cf95-4fe6-8e9d-6156d6f3e34a",
+                  "date": "2022-06-22T21:38:48.540Z",
+                  "isPaid": true,
+                  "paidDate": "2022-06-22T21:38:48.000Z",
+                  "client": {
+                    "id": "16968e0f-bfad-439c-a1b0-c249a66e5579",
+                    "name": "flavinhho do pneu"
+                  },
+                  "payment": {
+                    "id": "b3773113-dc08-4891-a091-9c341f018de1",
+                    "formOfPagament": "À vista"
+                  },
+                  "saleTotal": 18,
+                  "remainToPlay": 0,
+                  "products": [
+                    {
+                      "id": "9c840000-1393-44da-8719-94512d7bd5c2",
+                      "name": "carne de boo"
                     }
-                  }
-                },
-                "paidDate": {
-                  "type": "string",
-                  "format": "date-time",
-                  "example": "2022-06-21T22:53:08.520Z"
-                },
-                "isPaid": {
-                  "type": "boolean",
-                  "example": true
-                },
-                "saleTotal": {
-                  "type": "number",
-                  "example": 37.8
-                },
-                "remaintPay": {
-                  "type": "number",
-                  "example": 0
-                },
-                "payment": {
-                  "type": "object",
-                  "properties": {
-                    "Id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "example": "d290f1ee-6c54-4b01-90e6-d7018968f0851"
-                    },
-                    "formOfPagament": {
-                      "type": "string",
-                      "example": "À vista"
-                    }
-                  }
-                },
-                "products": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "format": "uuid",
-                        "example": "d290f1ee-6c54-4b01-90e6-d7018968f0851"
-                      },
-                      "name": {
-                        "type": "string",
-                        "example": "Banana"
-                      }
-                    }
-                  }
+                  ]
                 }
+              ]
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
               }
             }
           },
@@ -1178,7 +1146,7 @@
               "properties": {
                 "messenger": {
                   "type": "string",
-                  "example": "User not found | Establishment not found"
+                  "example": "Establishment not found"
                 }
               }
             }
@@ -1194,9 +1162,9 @@
             "Bearer": []
           }
         ],
-        "summary": "get an by id sale",
+        "summary": "get an sale by id sale",
         "operationId": "getProductById",
-        "description": "This route is to get a product by id. Only administrators or the owner of the establishment have access.",
+        "description": "This route is to get a sale by id. Only administrators or the owner of the establishment have access.",
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
@@ -1213,31 +1181,38 @@
           "200": {
             "description": "Ok",
             "schema": {
-              "type": "array",
-              "example": [
-                {
-                  "id": "d290f1ee-6c54-4b01-90e6-d7018968f0851",
-                  "date": "2022-06-21T22:53:08.520Z",
-                  "client": {
-                    "id": "d290f1ee-6c54-4b01-90e6-d7018968f0851",
-                    "name": "Julio Pereira Cliente"
-                  },
-                  "paidDate": "2022-06-21T22:53:08.520Z",
-                  "isPaid": true,
-                  "saleTotal": 37.8,
-                  "remaintPay": 0,
-                  "payment": {
-                    "Id": "d290f1ee-6c54-4b01-90e6-d7018968f0851",
-                    "formOfPagament": "À vista"
-                  },
-                  "products": [
-                    {
-                      "id": "d290f1ee-6c54-4b01-90e6-d7018968f0851",
-                      "name": "Banana"
-                    }
-                  ]
-                }
-              ]
+              "type": "object",
+              "example": {
+                "id": "0db396b6-cf95-4fe6-8e9d-6156d6f3e34a",
+                "date": "2022-06-22T21:38:48.540Z",
+                "isPaid": true,
+                "paidDate": "2022-06-22T21:38:48.000Z",
+                "client": {
+                  "id": "16968e0f-bfad-439c-a1b0-c249a66e5579",
+                  "name": "flavinhho do pnew"
+                },
+                "payment": {
+                  "id": "b3773113-dc08-4891-a091-9c341f018de1",
+                  "formOfPagament": "À vista"
+                },
+                "saleTotal": 18,
+                "remainToPlay": 0,
+                "products": [
+                  {
+                    "id": "9c840000-1393-44da-8719-94512d7bd5c2",
+                    "name": "carne de boo"
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
+              }
             }
           },
           "404": {
@@ -1247,7 +1222,7 @@
               "properties": {
                 "messenger": {
                   "type": "string",
-                  "example": "User not found | Establishment not found"
+                  "example": "sale not found"
                 }
               }
             }
@@ -1298,6 +1273,15 @@
                   "remainToPay": 99,
                   "thing": 0
                 }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "example": {
+                "message": "Missing authorization token."
               }
             }
           },
