@@ -18,7 +18,6 @@ class ClientController {
     const establishmentId = req.params.id;
     const userEmail = req.decoded.email;
     const userIsAdmin = req.decoded.isAdmin;
-
     const clients = await ClientService.getEstablishmentClients(
       establishmentId,
       userEmail,
