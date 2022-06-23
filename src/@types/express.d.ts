@@ -13,6 +13,7 @@ declare global {
       decoded: TDecoded;
       userRequest: User;
       establishment: Establishment;
+      sale: Sale;
       findRepository: object;
     }
   }

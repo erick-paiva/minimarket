@@ -1,7 +1,6 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 import { Client } from "../entities/client.entity";
 import { Payment } from "../entities/payment.entity";
-import { Product } from "../entities/product.entity";
 import { Sale } from "../entities/sale.entity";
 import { User } from "../entities/user.entity";
 import ErrorHTTP from "../errors/ErrorHTTP";
@@ -55,9 +54,7 @@ class SaleService {
     let saleTotal = 0;
 
     for (let p of products) {
-      const productFound = (await productRepository.findOne({
-        id: p.id,
-      })) as Product | null;
+      const productFound = await productRepository.findOne({ id: p.id });
 
       if (!productFound) {
         throw new ErrorHTTP(404, `Product ${p.id} not found`);
@@ -151,7 +148,7 @@ class SaleService {
     const salesData = await saleRepo.all();
 
     const sales = salesData.filter(
-      (sale) => sale.establishment.id === params.id
+      ({ establishment }) => establishment.id === params.id
     );
 
     return await serializedArrSaleSchema.validate(sales, {
@@ -159,32 +156,10 @@ class SaleService {
     });
   };
 
-  getSaleById = async (req: Request, res: Response) => {
-    try {
-      const sale = await saleRepo.findOneBy(req.params.id);
-
-      if (!sale) {
-        throw new ErrorHTTP(404, `Sale with id ${req.params.id} not found.`);
-      }
-
-      if (
-        sale[0].establishment.user.email !== req.decoded.email &&
-        req.decoded.isAdmin === false
-      ) {
-        throw new ErrorHTTP(403, `Sale with id ${req.params.id} not found.`);
-      }
-
-      return await serializedObjSaleSchema.validate(sale[0], {
-        stripUnknown: true,
-      });
-    } catch (err: any) {
-      if (err instanceof ErrorHTTP) {
-        return res.status(err.statusCode).json({
-          error: err.message,
-        });
-      }
-      throw new ErrorHTTP(404, `The id ${req.params.id} is not valid`);
-    }
+  getSaleById = async ({ sale }: Request) => {
+    return await serializedObjSaleSchema.validate(sale, {
+      stripUnknown: true,
+    });
   };
 }
 

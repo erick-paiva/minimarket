@@ -32,7 +32,7 @@ class saleRepo implements ISaleRepository {
     return await this.ormRepo.find({
       relations: ["client", "establishment"],
       where: { id: id },
-    });
+    })[0];
   };
 
   update = async (id: string, payload: Partial<Sale>) =>

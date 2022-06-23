@@ -5,6 +5,7 @@ import verifyAdmin from "./verifyAdmin.middleware";
 import getEstablishmentByIdOr404 from "./getEstablishmentByIdOr404.middleware";
 import checkIfAdminOrOwner from "./checkIfAdminOrOwner.middleware";
 import validateAdminOrEstOwner from "./validateAdminOwner.middleware";
+import validateAdminOrSaleOwner from "./validateAdminOrSaleOwner.middleware";
 
 export {
   validadeSchema,
@@ -14,4 +15,5 @@ export {
   getEstablishmentByIdOr404,
   checkIfAdminOrOwner,
   validateAdminOrEstOwner,
+  validateAdminOrSaleOwner,
 };
