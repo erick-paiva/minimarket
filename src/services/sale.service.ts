@@ -167,7 +167,10 @@ class SaleService {
         throw new ErrorHTTP(404, `Sale with id ${req.params.id} not found.`);
       }
 
-      if (sale[0].establishment.user.id !== req.params.userId) {
+      if (
+        sale[0].establishment.user.email !== req.decoded.email &&
+        req.decoded.isAdmin === false
+      ) {
         throw new ErrorHTTP(403, `Sale with id ${req.params.id} not found.`);
       }
 
