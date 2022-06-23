@@ -5,6 +5,7 @@ import { clientRepo, establishmentRepo } from "../repositories";
 import { serializedCreateClientSchema } from "../schemas";
 import establishmentRepository from "../repositories/establishment.repository";
 import { AppError } from "../errors/appError";
+import { serializedArrClient } from "../schemas";
 
 class ClientService {
   createClient = async ({ validated, decoded }: Request) => {
@@ -98,7 +99,10 @@ class ClientService {
       throw new ErrorHTTP(401, "You're not the owner of this establishment");
     }
     const clients = establishment.clients;
-    return clients;
+
+    return await serializedArrClient.validate(clients, {
+      stripUnknown: true,
+    });
   };
 }
 
