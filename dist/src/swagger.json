@@ -1,0 +1,1814 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a simple API",
+        "version": "1.0.0",
+        "title": "Capstone Q4",
+        "contact": {
+            "email": "you@your-company.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "tags": [
+        {
+            "name": "auth",
+            "description": "User authentication"
+        },
+        {
+            "name": "user",
+            "description": "User routes"
+        },
+        {
+            "name": "establishment",
+            "description": "Establishment routes"
+        },
+        {
+            "name": "client",
+            "description": "Client routes"
+        },
+        {
+            "name": "sale",
+            "description": "Sale routes"
+        },
+        {
+            "name": "product",
+            "description": "Products routes"
+        }
+    ],
+    "paths": {
+        "/signin": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "user login",
+                "operationId": "userLogin",
+                "description": "Login route, returns user access token if credentials are correct.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "LoginUser",
+                        "description": "User credentials.",
+                        "schema": {
+                            "type": "object",
+                            "required": ["email", "password"],
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "example": "jhondoe@mail.com"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "kytr235fv"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhYnJpZWxAbWFpbC5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NTU4MzQ2NDcsImV4cCI6MTY1NTgzODI0N30.3-G1_l1eBfgqHaY_4GhkoZC4j8r0oFUzfPH8wYRC2y0"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": "Invalid credentials"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": ["password is a required field"]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/signup": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "create user",
+                "operationId": "creaetUser",
+                "description": "Route to create a new user",
+                "produces": ["application/json"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "CreateUser",
+                        "description": "Create new user",
+                        "schema": {
+                            "type": "object",
+                            "required": ["firstName", "lastName", "email", "password"],
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "example": "Jhon"
+                                },
+                                "contact": {
+                                    "type": "string",
+                                    "example": "40028922"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": "jhondoe@mail.com"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "kytr235fv"
+                                },
+                                "avatar": {
+                                    "type": "string",
+                                    "example": "https://taverna42.files.wordpress.com/2018/09/maxresdefault-1.jpg"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "id": "3c9f3615-f43d-460d-8048-07870ded844d",
+                                "name": "Jhon",
+                                "email": "jhondoe@mail.com",
+                                "contact": "40028922",
+                                "avatar": "https://taverna42.files.wordpress.com/2018/09/maxresdefault-1.jpg",
+                                "isAdmin": false,
+                                "isActive": true,
+                                "createdAt": "2022-06-21T18:04:41.258Z",
+                                "updatedAt": "2022-06-21T18:04:41.258Z"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": ["password is a required field"]
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": "Email already exists"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": ["user"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "get all users",
+                "operationId": "GetUsers",
+                "description": "This route is to get all users. Only admin users have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing authorization token."
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "tags": ["user"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "get user by id",
+                "operationId": "GetUserById",
+                "description": "This route is to get the user by ID. Only admin users have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                                "firstName": "jhon",
+                                "lastName": "Doe",
+                                "email": "jhondoe@mail.com",
+                                "password": "kytr235fv",
+                                "isAdm": true,
+                                "createdAt": "2022-06-05 15:44:40.290",
+                                "updatedAt": "2022-06-05 15:44:40.290"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing admin permision."
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["user"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "update user by id",
+                "operationId": "UpdateUserById",
+                "description": "This route is to update user by ID. Only admin users have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "body",
+                        "name": "Update user",
+                        "description": "update one user",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "example": "Dio Brando"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "id": "3c9f3615-f43d-460d-8048-07870ded844d",
+                                "name": "Dio Brando",
+                                "email": "jhondoe@mail.com",
+                                "contact": "40028922",
+                                "avatar": "https://taverna42.files.wordpress.com/2018/09/maxresdefault-1.jpg",
+                                "isAdmin": false,
+                                "isActive": true,
+                                "createdAt": "2022-06-21T18:04:41.258Z",
+                                "updatedAt": "2022-06-21T18:04:41.258Z"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "User not found"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing admin permision."
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/isActive/{id}": {
+            "get": {
+                "tags": ["user"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "activate or deactivate a user",
+                "operationId": "userIsActivate",
+                "description": "This route is to activate or deactivate the user by ID. Only admin users have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                                "firstName": "jhon",
+                                "lastName": "Doe",
+                                "email": "jhondoe@mail.com",
+                                "password": "kytr235fv",
+                                "isAdm": true,
+                                "isActive": false,
+                                "createdAt": "2022-06-05 15:44:40.290",
+                                "updatedAt": "2022-06-05 15:44:40.290"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing admin permision."
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/establishment": {
+            "post": {
+                "tags": ["establishment"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "post establishment",
+                "operationId": "postEstablishment",
+                "description": "Creates a new establishment in the application",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "creation",
+                        "description": "create an establishment",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "name": "Via c",
+                                "cnpj": "30.0155138.77/0008-24",
+                                "address": {
+                                    "street": "Rua c",
+                                    "number": 14011,
+                                    "zipCode": "25090-29",
+                                    "district": "Gova"
+                                },
+                                "contact": "02299999999",
+                                "urlLogo": "https://cdn.pixabay.com/photo/2017/03/16/21/18/logo-2150297_960_7230.png",
+                                "userId": "Insert the userID"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "id": "9d3cb431-9031-425a-b4b1-dd6e0b71aeb6",
+                                "name": "Via c",
+                                "cnpj": "31.0155138.77/0008-24",
+                                "contact": "01299999999",
+                                "urlLogo": "https://cdn.pixabay.com/photo/2017/03/16/21/18/logo-2150297_960_7230.png",
+                                "address": {
+                                    "district": "Gova",
+                                    "zipCode": "25090-29",
+                                    "number": 14711,
+                                    "street": "Rua c"
+                                },
+                                "user": {
+                                    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                                    "name": "mercadinho",
+                                    "email": "jhondoe@gmail.com"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "type": "array",
+                            "example": [
+                                {
+                                    "error": "Missing authorization token."
+                                },
+                                {
+                                    "message": [
+                                        "name is a required field",
+                                        "cnpj is a required field",
+                                        "contact is a required field",
+                                        "urlLogo is a required field",
+                                        "address is a required field",
+                                        "userId is a required field"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "type": "array",
+                            "example": [
+                                {
+                                    "error": "Address number 123 already registered"
+                                },
+                                {
+                                    "error": "Establishment with cnpj 11.0000.33/3333-12 already registered"
+                                },
+                                {
+                                    "error": "Establishment with contact 035999947334 already registered"
+                                },
+                                {
+                                    "error": "User not found"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["establishment"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "get all establishments",
+                "operationId": "getEstablishments",
+                "description": "Returns all establishments",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "array",
+                            "example": [
+                                {
+                                    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                                    "name": "mercadinho",
+                                    "cnpj": "11.0000.33/3333-11",
+                                    "contact": "035999947333",
+                                    "urlLogo": "https://www.google.com/image",
+                                    "address": {
+                                        "district": "centro",
+                                        "zipCode": "12345-678",
+                                        "number": 123,
+                                        "street": "rua"
+                                    },
+                                    "user": {
+                                        "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                                        "name": "mercadinho",
+                                        "email": "jhondoe@gmail.com"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing admin permision."
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/establishment/{id}": {
+            "get": {
+                "tags": ["establishment"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "get one establishment",
+                "operationId": "getEstablishment",
+                "description": "Returns the establishment by id",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                                "name": "mercadinho",
+                                "cnpj": "11.0000.33/3333-11",
+                                "contact": "035999947333",
+                                "urlLogo": "https://www.google.com/image",
+                                "address": {
+                                    "district": "centro",
+                                    "zipCode": "12345-678",
+                                    "number": 123,
+                                    "street": "rua"
+                                },
+                                "user": {
+                                    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                                    "name": "mercadinho",
+                                    "email": "jhondoe@gmail.com"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": ["Missing authorization token."]
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["establishment"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "patch establishment",
+                "operationId": "patchEstablishment",
+                "description": "Edit the values of an establishment",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "body",
+                        "name": "Update user",
+                        "description": "update one user",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "example": "Mercadão"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "array",
+                            "example": [
+                                {
+                                    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                                    "name": "Mercadão",
+                                    "cnpj": "11.0000.33/3333-11",
+                                    "contact": "035999947333",
+                                    "urlLogo": "https://www.google.com/image",
+                                    "address": {
+                                        "district": "centro",
+                                        "zipCode": "12345-678",
+                                        "number": 123,
+                                        "street": "rua"
+                                    },
+                                    "user": {
+                                        "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                                        "name": "mercadinho",
+                                        "email": "jhondoe@gmail.com"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "type": "array",
+                            "example": [
+                                {
+                                    "error": "Missing authorization token."
+                                },
+                                {
+                                    "message": [
+                                        "name is a required field",
+                                        "cnpj is a required field",
+                                        "contact is a required field",
+                                        "urlLogo is a required field",
+                                        "address is a required field",
+                                        "userId is a required field"
+                                    ]
+                                },
+                                {
+                                    "error": "The id 123 is not valid"
+                                }
+                            ]
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "array",
+                            "example": [
+                                {
+                                    "error": "User not found"
+                                },
+                                {
+                                    "error": "Establishment with id 9cc26733-4de1-4a60-88af-082a7a8fb0d2 not found."
+                                }
+                            ]
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "type": "array",
+                            "example": [
+                                {
+                                    "error": "Address number 123 already registered"
+                                },
+                                {
+                                    "error": "Establishment with cnpj 11.0000.33/3333-12 already registered"
+                                },
+                                {
+                                    "error": "Establishment with contact 035999947334 already registered"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/client": {
+            "post": {
+                "tags": ["client"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "post clients",
+                "operationId": "postClients",
+                "description": "This route is to post an user. Only admin users have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "creation",
+                        "description": "create an client",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/Client"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "id": "5db63df3-1f8d-49de-a046-a91e354cd257",
+                                "name": "Kenzo",
+                                "avatar": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
+                                "contact": "40028922",
+                                "payDay": 7,
+                                "isDeptor": false,
+                                "isLate": false,
+                                "isActivate": true
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "You're not the owner of this establishment."
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Client already exists"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/client/{id}": {
+            "patch": {
+                "tags": ["client"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "Edit the values of an client",
+                "operationId": "patchClient",
+                "description": "This route is to patch an client by passing the id. Only admin users have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "body",
+                        "name": "creation",
+                        "description": "patch an client",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "name": "jonathan joestar",
+                                "avatar": "https://i.pinimg.com/originals/30/2c/5e/302c5e9ca27dcd4cc6b9a0611079c876.jpg"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "id": "10bc1f8b-b3bf-44cc-90fd-eb3a45e9ff83",
+                                "name": "jonathan joestar",
+                                "avatar": "https://i.pinimg.com/originals/30/2c/5e/302c5e9ca27dcd4cc6b9a0611079c876.jpg",
+                                "contact": "40028922",
+                                "payDay": 7,
+                                "isDeptor": false,
+                                "isLate": false,
+                                "isActivate": true,
+                                "establishmentId": "59a6a1fa-c380-4da4-ae15-5aaf1f82de1f"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "You're not the owner of this establishment."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Client not found"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/client/{establishmentId}": {
+            "get": {
+                "tags": ["client"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "get all clients of the passed establishmentId",
+                "operationId": "getEstablishmentClients",
+                "description": "This route is to get an client by passing the id. Only admin users or the establishment owner have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "establishmentId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "array",
+                            "example": [
+                                {
+                                    "id": "10bc1f8b-b3bf-44cc-90fd-eb3a45e9ff83",
+                                    "name": "Kenzo",
+                                    "avatar": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
+                                    "contact": "40028922",
+                                    "payDay": 7,
+                                    "isDeptor": false,
+                                    "isLate": false,
+                                    "isActivate": true,
+                                    "sales": []
+                                },
+                                {
+                                    "id": "86ceb63f-a401-48e7-b262-9702527cf507",
+                                    "name": "Dio Brando",
+                                    "avatar": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
+                                    "contact": "400289222",
+                                    "payDay": 7,
+                                    "isDeptor": false,
+                                    "isLate": false,
+                                    "isActivate": true,
+                                    "sales": []
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "You're not the owner of this establishment."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Establishment not found"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sale": {
+            "post": {
+                "tags": ["sale"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "adds an sale",
+                "description": "adds a sale and returns the created sale",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "LoginUser",
+                        "description": "User credentials.",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "clientId": "Insert the clientId",
+                                "paymentId": "Insert the paymentId",
+                                "establishmentId": "Insert the establishmentId",
+                                "products": [
+                                    {
+                                        "productId": "Insert the productId",
+                                        "quantity": 1
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "sale created",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "id": "fd7514ae-bfd4-4003-8859-44c402103c42",
+                                "date": "2022-06-22T19:35:30.969Z",
+                                "isPaid": true,
+                                "paidDate": "2022-06-22T19:35:30.000Z",
+                                "client": {
+                                    "id": "d3927977-3244-43e4-a8f5-4684b5098822",
+                                    "name": "flavinhho"
+                                },
+                                "payment": {
+                                    "id": "b8ef0d30-4ab7-4c7f-9ad4-a77f5f23f040",
+                                    "formOfPagament": "À vista"
+                                },
+                                "saleTotal": 18,
+                                "remainToPay": 0,
+                                "products": [
+                                    {
+                                        "id": "258e6eea-4a14-4364-aa18-2b07796e68db",
+                                        "name": "carne de boi"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": "Missing authorization token."
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sale/establishment/{establishmentId}": {
+            "get": {
+                "tags": ["sale"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "get all sales from the informed establishment",
+                "operationId": "getSales",
+                "description": "This route is to get all sales. Only administrators or the owner of the establishment have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "establishmentId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "array",
+                            "example": [
+                                {
+                                    "id": "0db396b6-cf95-4fe6-8e9d-6156d6f3e34a",
+                                    "date": "2022-06-22T21:38:48.540Z",
+                                    "isPaid": true,
+                                    "paidDate": "2022-06-22T21:38:48.000Z",
+                                    "client": {
+                                        "id": "16968e0f-bfad-439c-a1b0-c249a66e5579",
+                                        "name": "flavinhho"
+                                    },
+                                    "payment": {
+                                        "id": "b3773113-dc08-4891-a091-9c341f018de1",
+                                        "formOfPagament": "À vista"
+                                    },
+                                    "saleTotal": 18,
+                                    "remainToPay": 0,
+                                    "products": [
+                                        {
+                                            "id": "9c840000-1393-44da-8719-94512d7bd5c2",
+                                            "name": "carne"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "messenger": {
+                                    "type": "string",
+                                    "example": "Establishment not found"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sale/{saleId}": {
+            "get": {
+                "tags": ["sale"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "get an sale by id sale",
+                "operationId": "getProductById",
+                "description": "This route is to get a sale by id. Only administrators or the owner of the establishment have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "saleId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "id": "0db396b6-cf95-4fe6-8e9d-6156d6f3e34a",
+                                "date": "2022-06-22T21:38:48.540Z",
+                                "isPaid": true,
+                                "paidDate": "2022-06-22T21:38:48.000Z",
+                                "client": {
+                                    "id": "16968e0f-bfad-439c-a1b0-c249a66e5579",
+                                    "name": "flavinhho"
+                                },
+                                "payment": {
+                                    "id": "b3773113-dc08-4891-a091-9c341f018de1",
+                                    "formOfPagament": "À vista"
+                                },
+                                "saleTotal": 18,
+                                "remainToPay": 0,
+                                "products": [
+                                    {
+                                        "id": "9c840000-1393-44da-8719-94512d7bd5c2",
+                                        "name": "carne"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "messenger": {
+                                    "type": "string",
+                                    "example": "sale not found"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["sale"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "patch an by id sale",
+                "operationId": "patchProductById",
+                "description": "This route is to patch a product by id. Only administrators or the owner of the establishment have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "saleId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    },
+                    {
+                        "in": "body",
+                        "name": "patchSale",
+                        "description": "sale credentials.",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "payment": 1
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": {
+                                    "isPaid": false,
+                                    "remainToPay": 99,
+                                    "thing": 0
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Sale not found"
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": "this sale is already paid"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product": {
+            "post": {
+                "tags": ["product"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "post product",
+                "operationId": "postProduct",
+                "description": "This route is create a new product. Only admin users have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "CreateProduct",
+                        "description": "Create new Product",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "name": "Carne",
+                                "description": "carne de qualidade",
+                                "salePrice": 10,
+                                "costPrice": 5,
+                                "unitType": "kg",
+                                "urlImg": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
+                                "establishmentId": "Insert the establishmentID",
+                                "categories": ["Carnes"]
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/product"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "message": "You are not allowed to access this information"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Notfound",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "The category c4rnes is not valid"
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "You already have a product calls carne"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product/{id}": {
+            "patch": {
+                "tags": ["product"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "patch product",
+                "operationId": "patchProduct",
+                "description": "This route is to patch a product. Only admin users have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "body",
+                        "name": "PatchProduct",
+                        "description": "Patch Product",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "name": "Frango",
+                                "description": "Frango suculento"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                                "name": "Frango",
+                                "description": "Frango suculento",
+                                "salePrice": 2,
+                                "costPrice": 3,
+                                "unitType": "kg",
+                                "urlImg": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
+                                "categories": [
+                                    {
+                                        "name": "Carnes",
+                                        "image": "https://www.saboravida.com.br/wp-content/uploads/2019/12/veja-como-preparar-diferentes-cortes-de-carnes-800x445.jpg"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing admin permision."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Notfound",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Product not found"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product/{establishmentId}": {
+            "get": {
+                "tags": ["product"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "get products",
+                "operationId": "getProduct",
+                "description": "This route is to get all products. Only administrators or the owner of the establishment have access.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "establishmentId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "type": "array",
+                            "example": [
+                                {
+                                    "id": "ce987c7a-8de9-4f0e-9d37-4275983adb38",
+                                    "name": "Carne",
+                                    "description": "carne de qualidade",
+                                    "salePrice": "10",
+                                    "costPrice": "5",
+                                    "unitType": "kg",
+                                    "urlImg": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
+                                    "categories": [
+                                        {
+                                            "id": "0d92a386-818e-4867-bc95-441e00092b4d",
+                                            "name": "Carnes",
+                                            "image": "https://www.saboravida.com.br/wp-content/uploads/2019/12/veja-como-preparar-diferentes-cortes-de-carnes-800x445.jpg"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "b5c6ac95-c887-47e2-9fb4-d4acb3290015",
+                                    "name": "Frango",
+                                    "description": "Frango suculento",
+                                    "salePrice": "10",
+                                    "costPrice": "5",
+                                    "unitType": "qwdwd",
+                                    "urlImg": "wdwdwd",
+                                    "categories": [
+                                        {
+                                            "id": "0d92a386-818e-4867-bc95-441e00092b4d",
+                                            "name": "Carnes",
+                                            "image": "https://www.saboravida.com.br/wp-content/uploads/2019/12/veja-como-preparar-diferentes-cortes-de-carnes-800x445.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Missing authorization token."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "You're not the owner of this establishment. So you can't see the products."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Notfound",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "error": "Establishment not found. Try with other establishmentId"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "definitions": {
+        "User": {
+            "type": "object",
+            "required": ["firstName", "lastName", "email", "password"],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "3c9f3615-f43d-460d-8048-07870ded844d"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Jhon"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "jhondoe@mail.com"
+                },
+                "contact": {
+                    "type": "string",
+                    "example": "40028922"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "kytr235fv"
+                },
+                "avatar": {
+                    "type": "string",
+                    "example": "https://taverna42.files.wordpress.com/2018/09/maxresdefault-1.jpg"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2022-06-21T18:04:41.258Z"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2022-06-21T18:04:41.258Z"
+                },
+                "isActive": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "isAdmin": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "Establishment": {
+            "type": "object",
+            "required": ["name", "address", "contact", "urlLogo", "userId"],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Jhon"
+                },
+                "cpnj": {
+                    "type": "string",
+                    "example": "11.0000.33/3333-12"
+                },
+                "address": {
+                    "type": "object",
+                    "required": ["street", "number", "city", "zipCode", "district"],
+                    "example": {
+                        "street": "Rua dos Bobos",
+                        "number": 0,
+                        "city": "São Paulo",
+                        "zipCode": "01001000",
+                        "district": "Centro"
+                    }
+                },
+                "contact": {
+                    "type": "string",
+                    "example": "123456789012"
+                },
+                "urlLogo": {
+                    "type": "string",
+                    "example": "https://www.google.com/image"
+                },
+                "userId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+                }
+            }
+        },
+        "UserRelationship": {
+            "type": "object",
+            "required": ["firstName", "lastName", "email", "password"],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+                },
+                "firstName": {
+                    "type": "string",
+                    "example": "Jhon"
+                },
+                "lastName": {
+                    "type": "string",
+                    "example": "Doe"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "jhondoe@mail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "kytr235fv"
+                },
+                "isAdm": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2022-06-05 15:44:40.290"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2022-06-05 15:44:40.290"
+                },
+                "courses": {
+                    "$ref": "#/definitions/Establishment"
+                }
+            }
+        },
+        "Client": {
+            "type": "object",
+            "required": [
+                "name",
+                "avatar",
+                "contact",
+                "payDay",
+                "isDeptor",
+                "isLate",
+                "isActivate",
+                "establishmentId"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "Kenzo"
+                },
+                "avatar": {
+                    "type": "string",
+                    "example": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg"
+                },
+                "contact": {
+                    "type": "string",
+                    "example": "40028922"
+                },
+                "payDay": {
+                    "type": "number",
+                    "example": 7
+                },
+                "isDeptor": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "isLate": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "isActivate": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "establishmentId": {
+                    "type": "string",
+                    "example": "Insert the establishmentID"
+                }
+            }
+        },
+        "product": {
+            "type": "object",
+            "required": ["firstName", "lastName", "email", "password"],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Carne"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Carne suculenta"
+                },
+                "salePrice": {
+                    "type": "number",
+                    "example": 2
+                },
+                "costPrice": {
+                    "type": "number",
+                    "example": 3
+                },
+                "unitType": {
+                    "type": "string",
+                    "example": "kg"
+                },
+                "urlImg": {
+                    "type": "string",
+                    "example": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg"
+                },
+                "categories": {
+                    "type": "array",
+                    "example": [
+                        {
+                            "name": "Carnes",
+                            "image": "https://www.saboravida.com.br/wp-content/uploads/2019/12/veja-como-preparar-diferentes-cortes-de-carnes-800x445.jpg"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "host": "localhost",
+    "basePath": ":3000/api",
+    "schemes": ["http"]
+}
