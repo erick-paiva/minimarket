@@ -9,7 +9,7 @@ const saleSchema = {
   id: yup.string().required(),
   isPaid: yup.boolean().required(),
   saleTotal: yup.string().required(),
-  remainToPlay: yup.string().required(),
+  remainToPay: yup.string().required(),
   payment: yup.object().shape({
     formOfPagament: yup.string().required(),
   }),
