@@ -3,3 +3,4 @@
 .lock*
 yarn.lock
 coverage
+/dist
