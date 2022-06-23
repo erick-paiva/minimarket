@@ -171,10 +171,14 @@ const createAnSale = async (inCash = true) => {
   const { client, token } = await createAnClient();
   const { payments } = await getPaymentMethods();
   const { product } = await createAnProduct();
+  const { establishment } = await createAnStablishment();
+
+  console.log(establishment, "xxxxxxxxxxxxxxxxxx")
 
   const saleData = {
     clientId: client.id,
     paymentId: payments[inCash ? 0 : 1].id,
+    establishmentId: establishment.id,
     products: [
       {
         productId: product.id,
