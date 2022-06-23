@@ -2,10 +2,10 @@ import { config } from "dotenv";
 import request from "supertest";
 import { faker } from "@faker-js/faker";
 import { DataSource } from "typeorm";
-import app from "../../../index";
-import { AppDataSource } from "../../../data-source";
+import app from "../../../../index";
+import { AppDataSource } from "../../../../data-source";
 import { sign } from "jsonwebtoken";
-import { createAnStablishment } from "../../utils/mainFunctions";
+import { createAnStablishment } from "../../../utils/mainFunctions";
 config();
 
 describe(" Get establishment clients  test", () => {
