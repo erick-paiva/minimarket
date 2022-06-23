@@ -77,8 +77,10 @@ class SaleService {
     sale.products = productsA;
     sale.remainToPay = 0;
 
+    if (payment.formOfPagament === "Crediário") {
+      await clientRepo.update(clientFound.id, { isDeptor: true });
+    }
     const newSale = await saleRepo.save(sale);
-    await clientRepo.update(clientFound.id, { isDeptor: true });
 
     return await serializedObjSaleSchema.validate(newSale, {
       stripUnknown: true,

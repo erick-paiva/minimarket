@@ -949,26 +949,44 @@
               "type": "array",
               "example": [
                 {
-                  "id": "10bc1f8b-b3bf-44cc-90fd-eb3a45e9ff83",
-                  "name": "Kenzo",
-                  "avatar": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
-                  "contact": "40028922",
-                  "payDay": 7,
+                  "id": "051c609d-af9b-455e-ae47-b152a480923f",
+                  "name": "Rodolfo Silva",
+                  "payDay": 12,
                   "isDeptor": false,
-                  "isLate": false,
                   "isActivate": true,
-                  "sales": []
-                },
-                {
-                  "id": "86ceb63f-a401-48e7-b262-9702527cf507",
-                  "name": "Dio Brando",
-                  "avatar": "https://i.ytimg.com/vi/wLoRiTk-awo/maxresdefault.jpg",
-                  "contact": "400289222",
-                  "payDay": 7,
-                  "isDeptor": false,
-                  "isLate": false,
-                  "isActivate": true,
-                  "sales": []
+                  "avatar": "avatar.png",
+                  "sales": [
+                    {
+                      "products": [
+                        {
+                          "name": "Amaciante",
+                          "id": "fe281a69-4144-4ca3-9d18-98718e487390"
+                        }
+                      ],
+                      "payment": {
+                        "formOfPagament": "Crediário"
+                      },
+                      "remainToPay": "0",
+                      "saleTotal": "500",
+                      "isPaid": true,
+                      "id": "70be0168-a8d9-4ad3-9157-b7fd553a9d37"
+                    },
+                    {
+                      "products": [
+                        {
+                          "name": "Amaciante",
+                          "id": "fe281a69-4144-4ca3-9d18-98718e487390"
+                        }
+                      ],
+                      "payment": {
+                        "formOfPagament": "Crediário"
+                      },
+                      "remainToPay": "0",
+                      "saleTotal": "500",
+                      "isPaid": true,
+                      "id": "8a31498d-c14a-4547-bb33-316ed49ee057"
+                    }
+                  ]
                 }
               ]
             }
@@ -1048,7 +1066,7 @@
                 "paidDate": "2022-06-22T19:35:30.000Z",
                 "client": {
                   "id": "d3927977-3244-43e4-a8f5-4684b5098822",
-                  "name": "flavinhho"
+                  "name": "flavinho"
                 },
                 "payment": {
                   "id": "b8ef0d30-4ab7-4c7f-9ad4-a77f5f23f040",
@@ -1113,7 +1131,7 @@
                   "paidDate": "2022-06-22T21:38:48.000Z",
                   "client": {
                     "id": "16968e0f-bfad-439c-a1b0-c249a66e5579",
-                    "name": "flavinhho"
+                    "name": "flavinho"
                   },
                   "payment": {
                     "id": "b3773113-dc08-4891-a091-9c341f018de1",
@@ -1190,7 +1208,7 @@
                 "paidDate": "2022-06-22T21:38:48.000Z",
                 "client": {
                   "id": "16968e0f-bfad-439c-a1b0-c249a66e5579",
-                  "name": "flavinhho"
+                  "name": "flavinho"
                 },
                 "payment": {
                   "id": "b3773113-dc08-4891-a091-9c341f018de1",
@@ -1809,7 +1827,7 @@
       }
     }
   },
-  "host": "localhost",
-  "basePath": ":3000/api",
+  "host": "capstone-q4-alex.herokuapp.com",
+  "basePath": "/api",
   "schemes": ["http"]
 }
