@@ -1809,7 +1809,7 @@
       }
     }
   },
-  "host": "localhost",
-  "basePath": ":3000/api",
+  "host": "capstone-q4-alex.herokuapp.com",
+  "basePath": "/api",
   "schemes": ["http"]
 }
