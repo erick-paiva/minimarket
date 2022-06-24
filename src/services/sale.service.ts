@@ -13,6 +13,7 @@ import {
   establishmentRepo,
 } from "../repositories";
 import productRepository from "../repositories/product.repository";
+import saleRepository from "../repositories/sale.repository";
 import {
   serializedObjSaleSchema,
   serializedArrSaleSchema,
@@ -76,6 +77,9 @@ class SaleService {
     sale.products = productsA;
     sale.remainToPay = 0;
 
+    if (payment.formOfPagament === "Crediário") {
+      await clientRepo.update(clientFound.id, { isDeptor: true });
+    }
     const newSale = await saleRepo.save(sale);
 
     return await serializedObjSaleSchema.validate(newSale, {
@@ -118,6 +122,19 @@ class SaleService {
 
     newSale.paidDate = new Date().toString();
 
+    await saleRepository.update(sale.id, { ...newSale });
+    if (newSale.isPaid === true) {
+      const clients = await clientRepo.all();
+      const client = clients.find((client) =>
+        client.sales.find((sale) => sale.id === saleId)
+      );
+      const notPayedSales = client.sales.filter(
+        (sale) => sale.isPaid === false
+      );
+      if (notPayedSales.length === 0) {
+        await clientRepo.update(client.id, { isDeptor: false });
+      }
+    }
     await saleRepo.update(sale.id, { ...newSale });
 
     return {
