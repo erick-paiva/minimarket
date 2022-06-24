@@ -22,6 +22,12 @@ describe("Get establishment test", () => {
 
   const mockUuid = "f284f782-7a77-4bb0-a5b9-4c578ce49211";
 
+  test("Sale as JSON response | Status code: 201", async () => {
+    const { response } = await createAnSaleWithParams();
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty("id");
+  });
+
   test("Should return 400 if the uuid type is invalid", async () => {
     const { response } = await createAnSaleWithParams("999");
     expect(response.status).toBe(400);
@@ -57,11 +63,5 @@ describe("Get establishment test", () => {
     expect(response.status).toBe(404);
     expect(response.body.error).toBeDefined();
     expect(response.body.error).toStrictEqual(`Product ${mockUuid} not found`);
-  });
-
-  test("Sale as JSON response | Status code: 201", async () => {
-    const { response } = await createAnSaleWithParams();
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty("id");
   });
 });
