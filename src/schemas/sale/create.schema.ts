@@ -8,7 +8,7 @@ const createSaleSchema = yup.object().shape({
     .array()
     .of(
       yup.object().shape({
-        productId: yup.string().uuid().required(),
+        id: yup.string().uuid().required(),
         quantity: yup.number().required(),
       })
     )

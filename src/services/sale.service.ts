@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { Request, Response } from "express";
 import { Client } from "../entities/client.entity";
 import { Payment } from "../entities/payment.entity";
 import { Product } from "../entities/product.entity";
@@ -159,12 +159,19 @@ class SaleService {
     });
   };
 
-  getSaleById = async ({ params }: Request) => {
+  getSaleById = async (req: Request, res: Response) => {
     try {
-      const sale = await saleRepo.findOneBy(params.id);
+      const sale = await saleRepo.findOneBy(req.params.id);
 
       if (!sale) {
-        throw new ErrorHTTP(404, `Sale with id ${params.id} not found.`);
+        throw new ErrorHTTP(404, `Sale with id ${req.params.id} not found.`);
+      }
+
+      if (
+        sale[0].establishment.user.email !== req.decoded.email &&
+        req.decoded.isAdmin === false
+      ) {
+        throw new ErrorHTTP(403, `Sale with id ${req.params.id} not found.`);
       }
 
       return await serializedObjSaleSchema.validate(sale[0], {
@@ -172,9 +179,11 @@ class SaleService {
       });
     } catch (err: any) {
       if (err instanceof ErrorHTTP) {
-        throw new ErrorHTTP(404, `Sale with id ${params.id} not found.`);
+        return res.status(err.statusCode).json({
+          error: err.message,
+        });
       }
-      throw new ErrorHTTP(404, `The id ${params.id} is not valid`);
+      throw new ErrorHTTP(404, `The id ${req.params.id} is not valid`);
     }
   };
 }
