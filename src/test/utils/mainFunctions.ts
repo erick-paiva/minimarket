@@ -87,7 +87,7 @@ const createAnClient = async () => {
       avatar: faker.image.avatar(),
       contact: faker.phone.number(),
       payDay: generateRandomNumbers(1, 31),
-      establishmentId: establishment.id,
+      establishment: establishment.id,
       isActicvate: true,
       isLate: false,
       isActivate: true,
@@ -173,25 +173,24 @@ const createAnSale = async (inCash = true) => {
   const { product } = await createAnProduct();
   const { establishment } = await createAnStablishment();
 
-  console.log(establishment, "xxxxxxxxxxxxxxxxxx")
-
+  
   const saleData = {
     clientId: client.id,
     paymentId: payments[inCash ? 0 : 1].id,
     establishmentId: establishment.id,
     products: [
       {
-        productId: product.id,
+        id: product.id,
         quantity: generateRandomNumbers(1, 1000),
       },
     ],
   };
-
+  
   const response = await supertest(app)
-    .post("/api/sale")
-    .send(saleData)
-    .set("Authorization", "Bearer " + token);
-
+  .post("/api/sale")
+  .send(saleData)
+  .set("Authorization", "Bearer " + token);
+  
   return { sale: response.body, saleData, token: token };
 };
 
