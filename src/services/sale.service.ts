@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { Request, Response } from "express";
 import { Client } from "../entities/client.entity";
 import { Payment } from "../entities/payment.entity";
 import { Sale } from "../entities/sale.entity";

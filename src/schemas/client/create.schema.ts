@@ -8,7 +8,7 @@ const createClientSchema = yup.object().shape({
   isDeptor: yup.boolean().default(false),
   isLate: yup.boolean().default(false),
   isActivate: yup.boolean().default(true),
-  establishmentId: yup.string().required(),
+  establishment: yup.string().required(),
 });
 
 const responseObject = {

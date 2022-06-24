@@ -87,7 +87,7 @@ const createAnClient = async () => {
       avatar: faker.image.avatar(),
       contact: faker.phone.number(),
       payDay: generateRandomNumbers(1, 31),
-      establishmentId: establishment.id,
+      establishment: establishment.id,
       isActicvate: true,
       isLate: false,
       isActivate: true,
