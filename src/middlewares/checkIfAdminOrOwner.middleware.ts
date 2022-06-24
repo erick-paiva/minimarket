@@ -43,7 +43,6 @@ const checkIfAdminOrOwner = async (
     }
 
     req.findRepository = responseDb as object;
-
   } catch (error) {
     return res.status(400).json({
       message: error.message,

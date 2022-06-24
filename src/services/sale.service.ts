@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { Client } from "../entities/client.entity";
 import { Payment } from "../entities/payment.entity";
-import { Product } from "../entities/product.entity";
 import { Sale } from "../entities/sale.entity";
 import { User } from "../entities/user.entity";
 import ErrorHTTP from "../errors/ErrorHTTP";
@@ -49,15 +48,17 @@ class SaleService {
       id: validated.paymentId,
     })) as Payment | null;
 
+    if (!payment) {
+      throw new ErrorHTTP(404, "Payment not found");
+    }
+
     const products = validated.products;
 
     let productsA = [];
     let saleTotal = 0;
 
     for (let p of products) {
-      const productFound = (await productRepository.findOne({
-        id: p.id,
-      })) as Product | null;
+      const productFound = await productRepository.findOne({ id: p.id });
 
       if (!productFound) {
         throw new ErrorHTTP(404, `Product ${p.id} not found`);
@@ -147,11 +148,27 @@ class SaleService {
     };
   };
 
-  getSales = async ({ params }: Request) => {
-    const salesData = await saleRepo.all();
+  getSales = async ({ params, decoded }: Request) => {
+    const establishment = await establishmentRepo.findOne({
+      id: params.id,
+    });
 
-    const sales = salesData.filter(
-      (sale) => sale.establishment.id === params.id
+    if (!establishment) {
+      throw new ErrorHTTP(404, `Establishment with id ${params.id} not found.`);
+    }
+
+    if (
+      establishment.user.email !== decoded.email &&
+      decoded.isAdmin === false
+    ) {
+      throw new ErrorHTTP(
+        403,
+        "You are not authorized to perform this action."
+      );
+    }
+
+    const sales = (await saleRepo.all()).filter(
+      ({ establishment }) => establishment.id === params.id
     );
 
     return await serializedArrSaleSchema.validate(sales, {
@@ -159,32 +176,26 @@ class SaleService {
     });
   };
 
-  getSaleById = async (req: Request, res: Response) => {
-    try {
-      const sale = await saleRepo.findOneBy(req.params.id);
+  getSaleById = async ({ params, decoded }: Request) => {
+    const sale = await saleRepo.findOneBy(params.id);
 
-      if (!sale) {
-        throw new ErrorHTTP(404, `Sale with id ${req.params.id} not found.`);
-      }
-
-      if (
-        sale[0].establishment.user.email !== req.decoded.email &&
-        req.decoded.isAdmin === false
-      ) {
-        throw new ErrorHTTP(403, `Sale with id ${req.params.id} not found.`);
-      }
-
-      return await serializedObjSaleSchema.validate(sale[0], {
-        stripUnknown: true,
-      });
-    } catch (err: any) {
-      if (err instanceof ErrorHTTP) {
-        return res.status(err.statusCode).json({
-          error: err.message,
-        });
-      }
-      throw new ErrorHTTP(404, `The id ${req.params.id} is not valid`);
+    if (!sale) {
+      throw new ErrorHTTP(404, `Sale with id ${params.id} not found.`);
     }
+
+    if (
+      sale.establishment.user.email !== decoded.email &&
+      decoded.isAdmin === false
+    ) {
+      throw new ErrorHTTP(
+        403,
+        "You are not authorized to perform this action."
+      );
+    }
+
+    return await serializedObjSaleSchema.validate(sale, {
+      stripUnknown: true,
+    });
   };
 }
 
