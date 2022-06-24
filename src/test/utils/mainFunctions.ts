@@ -171,13 +171,15 @@ const createAnSale = async (inCash = true) => {
   const { client, token } = await createAnClient();
   const { payments } = await getPaymentMethods();
   const { product } = await createAnProduct();
+  const { establishment } = await createAnStablishment();
 
   const saleData = {
     clientId: client.id,
+    establishmentId: establishment.id,
     paymentId: payments[inCash ? 0 : 1].id,
     products: [
       {
-        productId: product.id,
+        id: product.id,
         quantity: generateRandomNumbers(1, 1000),
       },
     ],
@@ -191,6 +193,41 @@ const createAnSale = async (inCash = true) => {
   return { sale: response.body, saleData, token: token };
 };
 
+const createAnSaleWithParams = async (
+  clientId: string = "",
+  establishmentId: string = "",
+  productId: string = "",
+  paymentId: string = ""
+) => {
+  const { establishment, token } = await createAnStablishment();
+  const { client } = await createAnClient();
+  const { payments } = await getPaymentMethods();
+  const { product } = await createAnProduct();
+
+  const sale = {
+    clientId: clientId ? clientId : client.id,
+    establishmentId: establishmentId ? establishmentId : establishment.id,
+    paymentId: paymentId ? paymentId : payments[0].id,
+    products: [
+      {
+        id: productId ? productId : product.id,
+        quantity: generateRandomNumbers(1, 1000),
+      },
+    ],
+  };
+
+  const response = await supertest(app)
+    .post("/api/sale")
+    .send(sale)
+    .set("Authorization", "Bearer " + token);
+
+  return {
+    response: response,
+    token: token,
+    establishment: establishment,
+  };
+};
+
 export {
   generateUserWithToken,
   generateToken,
@@ -201,4 +238,5 @@ export {
   createAnProduct,
   createAnPaymentMethod,
   createAnCategory,
+  createAnSaleWithParams,
 };

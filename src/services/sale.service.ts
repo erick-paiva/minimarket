@@ -48,6 +48,10 @@ class SaleService {
       id: validated.paymentId,
     })) as Payment | null;
 
+    if (!payment) {
+      throw new ErrorHTTP(404, "Payment not found");
+    }
+
     const products = validated.products;
 
     let productsA = [];
@@ -144,10 +148,26 @@ class SaleService {
     };
   };
 
-  getSales = async ({ params }: Request) => {
-    const salesData = await saleRepo.all();
+  getSales = async ({ params, decoded }: Request) => {
+    const establishment = await establishmentRepo.findOne({
+      id: params.id,
+    });
 
-    const sales = salesData.filter(
+    if (!establishment) {
+      throw new ErrorHTTP(404, `Establishment with id ${params.id} not found.`);
+    }
+
+    if (
+      establishment.user.email !== decoded.email &&
+      decoded.isAdmin === false
+    ) {
+      throw new ErrorHTTP(
+        403,
+        "You are not authorized to perform this action."
+      );
+    }
+
+    const sales = (await saleRepo.all()).filter(
       ({ establishment }) => establishment.id === params.id
     );
 
@@ -156,7 +176,23 @@ class SaleService {
     });
   };
 
-  getSaleById = async ({ sale }: Request) => {
+  getSaleById = async ({ params, decoded }: Request) => {
+    const sale = await saleRepo.findOneBy(params.id);
+
+    if (!sale) {
+      throw new ErrorHTTP(404, `Sale with id ${params.id} not found.`);
+    }
+
+    if (
+      sale.establishment.user.email !== decoded.email &&
+      decoded.isAdmin === false
+    ) {
+      throw new ErrorHTTP(
+        403,
+        "You are not authorized to perform this action."
+      );
+    }
+
     return await serializedObjSaleSchema.validate(sale, {
       stripUnknown: true,
     });

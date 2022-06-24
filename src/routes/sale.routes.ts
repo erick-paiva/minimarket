@@ -1,11 +1,10 @@
 import "express-async-errors";
 import { Router } from "express";
 import SaleController from "../controllers/sale.controller";
-import validateAdminOrEstOwner from "../middlewares/validateAdminOwner.middleware";
 import {
   validadeSchema,
-  validateAdminOrSaleOwner,
   validateToken,
+  validateUuidParams,
 } from "../middlewares";
 import { createSaleSchema } from "../schemas/sale/create.schema";
 import { updateEstablishmentSchema } from "../schemas";
@@ -29,14 +28,14 @@ saleRouter.patch(
 saleRouter.get(
   "/sale/establishment/:id",
   validateToken,
-  validateAdminOrEstOwner,
+  validateUuidParams,
   SaleController.getSales
 );
 
 saleRouter.get(
   "/sale/:id",
   validateToken,
-  validateAdminOrSaleOwner,
+  validateUuidParams,
   SaleController.getSaleById
 );
 

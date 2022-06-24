@@ -5,7 +5,7 @@ import { Sale } from "../entities/sale.entity";
 interface ISaleRepository {
   save: (sale: Sale) => Promise<Sale>;
   findOne: (payload: object) => Promise<Sale | null>;
-  findOneBy: (id: string) => Promise<Sale[]>;
+  findOneBy: (id: string) => Promise<Sale>;
   all: () => Promise<Sale[]>;
 }
 
@@ -29,10 +29,10 @@ class saleRepo implements ISaleRepository {
   };
 
   findOneBy = async (id: string) => {
-    return await this.ormRepo.find({
+    return await this.ormRepo.findOne({
       relations: ["client", "establishment"],
       where: { id: id },
-    })[0];
+    });
   };
 
   update = async (id: string, payload: Partial<Sale>) =>
